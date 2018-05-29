@@ -32,7 +32,7 @@ public class UsersTest extends V1SecviceTestBase {
     public void create() throws IOException {
         //First Create.
         HashMap <String,Object> params = new HashMap<String, Object>();
-        params.put("name", "Alice " + String.valueOf(System.currentTimeMillis() / 1000) );
+        params.put("name", "Tom" + generateNamePostFix() );
 
         JsonObject response;
         String resultType = "user";
@@ -48,7 +48,7 @@ public class UsersTest extends V1SecviceTestBase {
     public void edit() throws IOException, OSTAPIService.MissingParameter {
         //First Create.
         HashMap <String,Object> params = new HashMap<String, Object>();
-        params.put("name", "Ben " + String.valueOf(System.currentTimeMillis() / 1000) );
+        params.put("name", "Ben " + generateNamePostFix() );
 
         JsonObject response;
         String resultType = "user";
@@ -59,7 +59,7 @@ public class UsersTest extends V1SecviceTestBase {
         validateResult(params, result);
 
         params.put("id", result.get("id").getAsString() );
-        params.put("name", "Jax " + String.valueOf(System.currentTimeMillis() / 1000) );
+        params.put("name", "Jax " + generateNamePostFix() );
         response = getService().edit( params );
         validateResponseWithSuccess( response, resultType, isArrayResultType );
         result = response.getAsJsonObject("data").getAsJsonObject( resultType );
@@ -71,7 +71,7 @@ public class UsersTest extends V1SecviceTestBase {
     public void get() throws IOException, OSTAPIService.MissingParameter {
         //First Create.
         HashMap <String,Object> params = new HashMap<String, Object>();
-        params.put("name", "Bob " + String.valueOf(System.currentTimeMillis() / 1000) );
+        params.put("name", "Bob " + generateNamePostFix() );
 
         JsonObject response;
         String resultType = "user";

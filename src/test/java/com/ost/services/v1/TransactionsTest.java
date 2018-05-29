@@ -30,7 +30,7 @@ public class TransactionsTest extends V1SecviceTestBase {
 
         //First Create an action
         HashMap <String,Object> params = new HashMap<String, Object>();
-        params.put("name", "T1 " + String.valueOf(System.currentTimeMillis() / 1000) );
+        params.put("name", "T1 " + generateNamePostFix() );
         params.put("kind", "user_to_user");
         params.put("currency", "BT");
         params.put("arbitrary_amount", false);

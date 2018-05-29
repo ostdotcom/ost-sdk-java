@@ -8,12 +8,14 @@ import org.junit.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class ServiceTestBase {
     private OSTSDK ostsdk;
     private HashMap<String, Object> apiV0Params;
     protected com.ost.services.OSTServiceManifest services;
     private OSTAPIService service;
+    private static final int sleepMilliSeconds = 300;
 
 
     public void setUp( String apiEndPoint ) throws Exception {
@@ -49,8 +51,17 @@ public class ServiceTestBase {
         validateResponseWithSuccess(response, resultType, false);
     }
     protected static void validateResponseWithSuccess(JsonObject response, String resultType, Boolean isArrayResultType) {
-        Assert.assertEquals( response.has("success"), true );
-        Assert.assertEquals( response.has("data"), true );
+        // Lets sleep for a while.
+        try {
+            int randomTimeBuffer = getRandomNumberInRange(10, 99);
+            Thread.sleep(sleepMilliSeconds + randomTimeBuffer);
+        } catch (InterruptedException e) {
+            //Ignore it.
+        }
+
+        //
+        Assert.assertEquals( "success key missing in response.", true, response.has("success") );
+        Assert.assertEquals( "data key missing in response.", true,  response.has("data") );
 
         // Validate Success Flag.
         boolean success = response.get("success").getAsBoolean();
@@ -85,6 +96,20 @@ public class ServiceTestBase {
             Assert.assertEquals("result value for key " + paramKey + " does not match expected value.", paramVal, resultVal );
 
         }
+    }
+
+    protected static String generateNamePostFix() {
+        return String.valueOf(System.currentTimeMillis()) +  (getRandomNumberInRange(0, 99)).toString();
+    }
+
+    protected static Integer getRandomNumberInRange(int min, int max) {
+
+        if (min >= max) {
+            throw new IllegalArgumentException("max must be greater than min");
+        }
+
+        Random r = new Random();
+        return r.nextInt((max - min) + 1) + min;
     }
 
     @After
