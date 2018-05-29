@@ -14,6 +14,7 @@ public class ServiceTestBase {
     private HashMap<String, Object> apiV0Params;
     protected com.ost.services.OSTServiceManifest services;
     private OSTAPIService service;
+    private static final int sleepMilliSeconds = 300;
 
 
     public void setUp( String apiEndPoint ) throws Exception {
@@ -49,6 +50,14 @@ public class ServiceTestBase {
         validateResponseWithSuccess(response, resultType, false);
     }
     protected static void validateResponseWithSuccess(JsonObject response, String resultType, Boolean isArrayResultType) {
+        // Lets sleep for a while.
+        try {
+            Thread.sleep(sleepMilliSeconds);
+        } catch (InterruptedException e) {
+            //Ignore it.
+        }
+
+        //
         Assert.assertEquals( response.has("success"), true );
         Assert.assertEquals( response.has("data"), true );
 
