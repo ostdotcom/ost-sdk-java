@@ -29,7 +29,7 @@ public class ActionsTest extends V1SecviceTestBase {
     @Test
     public void create() throws IOException {
         HashMap <String,Object> params = new HashMap<String, Object>();
-        params.put("name", "C1 " + String.valueOf(System.currentTimeMillis() / 1000) );
+        params.put("name", "C1 " + generateNamePostFix() );
         params.put("kind", "company_to_user");
         params.put("currency", "BT");
         params.put("arbitrary_amount", true);
@@ -48,7 +48,7 @@ public class ActionsTest extends V1SecviceTestBase {
     public void edit() throws IOException, OSTAPIService.MissingParameter {
         // First Create.
         HashMap <String,Object> params = new HashMap<String, Object>();
-        params.put("name", "C2 " + String.valueOf(System.currentTimeMillis() / 1000) );
+        params.put("name", "C2 " + generateNamePostFix() );
         params.put("kind", "user_to_user");
         params.put("currency", "BT");
         params.put("arbitrary_amount", true);
@@ -83,7 +83,7 @@ public class ActionsTest extends V1SecviceTestBase {
     public void get() throws IOException, OSTAPIService.MissingParameter {
         //First Create.
         HashMap <String,Object> params = new HashMap<String, Object>();
-        params.put("name", "C3 " + String.valueOf(System.currentTimeMillis() / 1000) );
+        params.put("name", "C3 " + generateNamePostFix() );
         params.put("kind", "user_to_company");
         params.put("currency", "BT");
         params.put("arbitrary_amount", true);

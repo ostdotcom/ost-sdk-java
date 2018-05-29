@@ -1,8 +1,6 @@
 package com.ost.services.v0;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -29,7 +27,7 @@ public class TransactionKindTest extends V0ServiceTestBase {
     @Test
     public void t1Create() throws IOException {
         HashMap <String,Object> params = new HashMap<String, Object>();
-        params.put("name", "C1 " + String.valueOf(System.currentTimeMillis() / 1000) );
+        params.put("name", "C1 " + generateNamePostFix() );
         params.put("kind", "company_to_user");
         params.put("currency_type", "BT");
         params.put("currency_value", 10);
@@ -47,7 +45,7 @@ public class TransactionKindTest extends V0ServiceTestBase {
     @Test
     public void t2Edit() throws IOException {
         HashMap <String,Object> params = new HashMap<String, Object>();
-        params.put("name", "C2 " + String.valueOf(System.currentTimeMillis() / 1000) );
+        params.put("name", "C2 " + generateNamePostFix() );
         params.put("kind", "user_to_user");
         params.put("currency_type", "USD");
         params.put("currency_value", 10);

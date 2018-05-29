@@ -35,6 +35,7 @@ public class OSTRequestClient {
     private static final String HMAC_SHA256 = "HmacSHA256";
     private static final Charset UTF_8 = Charset.forName("UTF-8");
     private static Boolean DEBUG = System.getenv("OST_SDK_DEBUG").equalsIgnoreCase("true");
+    private static Boolean VERBOSE = false;
 
 
     public OSTRequestClient( Map<String,Object> params) {
@@ -114,7 +115,7 @@ public class OSTRequestClient {
         // Start Building HMAC Input Buffer by parsing the url.
         Buffer hmacInputBuffer = new Buffer();
         for (String path : url.pathSegments()) {
-            if ( DEBUG ) System.out.println("path:" + path);
+            if ( DEBUG && VERBOSE ) System.out.println("path:" + path);
             hmacInputBuffer.writeByte('/').writeUtf8( PathSegmentEscaper.escape( path ) );
         }
         hmacInputBuffer.writeByte('?');
@@ -157,11 +158,11 @@ public class OSTRequestClient {
             hmacInputBuffer.writeUtf8( paramKey );
             hmacInputBuffer.writeByte( '=' );
             hmacInputBuffer.writeUtf8( paramVal );
+            if ( DEBUG ) System.out.println("paramKey " + paramKey + " paramVal " + paramVal);
 
             if ( GET_REQUEST.equalsIgnoreCase( requestType) ) {
                 urlBuilder.addEncodedQueryParameter(paramKey, paramVal);
             } else {
-                if ( DEBUG ) System.out.println("paramKey " + paramKey + " paramVal " + paramVal);
                 formBodyBuilder.addEncoded( paramKey, paramVal);
             }
         }
@@ -191,9 +192,8 @@ public class OSTRequestClient {
         if ( GET_REQUEST.equalsIgnoreCase( requestType) ) {
             requestBuilder.get();
         } else {
-            if ( DEBUG ) System.out.println("Creating POST request");
             FormBody formBody = formBodyBuilder.build();
-            if ( DEBUG ) {
+            if ( DEBUG && VERBOSE ) {
                 for (int i = 0; i < formBody.size(); i++) {
                     System.out.println(formBody.name(i) + "\t\t" + formBody.value(i));
                 }
