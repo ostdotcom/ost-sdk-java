@@ -12,4 +12,8 @@ notifications:
     on_success: always
     on_failure: always
 sudo: false
+branches:
+  only:
+  - master
+  - develop
 script: mvn clean verify
