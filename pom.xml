@@ -4,9 +4,52 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ost-sdk-java</groupId>
+    <groupId>com.ost</groupId>
     <artifactId>ost-sdk-java</artifactId>
     <version>0.9.0-beta-1</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>7</source>
+                    <target>7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <name>OST SDK for Java</name>
+    <description>The official OST SDK for Java(https://dev.ost.com).</description>
+    <packaging>jar</packaging>
+    <url>https://ost.com/</url>
+    <licenses>
+      <license>
+        <name>MIT License</name>
+        <url>http://www.opensource.org/licenses/mit-license.php</url>
+      </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>ostdev</id>
+            <organization>OST.COM</organization>
+            <organizationUrl>https://ost.com/</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/OpenSTFoundation/ost-sdk-java.git</connection>
+        <developerConnection>scm:git:git@github.com:OpenSTFoundation/ost-sdk-java.git</developerConnection>
+        <url>https://github.com/OpenSTFoundation/ost-sdk-java</url>
+    </scm>
+    <properties>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -40,18 +83,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <proc>none</proc>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

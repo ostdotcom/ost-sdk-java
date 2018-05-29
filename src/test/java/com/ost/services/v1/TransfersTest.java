@@ -26,15 +26,14 @@ public class TransfersTest extends V1SecviceTestBase {
     public void setUp() throws Exception {
         super.setUp();
         setService(getServiceManifest().transfers);
-
-        commonParams = new HashMap<>();
+        commonParams = new HashMap<String, Object>();
         commonParams.put("to_address", "0x062ded9304cd96af6fa4780d6d6fd873e2b52410");
         commonParams.put("amount", 1);
     }
 
     @Test
     public void execute() throws IOException {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.putAll( commonParams );
         JsonObject response;
         String resultType = "transfer";
@@ -48,7 +47,7 @@ public class TransfersTest extends V1SecviceTestBase {
 
     @Test
     public void get() throws IOException, OSTAPIService.MissingParameter {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.putAll( commonParams );
         JsonObject response;
         String resultType = "transfer";
@@ -60,7 +59,7 @@ public class TransfersTest extends V1SecviceTestBase {
         validateResult(params, result);
 
         //Now get.
-        params = new HashMap<>();
+        params = new HashMap<String, Object>();
         params.put("id", result.get("id").getAsString() );
         response = getService().get( params );
         validateResponseWithSuccess( response, resultType, isArrayResultType );
@@ -70,7 +69,7 @@ public class TransfersTest extends V1SecviceTestBase {
 
     @Test
     public void list() throws IOException {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         JsonObject response;
         String resultType = "transfers";
         Boolean isArrayResultType = true;

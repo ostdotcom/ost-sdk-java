@@ -73,8 +73,6 @@ crashlytics-build.properties
 fabric.properties
 
 # Editor-based Rest Client
-.idea/httpRequests
 .DS_Store
-.idea/compiler.xml
-.idea/markdown-navigator.xml
-.idea/markdown-navigator/profiles_settings.xml
+target
+

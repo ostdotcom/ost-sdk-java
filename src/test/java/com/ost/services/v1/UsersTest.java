@@ -31,7 +31,7 @@ public class UsersTest extends V1SecviceTestBase {
     @Test
     public void create() throws IOException {
         //First Create.
-        HashMap <String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.put("name", "Alice " + String.valueOf(System.currentTimeMillis() / 1000) );
 
         JsonObject response;
@@ -47,7 +47,7 @@ public class UsersTest extends V1SecviceTestBase {
     @Test
     public void edit() throws IOException, OSTAPIService.MissingParameter {
         //First Create.
-        HashMap <String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.put("name", "Ben " + String.valueOf(System.currentTimeMillis() / 1000) );
 
         JsonObject response;
@@ -70,7 +70,7 @@ public class UsersTest extends V1SecviceTestBase {
     @Test
     public void get() throws IOException, OSTAPIService.MissingParameter {
         //First Create.
-        HashMap <String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.put("name", "Bob " + String.valueOf(System.currentTimeMillis() / 1000) );
 
         JsonObject response;
@@ -82,7 +82,7 @@ public class UsersTest extends V1SecviceTestBase {
         validateResult(params, result);
 
         //Now get.
-        params = new HashMap<>();
+        params = new HashMap<String, Object>();
         params.put("id", result.get("id").getAsString() );
         response = getService().get( params );
         validateResponseWithSuccess( response, resultType, isArrayResultType );
@@ -92,7 +92,7 @@ public class UsersTest extends V1SecviceTestBase {
 
     @Test
     public void list() throws IOException {
-        HashMap <String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         JsonObject response;
         String resultType = "users";
         Boolean isArrayResultType = true;

@@ -36,7 +36,7 @@ public class UserTest extends V0ServiceTestBase {
 
     @Test
     public void t3list() {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
 
         String resultType = "economy_users";
         JsonObject response;

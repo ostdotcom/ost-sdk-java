@@ -30,7 +30,7 @@ public class AirDropsTest extends V1SecviceTestBase {
 
     @Test
     public void execute() throws IOException {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.put("amount", "0.00001");
 
         JsonObject response;
@@ -46,7 +46,7 @@ public class AirDropsTest extends V1SecviceTestBase {
 
     @Test
     public void get() throws IOException, OSTAPIService.MissingParameter {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.put("amount", "0.00001");
 
         JsonObject response;
@@ -57,7 +57,7 @@ public class AirDropsTest extends V1SecviceTestBase {
         JsonObject result = response.getAsJsonObject("data").getAsJsonObject( resultType );
 
         //Now get.
-        params = new HashMap<>();
+        params = new HashMap<String, Object>();
         params.put("id", result.get("id").getAsString() );
         response = getService().get( params );
         validateResponseWithSuccess( response, resultType, isArrayResultType );
@@ -67,7 +67,7 @@ public class AirDropsTest extends V1SecviceTestBase {
 
     @Test
     public void list() throws IOException {
-        HashMap <String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         JsonObject response;
         String resultType = "airdrops";
         Boolean isArrayResultType = true;

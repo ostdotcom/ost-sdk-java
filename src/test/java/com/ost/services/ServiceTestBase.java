@@ -32,7 +32,7 @@ public class ServiceTestBase {
             throw new Exception("apiEndPoint can not be null.");
         }
 
-        apiV0Params = new HashMap<>();
+        apiV0Params = new HashMap<String, Object>();
         apiV0Params.put( "apiKey", apiKey);
         apiV0Params.put( "apiSecret", apiSecret);
         apiV0Params.put( "apiEndpoint", apiEndPoint);

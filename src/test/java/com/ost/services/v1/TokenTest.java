@@ -31,7 +31,7 @@ public class TokenTest extends V1SecviceTestBase {
         String resultType = "token";
         Boolean isArrayResultType = false;
 
-        HashMap <String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         response = getService().get( params );
 
         validateResponseWithSuccess( response, resultType, isArrayResultType );

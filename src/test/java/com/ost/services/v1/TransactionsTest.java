@@ -29,7 +29,7 @@ public class TransactionsTest extends V1SecviceTestBase {
 
 
         //First Create an action
-        HashMap <String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.put("name", "T1 " + String.valueOf(System.currentTimeMillis() / 1000) );
         params.put("kind", "user_to_user");
         params.put("currency", "BT");
@@ -47,7 +47,7 @@ public class TransactionsTest extends V1SecviceTestBase {
 
 
 
-        commonParams = new HashMap<>();
+        commonParams = new HashMap<String, Object>();
         String fromUserId = System.getenv("OST_KIT_TRANSFER_FROM_UUID");
         if ( null == fromUserId ) {
             throw new Exception("OST_KIT_TRANSFER_FROM_UUID environment variable not set.");
@@ -62,7 +62,7 @@ public class TransactionsTest extends V1SecviceTestBase {
     }
     @Test
     public void execute() throws IOException {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.putAll( commonParams );
         JsonObject response;
         String resultType = "transaction";
@@ -77,7 +77,7 @@ public class TransactionsTest extends V1SecviceTestBase {
 
     @Test
     public void get() throws IOException, OSTAPIService.MissingParameter {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.putAll( commonParams );
         JsonObject response;
         String resultType = "transaction";
@@ -89,7 +89,7 @@ public class TransactionsTest extends V1SecviceTestBase {
         validateResult(params, result);
 
         //Now get.
-        params = new HashMap<>();
+        params = new HashMap<String, Object>();
         params.put("id", result.get("id").getAsString() );
         response = getService().get( params );
         validateResponseWithSuccess( response, resultType, isArrayResultType );
@@ -100,7 +100,7 @@ public class TransactionsTest extends V1SecviceTestBase {
 
     @Test
     public void list() throws IOException {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         JsonObject response;
         String resultType = "transactions";
         Boolean isArrayResultType = true;

@@ -4,7 +4,6 @@ package com.ost.lib;
 import java.io.IOException;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.Iterator;
 
 import com.google.gson.Gson;
@@ -15,9 +14,10 @@ import okhttp3.*;
 import okio.Buffer;
 import okio.ByteString;
 
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.security.InvalidKeyException;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.TimeUnit;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -33,6 +33,7 @@ public class OSTRequestClient {
     private static final Escaper FormParameterEscaper = UrlEscapers.urlFormParameterEscaper();
     private static final Escaper PathSegmentEscaper   = UrlEscapers.urlPathSegmentEscaper();
     private static final String HMAC_SHA256 = "HmacSHA256";
+    private static final Charset UTF_8 = Charset.forName("UTF-8");
     private static Boolean DEBUG = System.getenv("OST_SDK_DEBUG").equalsIgnoreCase("true");
 
 
@@ -93,7 +94,7 @@ public class OSTRequestClient {
             throw new IOException("Invalid requestType");
         }
         if ( null == mapParams ) {
-            mapParams = new TreeMap<>();
+            mapParams = new ConcurrentSkipListMap<String, Object>();
         }
 
         // Start Building the request, url of request and request form body.
@@ -123,7 +124,7 @@ public class OSTRequestClient {
 
         // Convert mapParams to SortedMap.
         // SortedMap is needed to generate correct signature.
-        SortedMap <String,String> params = new TreeMap<>();
+        SortedMap <String,String> params = new ConcurrentSkipListMap<String, String>();
         String paramKey;
         String paramVal;
         for ( Object paramPair : mapParams.entrySet()) {
@@ -204,7 +205,7 @@ public class OSTRequestClient {
 
 
 
-        // Make the call and execute.∂
+        // Make the call and execute.
         Call call = client.newCall( request );
         okhttp3.Response response = call.execute();
         String responseBody = getResponseBodyAsString( response );
@@ -214,16 +215,18 @@ public class OSTRequestClient {
 
     private String signQueryParams( Buffer hmacInputBuffer ) {
         // Generate Signature for Params.
-        SecretKeySpec keySpec = new SecretKeySpec( apiSecret.getBytes(StandardCharsets.UTF_8), HMAC_SHA256);
+        SecretKeySpec keySpec = new SecretKeySpec( apiSecret.getBytes( UTF_8 ), HMAC_SHA256);
         Mac mac;
         try {
             mac = Mac.getInstance(HMAC_SHA256);
             mac.init(keySpec);
-        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+        } catch ( NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        } catch (InvalidKeyException e) {
             throw new IllegalStateException(e);
         }
         byte[] bytes = hmacInputBuffer.readByteArray();
-        if ( DEBUG ) System.out.println("bytes to sign: " + new String(bytes, StandardCharsets.UTF_8));
+        if ( DEBUG ) System.out.println("bytes to sign: " + new String(bytes, UTF_8 ));
         byte[] result = mac.doFinal(bytes);
 
         String signature = ByteString.of(result).hex();

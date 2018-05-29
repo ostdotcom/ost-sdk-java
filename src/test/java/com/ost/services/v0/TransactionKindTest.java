@@ -28,7 +28,7 @@ public class TransactionKindTest extends V0ServiceTestBase {
 
     @Test
     public void t1Create() throws IOException {
-        HashMap <String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.put("name", "C1 " + String.valueOf(System.currentTimeMillis() / 1000) );
         params.put("kind", "company_to_user");
         params.put("currency_type", "BT");
@@ -46,7 +46,7 @@ public class TransactionKindTest extends V0ServiceTestBase {
 
     @Test
     public void t2Edit() throws IOException {
-        HashMap <String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
         params.put("name", "C2 " + String.valueOf(System.currentTimeMillis() / 1000) );
         params.put("kind", "user_to_user");
         params.put("currency_type", "USD");
@@ -77,7 +77,7 @@ public class TransactionKindTest extends V0ServiceTestBase {
 
     @Test
     public void t3list() {
-        HashMap<String,Object> params = new HashMap<>();
+        HashMap <String,Object> params = new HashMap<String, Object>();
 
 
         JsonObject response;
