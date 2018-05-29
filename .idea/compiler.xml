@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ost-sdk-java" target="6" />
+      <module name="ost-sdk-java" target="1.6" />
     </bytecodeTargetLevel>
   </component>
 </project>
