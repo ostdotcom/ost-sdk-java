@@ -1,7 +1,6 @@
 language: java
 # The cross product of the jdk and env settings form the matrix of builds Travis will run.
 jdk:
-  - oraclejdk6
   - oraclejdk8
   - oraclejdk9
   - openjdk7
