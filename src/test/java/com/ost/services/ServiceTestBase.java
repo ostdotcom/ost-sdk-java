@@ -52,12 +52,12 @@ public class ServiceTestBase {
     }
     protected static void validateResponseWithSuccess(JsonObject response, String resultType, Boolean isArrayResultType) {
         // Lets sleep for a while.
-        try {
-            int randomTimeBuffer = getRandomNumberInRange(10, 99);
-            Thread.sleep(sleepMilliSeconds + randomTimeBuffer);
-        } catch (InterruptedException e) {
-            //Ignore it.
-        }
+//        try {
+//            int randomTimeBuffer = getRandomNumberInRange(10, 99);
+//            Thread.sleep(sleepMilliSeconds + randomTimeBuffer);
+//        } catch (InterruptedException e) {
+//            //Ignore it.
+//        }
 
         //
         Assert.assertEquals( "success key missing in response.", true, response.has("success") );
