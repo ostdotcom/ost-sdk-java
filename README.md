@@ -18,11 +18,37 @@ To use this node module, developers will need to:
 
 ## Installation
 
-Install OST JavaScript SDK
+### Building from source using Maven
 
+Clone the repository
 ```bash
-> TBD
+git clone https://github.com/OpenSTFoundation/ost-sdk-java.git
+cd ost-sdk-java
 ```
+
+Set environment variables (required for tests)
+```bash
+# the latest valid API endpoint is "https://sandboxapi.ost.com/v1/", this may change in the future
+export OST_KIT_API_ENDPOINT="[V0_API_ENDPOINT]"
+export OST_KIT_API_V1_ENDPOINT="[V1_API_ENDPOINT]"
+export OST_KIT_API_KEY='[YOUR_API_KEY]'
+export OST_KIT_API_SECRET='[YOUR_API_SECRET]'
+export OST_KIT_TRANSFER_FROM_UUID="[UUID_OF_SENDER_USER]"
+export OST_KIT_TRANSFER_TO_UUID="[UUID_OF_RECEIPIENT_USER]"
+export OST_SDK_DEBUG="true"
+```
+
+Package using MVN (without dependencies)
+```bash
+mvn clean pacakge
+```
+
+With dependencies
+```bash
+mvn clean compile assembly:single
+```
+
+The jar file can be found in the target folder.
 
 ## Example Usage
 
@@ -32,7 +58,7 @@ Initialize the SDK object:
 ```java
 // the latest valid API endpoint is "https://sandboxapi.ost.com/v1/", this may change in the future
 HashMap <String,Object> sdkConfig = new HashMap<String,Object>();
-sdkConfig.put("apiEndpoint","https://sandboxapi.ost.com/v1/");
+sdkConfig.put("apiEndpoint","[V1_API_ENDPOINT]");
 sdkConfig.put("apiKey","[YOUR_API_KEY]");
 sdkConfig.put("apiSecret","[YOUR_API_SECRET]");
 OSTSDK ostObj = new OSTSDK(sdkConfig);
