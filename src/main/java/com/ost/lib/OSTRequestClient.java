@@ -34,7 +34,7 @@ public class OSTRequestClient {
     private static final Escaper PathSegmentEscaper   = UrlEscapers.urlPathSegmentEscaper();
     private static final String HMAC_SHA256 = "HmacSHA256";
     private static final Charset UTF_8 = Charset.forName("UTF-8");
-    private static Boolean DEBUG = System.getenv("OST_SDK_DEBUG").equalsIgnoreCase("true");
+    private static Boolean DEBUG = ("true").equalsIgnoreCase( System.getenv("OST_SDK_DEBUG") );
     private static Boolean VERBOSE = false;
 
 

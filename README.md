@@ -26,26 +26,15 @@ git clone https://github.com/OpenSTFoundation/ost-sdk-java.git
 cd ost-sdk-java
 ```
 
-Set environment variables (required for tests)
-```bash
-# the latest valid API endpoint is "https://sandboxapi.ost.com/v1/", this may change in the future
-export OST_KIT_API_ENDPOINT="[V0_API_ENDPOINT]"
-export OST_KIT_API_V1_ENDPOINT="[V1_API_ENDPOINT]"
-export OST_KIT_API_KEY='[YOUR_API_KEY]'
-export OST_KIT_API_SECRET='[YOUR_API_SECRET]'
-export OST_KIT_TRANSFER_FROM_UUID="[UUID_OF_SENDER_USER]"
-export OST_KIT_TRANSFER_TO_UUID="[UUID_OF_RECEIPIENT_USER]"
-export OST_SDK_DEBUG="true"
-```
 
 Package using MVN (without dependencies)
 ```bash
-mvn clean pacakge
+mvn clean pacakge -DskipTests
 ```
 
 With dependencies
 ```bash
-mvn clean compile assembly:single
+mvn clean compile assembly:single -DskipTests
 ```
 
 The jar file can be found in the target folder.
@@ -162,7 +151,7 @@ System.out.println("response: " + response.toString() );
 
 
 ```java
-com.ost.services.v1.Actions transactionService = services.actions;
+com.ost.services.v1.Actions actionService = services.actions;
 ```
 
 Create a new action:
