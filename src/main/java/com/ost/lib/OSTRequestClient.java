@@ -28,7 +28,7 @@ public class OSTRequestClient {
     private String apiKey;
     private String apiSecret;
     private String apiEndpoint;
-    private final Gson gson = new Gson();
+    private static final Gson gson = new Gson();
     private OkHttpClient client;
     private static final Escaper FormParameterEscaper = UrlEscapers.urlFormParameterEscaper();
     private static final Escaper PathSegmentEscaper   = UrlEscapers.urlPathSegmentEscaper();
@@ -234,14 +234,17 @@ public class OSTRequestClient {
         return signature;
     }
 
+    private static String SOMETHING_WRONG_RESPONSE = "{'success': false, 'err': {'code': 'SOMETHING_WENT_WRONG', 'internal_id': 'SDK(SOMETHING_WENT_WRONG)', 'msg': '', 'error_data':[]}}";
     private static String getResponseBodyAsString( okhttp3.Response response ) {
         // Process the response.
         String responseBody;
         if ( response.body() != null ) {
             try {
                 responseBody = response.body().string();
-                if ( DEBUG ) System.out.println("responseBody:\n" + responseBody + "\n");
-                return responseBody;
+                if ( responseBody.length() > 0 ) {
+                    if ( DEBUG ) System.out.println("responseBody:\n" + responseBody + "\n");
+                    return responseBody;
+                }
             } catch (IOException e) {
                 // Silently handle the error.
                 e.printStackTrace();
@@ -266,14 +269,20 @@ public class OSTRequestClient {
                 responseBody = "{'success': false, 'err': {'code': 'GATEWAY_TIMEOUT', 'internal_id': 'SDK(GATEWAY_TIMEOUT)', 'msg': '', 'error_data':[]}}";
                 break;
             default:
-                responseBody = "{'success': false, 'err': {'code': 'SOMETHING_WENT_WRONG', 'internal_id': 'SDK(SOMETHING_WENT_WRONG)', 'msg': '', 'error_data':[]}}";
+                responseBody = SOMETHING_WRONG_RESPONSE;
         }
 
         if ( DEBUG ) System.out.println("local responseBody:\n" + responseBody + "\n");
         return responseBody;
     }
 
-    private JsonObject buildApiResponse(String jsonString ) {
-        return gson.fromJson( jsonString , JsonObject.class);
+    private static JsonObject buildApiResponse(String jsonString ) {
+        try {
+            return gson.fromJson( jsonString , JsonObject.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if ( DEBUG ) System.out.println("Failed to parse response. local responseBody:\n" + SOMETHING_WRONG_RESPONSE + "\n");
+        return gson.fromJson(SOMETHING_WRONG_RESPONSE, JsonObject.class);
     }
 }
