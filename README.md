@@ -18,6 +18,16 @@ To use this node module, developers will need to:
 
 ## Installation
 
+### Maven users
+#### Add this dependency to your project's POM:
+```xml
+<dependency>
+  <groupId>com.ost</groupId>
+  <artifactId>ost-sdk-java</artifactId>
+  <version>0.9.0-beta-1</version>
+</dependency>
+```
+
 ### Building from source using Maven
 
 Clone the repository
