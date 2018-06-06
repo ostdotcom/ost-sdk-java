@@ -1,4 +1,4 @@
-# OST JavaScript SDK
+# OST Java SDK
 The official [OST Java SDK](https://dev.ost.com/).
 
 
@@ -116,8 +116,8 @@ Execute Airdrop:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("amount": 1);
-params.put("user_ids": "f87346e4-61f6-4d55-8cb8-234c65437b01");
+params.put("amount", 1);
+params.put("user_ids", "f87346e4-61f6-4d55-8cb8-234c65437b01");
 JsonObject response = airdropService.execute( params );
 System.out.println("response: " + response.toString() );
 ```
@@ -126,7 +126,7 @@ Get Airdrop Status:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id": 'ecd9b0b2-a0f4-422c-95a4-f25f8fc88334');
+params.put("id", 'ecd9b0b2-a0f4-422c-95a4-f25f8fc88334');
 JsonObject response = airdropService.get( params );
 System.out.println("response: " + response.toString() );
 ```
