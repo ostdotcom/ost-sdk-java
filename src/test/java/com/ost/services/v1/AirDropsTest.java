@@ -11,8 +11,6 @@ import org.junit.runners.MethodSorters;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AirDropsTest extends V1SecviceTestBase {
 
@@ -24,7 +22,7 @@ public class AirDropsTest extends V1SecviceTestBase {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        setService( getServiceManifest().airDrops );
+        setService( getServiceManifest().airdrops);
     }
 
 

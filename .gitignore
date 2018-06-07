@@ -76,3 +76,4 @@ fabric.properties
 .DS_Store
 target
 
+release.properties

@@ -1,0 +1,19 @@
+language: java
+# The cross product of the jdk and env settings form the matrix of builds Travis will run.
+jdk:
+  - oraclejdk8
+  - oraclejdk9
+  - openjdk7
+  - openjdk8
+notifications:
+  email:
+    recipients:
+      - ci.report@ost.com
+    on_success: always
+    on_failure: always
+sudo: false
+branches:
+  only:
+  - master
+  - develop
+script: mvn clean verify
