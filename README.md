@@ -24,7 +24,7 @@ To use this node module, developers will need to:
 <dependency>
   <groupId>com.ost</groupId>
   <artifactId>ost-sdk-java</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.0.beta.1</version>
 </dependency>
 ```
 
@@ -270,4 +270,34 @@ List Transfers:
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
 JsonObject response = transferService.list( params );
+```
+
+### Balance Module 
+
+```java
+com.ost.services.v1.Balances balanceService = ostObj.services.balances;
+```
+
+Get user balance:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("id", "38895b82-737e-4b23-b111-fec96e52f3b2");
+JsonObject response = balanceService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Ledger Module 
+
+```java
+com.ost.services.v1.Ledger ledgerService = ostObj.services.ledger;
+```
+
+Get transaction ledger for user:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("id", "38895b82-737e-4b23-b111-fec96e52f3b2");
+JsonObject response = ledgerService.get( params );
+System.out.println("response: " + response.toString() );
 ```

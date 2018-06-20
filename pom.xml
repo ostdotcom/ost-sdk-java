@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ost</groupId>
     <artifactId>ost-sdk-java</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0.beta.1-SNAPSHOT</version>
     <name>OST SDK for Java</name>
     <description>The official OST SDK for Java(https://dev.ost.com).</description>
     <packaging>jar</packaging>
