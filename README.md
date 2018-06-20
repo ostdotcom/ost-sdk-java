@@ -1,5 +1,9 @@
-# OST JavaScript SDK
+# OST Java SDK
 The official [OST Java SDK](https://dev.ost.com/).
+
+
+[![Travis](https://travis-ci.org/OpenSTFoundation/ost-sdk-java.svg?branch=master)](https://travis-ci.org/OpenSTFoundation/ost-sdk-java)
+[![Gitter: JOIN CHAT](https://img.shields.io/badge/gitter-JOIN%20CHAT-brightgreen.svg)](https://gitter.im/OpenSTFoundation/SimpleToken)
 
 ## Requirements
 
@@ -14,11 +18,36 @@ To use this node module, developers will need to:
 
 ## Installation
 
-Install OST JavaScript SDK
-
-```bash
-> TBD
+### Maven users
+#### Add this dependency to your project's POM:
+```xml
+<dependency>
+  <groupId>com.ost</groupId>
+  <artifactId>ost-sdk-java</artifactId>
+  <version>1.0.0</version>
+</dependency>
 ```
+
+### Building from source using Maven
+
+Clone the repository
+```bash
+git clone https://github.com/OpenSTFoundation/ost-sdk-java.git
+cd ost-sdk-java
+```
+
+
+Package using MVN (without dependencies)
+```bash
+mvn clean pacakge -DskipTests
+```
+
+With dependencies
+```bash
+mvn clean compile assembly:single -DskipTests
+```
+
+The jar file can be found in the target folder.
 
 ## Example Usage
 
@@ -28,7 +57,7 @@ Initialize the SDK object:
 ```java
 // the latest valid API endpoint is "https://sandboxapi.ost.com/v1/", this may change in the future
 HashMap <String,Object> sdkConfig = new HashMap<String,Object>();
-sdkConfig.put("apiEndpoint","https://sandboxapi.ost.com/v1/");
+sdkConfig.put("apiEndpoint","[V1_API_ENDPOINT]");
 sdkConfig.put("apiKey","[YOUR_API_KEY]");
 sdkConfig.put("apiSecret","[YOUR_API_SECRET]");
 OSTSDK ostObj = new OSTSDK(sdkConfig);
@@ -87,8 +116,8 @@ Execute Airdrop:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("amount": 1);
-params.put("user_ids": "f87346e4-61f6-4d55-8cb8-234c65437b01");
+params.put("amount", 1);
+params.put("user_ids", "f87346e4-61f6-4d55-8cb8-234c65437b01");
 JsonObject response = airdropService.execute( params );
 System.out.println("response: " + response.toString() );
 ```
@@ -97,7 +126,7 @@ Get Airdrop Status:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id": 'ecd9b0b2-a0f4-422c-95a4-f25f8fc88334');
+params.put("id", 'ecd9b0b2-a0f4-422c-95a4-f25f8fc88334');
 JsonObject response = airdropService.get( params );
 System.out.println("response: " + response.toString() );
 ```
@@ -132,7 +161,7 @@ System.out.println("response: " + response.toString() );
 
 
 ```java
-com.ost.services.v1.Actions transactionService = services.actions;
+com.ost.services.v1.Actions actionService = services.actions;
 ```
 
 Create a new action:
