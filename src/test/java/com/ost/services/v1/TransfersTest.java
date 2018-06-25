@@ -2,7 +2,9 @@ package com.ost.services.v1;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.ost.services.ApiEndPointProvider;
 import com.ost.services.OSTAPIService;
+import com.ost.services.ServiceTestBase;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -11,17 +13,27 @@ import org.junit.runners.MethodSorters;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TransfersTest extends V1SecviceTestBase {
+public class TransfersTest extends ServiceTestBase {
 
     @Override
     public com.ost.services.v1.Transfers getService() {
         return (com.ost.services.v1.Transfers) super.getService();
     }
 
+    @Override
+    public com.ost.services.v1.Manifest getServiceManifest() {
+        return (com.ost.services.v1.Manifest) super.getServiceManifest();
+    }
+
     HashMap<String,Object> commonParams;
+
+    @Override
+    protected void setUpApiEndPoint() throws Exception {
+        String apiEndPoint = ApiEndPointProvider.getV1EndPoint();
+        setApiEndPoint( apiEndPoint );
+    }
+
     @Before
     public void setUp() throws Exception {
         super.setUp();

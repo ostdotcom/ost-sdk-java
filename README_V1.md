@@ -24,7 +24,7 @@ To use this node module, developers will need to:
 <dependency>
   <groupId>com.ost</groupId>
   <artifactId>ost-sdk-java</artifactId>
-  <version>1.1.0.beta.1</version>
+  <version>1.0.1.beta.1</version>
 </dependency>
 ```
 
@@ -55,19 +55,19 @@ The jar file can be found in the target folder.
 Initialize the SDK object:
 
 ```java
-// the latest valid API endpoint is "https://sandboxapi.ost.com/v1.1/", this may change in the future
+// the latest valid API endpoint is "https://sandboxapi.ost.com/v1/", this may change in the future
 HashMap <String,Object> sdkConfig = new HashMap<String,Object>();
 sdkConfig.put("apiEndpoint","[V1_API_ENDPOINT]");
 sdkConfig.put("apiKey","[YOUR_API_KEY]");
 sdkConfig.put("apiSecret","[YOUR_API_SECRET]");
 OSTSDK ostObj = new OSTSDK(sdkConfig);
-com.ost.services.v1_1.Manifest services = (com.ost.services.v1_1.Manifest) ostObj.services;
+com.ost.services.v1.Manifest services = (com.ost.services.v1.Manifest) ostObj.services;
 ```
 
 ### Users Module 
 
 ```java
-com.ost.services.v1_1.Users userService = services.users;
+com.ost.services.v1.Users userService = services.users;
 ```
 
 Create a new user:
@@ -109,7 +109,7 @@ System.out.println("response: " + response.toString() );
 ### Airdrops Module 
 
 ```java
-com.ost.services.v1_1.Airdrops airdropService = services.airdrops;
+com.ost.services.v1.Airdrops airdropService = services.airdrops;
 ```
 
 Execute Airdrop:
@@ -146,7 +146,7 @@ System.out.println("response: " + response.toString() );
 ### Token Module 
 
 ```java
-com.ost.services.v1_1.Token tokenService = services.token;
+com.ost.services.v1.Token tokenService = services.token;
 ```
 
 Get details:
@@ -161,7 +161,7 @@ System.out.println("response: " + response.toString() );
 
 
 ```java
-com.ost.services.v1_1.Actions actionService = services.actions;
+com.ost.services.v1.Actions actionService = services.actions;
 ```
 
 Create a new action:
@@ -208,7 +208,7 @@ System.out.println("response: " + response.toString() );
 ### Transaction Module 
 
 ```java
-com.ost.services.v1_1.Transactions transactionService = services.transactions;
+com.ost.services.v1.Transactions transactionService = services.transactions;
 ```
 
 Execute Transaction:
@@ -243,7 +243,7 @@ System.out.println("response: " + response.toString() );
 ### Transfer Module 
 
 ```java
-com.ost.services.v1_1.Transfer transferService = ostObj.services.transfers;
+com.ost.services.v1.Transfer transferService = ostObj.services.transfers;
 ```
 
 Execute ST Prime Transfer:
@@ -272,32 +272,3 @@ HashMap <String,Object> params = new HashMap<String,Object>();
 JsonObject response = transferService.list( params );
 ```
 
-### Balance Module 
-
-```java
-com.ost.services.v1_1.Balances balanceService = ostObj.services.balances;
-```
-
-Get user balance:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", "38895b82-737e-4b23-b111-fec96e52f3b2");
-JsonObject response = balanceService.get( params );
-System.out.println("response: " + response.toString() );
-```
-
-### Ledger Module 
-
-```java
-com.ost.services.v1_1.Ledger ledgerService = ostObj.services.ledger;
-```
-
-Get transaction ledger for user:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", "38895b82-737e-4b23-b111-fec96e52f3b2");
-JsonObject response = ledgerService.get( params );
-System.out.println("response: " + response.toString() );
-```

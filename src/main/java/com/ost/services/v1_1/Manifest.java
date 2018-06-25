@@ -1,22 +1,14 @@
-package com.ost.services.v1;
-
-import com.ost.services.OSTServiceManifest;
+package com.ost.services.v1_1;
 
 import java.util.Map;
 
-public class Manifest extends OSTServiceManifest {
+public class Manifest extends com.ost.services.v1.Manifest {
 
-    public Actions actions;
-    public AirDrops airdrops;
-    public Token token;
-    public Transactions transactions;
-    public Transfers transfers;
-    public Users users;
-
+    public Balances balances;
+    public Ledger ledger;
 
     public Manifest( Map<String, Object> params) {
         super(params);
-        init();
     }
 
     protected void init() {
@@ -26,9 +18,13 @@ public class Manifest extends OSTServiceManifest {
         this.transactions = new Transactions( this.request );
         this.transfers = new Transfers( this.request );
         this.users = new Users( this.request );
+        this.balances = new Balances( this.request );
+        this.ledger = new Ledger( this.request );
     }
 
+    @Override
     public String getApiVersion() {
-        return "v1";
+        return "v1.1";
     }
+
 }
