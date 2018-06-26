@@ -48,7 +48,7 @@ public class BalancesTest extends ServiceTestBase {
     @Test
     public void get() throws IOException, OSTAPIService.MissingParameter {
         JsonObject response;
-        String resultType = "balances";
+        String resultType = "balance";
         Boolean isArrayResultType = false;
         HashMap<String,Object> params = new HashMap<String, Object>();
         params.put("id", fromUserId);
