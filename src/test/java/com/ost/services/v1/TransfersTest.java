@@ -21,11 +21,6 @@ public class TransfersTest extends ServiceTestBase {
         return (com.ost.services.v1.Transfers) super.getService();
     }
 
-    @Override
-    public com.ost.services.v1.Manifest getServiceManifest() {
-        return (com.ost.services.v1.Manifest) super.getServiceManifest();
-    }
-
     HashMap<String,Object> commonParams;
 
     @Override
@@ -37,10 +32,15 @@ public class TransfersTest extends ServiceTestBase {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        setService(getServiceManifest().transfers);
+        setService();
         commonParams = new HashMap<String, Object>();
         commonParams.put("to_address", "0x062ded9304cd96af6fa4780d6d6fd873e2b52410");
         commonParams.put("amount", 1);
+    }
+
+    protected void setService() {
+        com.ost.services.v1.Manifest services = (com.ost.services.v1.Manifest) getServiceManifest();
+        setService(services.transfers);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.ost.services.v1_1;
 import com.ost.services.ApiEndPointProvider;
+import org.junit.Before;
 
 
 public class ActionsTest extends com.ost.services.v1.ActionsTest {
@@ -8,9 +9,18 @@ public class ActionsTest extends com.ost.services.v1.ActionsTest {
         return (com.ost.services.v1_1.Actions) super.getService();
     }
 
+    @Before
     @Override
-    public com.ost.services.v1_1.Manifest getServiceManifest() {
-        return (com.ost.services.v1_1.Manifest) super.getServiceManifest();
+    public void setUp() throws Exception {
+        super.setUp();
+        com.ost.services.v1_1.Manifest services = (com.ost.services.v1_1.Manifest) getServiceManifest();
+        setService( services.actions );
+    }
+
+    @Override
+    protected void setService() {
+        com.ost.services.v1_1.Manifest services = (com.ost.services.v1_1.Manifest) getServiceManifest();
+        setService( services.actions );
     }
 
     @Override

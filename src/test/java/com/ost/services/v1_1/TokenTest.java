@@ -9,9 +9,11 @@ public class TokenTest extends com.ost.services.v1.TokenTest {
     }
 
     @Override
-    public com.ost.services.v1_1.Manifest getServiceManifest() {
-        return (com.ost.services.v1_1.Manifest) super.getServiceManifest();
+    protected void setService() {
+        com.ost.services.v1_1.Manifest services = (com.ost.services.v1_1.Manifest) getServiceManifest();
+        setService( services.token );
     }
+
 
     @Override
     protected void setUpApiEndPoint() throws Exception {

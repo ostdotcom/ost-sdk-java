@@ -21,11 +21,6 @@ public class ActionsTest extends ServiceTestBase {
     }
 
     @Override
-    public com.ost.services.v1.Manifest getServiceManifest() {
-        return (com.ost.services.v1.Manifest) super.getServiceManifest();
-    }
-
-    @Override
     protected void setUpApiEndPoint() throws Exception {
         String apiEndPoint = ApiEndPointProvider.getV1EndPoint();
         setApiEndPoint( apiEndPoint );
@@ -34,7 +29,13 @@ public class ActionsTest extends ServiceTestBase {
     @Before @Override
     public void setUp() throws Exception {
         super.setUp();
-        setService( getServiceManifest().actions );
+        setService();
+    }
+
+    protected void setService() {
+        com.ost.services.v1.Manifest services = (com.ost.services.v1.Manifest) getServiceManifest();
+        setService( services.actions );
+        super.setService( services.actions );
     }
 
     @Test

@@ -8,9 +8,9 @@ public class AirDropsTest extends com.ost.services.v1.AirDropsTest {
         return (com.ost.services.v1_1.AirDrops) super.getService();
     }
 
-    @Override
-    public com.ost.services.v1_1.Manifest getServiceManifest() {
-        return (com.ost.services.v1_1.Manifest) super.getServiceManifest();
+    protected void setService() {
+        com.ost.services.v1_1.Manifest services = (com.ost.services.v1_1.Manifest) getServiceManifest();
+        setService( services.airdrops );
     }
 
     @Override

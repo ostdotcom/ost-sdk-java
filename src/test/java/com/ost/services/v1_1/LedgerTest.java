@@ -20,11 +20,6 @@ public class LedgerTest extends ServiceTestBase {
     }
 
     @Override
-    public com.ost.services.v1_1.Manifest getServiceManifest() {
-        return (com.ost.services.v1_1.Manifest) super.getServiceManifest();
-    }
-
-    @Override
     public com.ost.services.v1_1.Ledger getService() {
         return (com.ost.services.v1_1.Ledger) super.getService();
     }
@@ -34,13 +29,19 @@ public class LedgerTest extends ServiceTestBase {
     @Before @Override
     public void setUp() throws Exception {
         super.setUp();
-        setService( getServiceManifest().ledger );
+        setService();
 
         fromUserId = System.getenv("OST_KIT_TRANSFER_FROM_UUID");
         if ( null == fromUserId ) {
             throw new Exception("OST_KIT_TRANSFER_FROM_UUID environment variable not set.");
         }
     }
+
+    protected void setService() {
+        com.ost.services.v1_1.Manifest services = (com.ost.services.v1_1.Manifest) getServiceManifest();
+        setService( services.ledger );
+    }
+
 
     @Test
     public void get() throws IOException, OSTAPIService.MissingParameter {

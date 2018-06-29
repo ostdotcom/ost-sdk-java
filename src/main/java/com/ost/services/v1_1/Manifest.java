@@ -1,14 +1,25 @@
 package com.ost.services.v1_1;
 
+import com.ost.services.OSTServiceManifest;
+
 import java.util.Map;
 
-public class Manifest extends com.ost.services.v1.Manifest {
+public class Manifest extends OSTServiceManifest {
+
+    public Actions actions;
+    public AirDrops airdrops;
+    public Token token;
+    public Transactions transactions;
+    public Transfers transfers;
+    public Users users;
 
     public Balances balances;
     public Ledger ledger;
 
+
     public Manifest( Map<String, Object> params) {
         super(params);
+        init();
     }
 
     protected void init() {

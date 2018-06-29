@@ -22,11 +22,6 @@ public class UsersTest extends ServiceTestBase {
     }
 
     @Override
-    public com.ost.services.v1.Manifest getServiceManifest() {
-        return (com.ost.services.v1.Manifest) super.getServiceManifest();
-    }
-
-    @Override
     protected void setUpApiEndPoint() throws Exception {
         String apiEndPoint = ApiEndPointProvider.getV1EndPoint();
         setApiEndPoint( apiEndPoint );
@@ -36,7 +31,13 @@ public class UsersTest extends ServiceTestBase {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        setService( getServiceManifest().users );
+        setService();
+    }
+
+
+    protected void setService() {
+        com.ost.services.v1.Manifest services = (com.ost.services.v1.Manifest) getServiceManifest();
+        setService( services.users );
     }
 
 

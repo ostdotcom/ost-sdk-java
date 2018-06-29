@@ -23,11 +23,6 @@ public class BalancesTest extends ServiceTestBase {
     }
 
     @Override
-    public com.ost.services.v1_1.Manifest getServiceManifest() {
-        return (com.ost.services.v1_1.Manifest) super.getServiceManifest();
-    }
-
-    @Override
     public com.ost.services.v1_1.Balances getService() {
         return (com.ost.services.v1_1.Balances) super.getService();
     }
@@ -37,12 +32,17 @@ public class BalancesTest extends ServiceTestBase {
     @Before @Override
     public void setUp() throws Exception {
         super.setUp();
-        setService( getServiceManifest().balances );
+        setService();
 
         fromUserId = System.getenv("OST_KIT_TRANSFER_FROM_UUID");
         if ( null == fromUserId ) {
             throw new Exception("OST_KIT_TRANSFER_FROM_UUID environment variable not set.");
         }
+    }
+
+    protected void setService() {
+        com.ost.services.v1_1.Manifest services = (com.ost.services.v1_1.Manifest) getServiceManifest();
+        setService( services.balances );
     }
 
     @Test

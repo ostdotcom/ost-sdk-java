@@ -9,15 +9,18 @@ public class UsersTest extends com.ost.services.v1.UsersTest {
         return (com.ost.services.v1_1.Users) super.getService();
     }
 
-    @Override
-    public com.ost.services.v1_1.Manifest getServiceManifest() {
-        return (com.ost.services.v1_1.Manifest) super.getServiceManifest();
-    }
 
     @Override
     protected void setUpApiEndPoint() throws Exception {
         String apiEndPoint = ApiEndPointProvider.getV1_1EndPoint();
         setApiEndPoint( apiEndPoint );
     }
+
+    @Override
+    protected void setService() {
+        com.ost.services.v1_1.Manifest services = (com.ost.services.v1_1.Manifest) getServiceManifest();
+        setService( services.users );
+    }
+
 
 }

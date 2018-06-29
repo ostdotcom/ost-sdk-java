@@ -21,10 +21,6 @@ public class AirDropsTest extends ServiceTestBase {
         return (com.ost.services.v1.AirDrops) super.getService();
     }
 
-    @Override
-    public com.ost.services.v1.Manifest getServiceManifest() {
-        return (com.ost.services.v1.Manifest) super.getServiceManifest();
-    }
 
     @Override
     protected void setUpApiEndPoint() throws Exception {
@@ -36,9 +32,13 @@ public class AirDropsTest extends ServiceTestBase {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        setService( getServiceManifest().airdrops);
+        setService();
     }
 
+    protected void setService() {
+        com.ost.services.v1.Manifest services = (com.ost.services.v1.Manifest) getServiceManifest();
+        setService( services.airdrops);
+    }
 
     @Test
     public void execute() throws IOException {
