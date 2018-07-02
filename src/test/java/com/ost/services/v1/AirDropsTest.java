@@ -2,7 +2,9 @@ package com.ost.services.v1;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.ost.services.ApiEndPointProvider;
 import com.ost.services.OSTAPIService;
+import com.ost.services.ServiceTestBase;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -12,19 +14,31 @@ import java.io.IOException;
 import java.util.HashMap;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class AirDropsTest extends V1SecviceTestBase {
+public class AirDropsTest extends ServiceTestBase {
 
     @Override
     public com.ost.services.v1.AirDrops getService() {
         return (com.ost.services.v1.AirDrops) super.getService();
     }
 
+
+    @Override
+    protected void setUpApiEndPoint() throws Exception {
+        String apiEndPoint = ApiEndPointProvider.getV1EndPoint();
+        setApiEndPoint( apiEndPoint );
+    }
+
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        setService( getServiceManifest().airdrops);
+        setService();
     }
 
+    protected void setService() {
+        com.ost.services.v1.Manifest services = (com.ost.services.v1.Manifest) getServiceManifest();
+        setService( services.airdrops);
+    }
 
     @Test
     public void execute() throws IOException {

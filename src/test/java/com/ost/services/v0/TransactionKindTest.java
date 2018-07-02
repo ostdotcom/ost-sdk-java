@@ -1,6 +1,8 @@
 package com.ost.services.v0;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.ost.services.ApiEndPointProvider;
+import com.ost.services.ServiceTestBase;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -11,14 +13,25 @@ import java.math.BigInteger;
 import java.util.HashMap;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TransactionKindTest extends V0ServiceTestBase {
+public class TransactionKindTest extends ServiceTestBase {
 
     @Override
     public TransactionKind getService() {
         return (TransactionKind) super.getService();
     }
 
-    @Before
+    @Override
+    protected void setUpApiEndPoint() throws Exception {
+        String apiEndPoint = ApiEndPointProvider.getV0EndPoint();
+        setApiEndPoint( apiEndPoint );
+    }
+
+    @Override
+    public com.ost.services.v0.Manifest getServiceManifest() {
+        return (com.ost.services.v0.Manifest) super.getServiceManifest();
+    }
+
+    @Before @Override
     public void setUp() throws Exception {
         super.setUp();
         setService( getServiceManifest().transactionKind );
