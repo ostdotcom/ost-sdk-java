@@ -2,7 +2,9 @@ package com.ost.services.v1;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.ost.services.ApiEndPointProvider;
 import com.ost.services.OSTAPIService;
+import com.ost.services.ServiceTestBase;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -11,22 +13,38 @@ import org.junit.runners.MethodSorters;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TransactionsTest extends V1SecviceTestBase {
+public class TransactionsTest extends ServiceTestBase {
 
     @Override
     public com.ost.services.v1.Transactions getService() {
         return (com.ost.services.v1.Transactions) super.getService();
     }
 
-    HashMap<String,Object> commonParams;
+    @Override
+    protected void setUpApiEndPoint() throws Exception {
+        String apiEndPoint = ApiEndPointProvider.getV1EndPoint();
+        setApiEndPoint( apiEndPoint );
+    }
+
+
+    protected HashMap<String,Object> commonParams;
+    protected com.ost.services.v1.Actions actionsService;
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        setService( getServiceManifest().transactions );
+        setService();
+        postSetup();
+    }
 
+    protected void setService() {
+        com.ost.services.v1.Manifest services = (com.ost.services.v1.Manifest) getServiceManifest();
+        setService( services.transactions);
+        actionsService = services.actions;
+    }
+
+
+    protected void postSetup()  throws Exception {
 
         //First Create an action
         HashMap <String,Object> params = new HashMap<String, Object>();
@@ -41,7 +59,7 @@ public class TransactionsTest extends V1SecviceTestBase {
         JsonObject response;
         String resultType = "action";
         Boolean isArrayResultType = false;
-        response = getServiceManifest().actions.create( params );
+        response = actionsService.create( params );
         validateResponseWithSuccess( response, resultType, isArrayResultType );
         JsonObject actionResult = response.getAsJsonObject("data").getAsJsonObject( resultType );
 
@@ -57,9 +75,8 @@ public class TransactionsTest extends V1SecviceTestBase {
         commonParams.put("from_user_id", fromUserId);
         commonParams.put("to_user_id", toUserId);
         commonParams.put("action_id", actionResult.get("id").getAsString() );
-
-
     }
+
     @Test
     public void execute() throws IOException {
         HashMap <String,Object> params = new HashMap<String, Object>();

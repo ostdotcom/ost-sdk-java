@@ -2,7 +2,9 @@ package com.ost.services.v1;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.ost.services.ApiEndPointProvider;
 import com.ost.services.OSTAPIService;
+import com.ost.services.ServiceTestBase;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -11,10 +13,8 @@ import org.junit.runners.MethodSorters;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TransfersTest extends V1SecviceTestBase {
+public class TransfersTest extends ServiceTestBase {
 
     @Override
     public com.ost.services.v1.Transfers getService() {
@@ -22,13 +22,25 @@ public class TransfersTest extends V1SecviceTestBase {
     }
 
     HashMap<String,Object> commonParams;
+
+    @Override
+    protected void setUpApiEndPoint() throws Exception {
+        String apiEndPoint = ApiEndPointProvider.getV1EndPoint();
+        setApiEndPoint( apiEndPoint );
+    }
+
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        setService(getServiceManifest().transfers);
+        setService();
         commonParams = new HashMap<String, Object>();
         commonParams.put("to_address", "0x062ded9304cd96af6fa4780d6d6fd873e2b52410");
         commonParams.put("amount", 1);
+    }
+
+    protected void setService() {
+        com.ost.services.v1.Manifest services = (com.ost.services.v1.Manifest) getServiceManifest();
+        setService(services.transfers);
     }
 
     @Test

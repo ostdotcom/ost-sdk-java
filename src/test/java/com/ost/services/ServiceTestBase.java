@@ -10,15 +10,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class ServiceTestBase {
+public abstract class ServiceTestBase {
     private OSTSDK ostsdk;
-    private HashMap<String, Object> apiV0Params;
+    private HashMap<String, Object> apiParams;
     protected com.ost.services.OSTServiceManifest services;
     private OSTAPIService service;
     private static final int sleepMilliSeconds = 300;
+    private String apiEndPoint;
 
 
-    public void setUp( String apiEndPoint ) throws Exception {
+    protected abstract void setUpApiEndPoint() throws Exception;
+
+    protected void setApiEndPoint( String apiEndPoint ) {
+        this.apiEndPoint = apiEndPoint;
+    }
+
+    public void setUp() throws Exception {
+        setUpApiEndPoint();
+
         String apiKey = System.getenv("OST_KIT_API_KEY");
         if ( null == apiKey ) {
             throw new Exception("Environment Variable OST_KIT_API_KEY is not set.");
@@ -34,12 +43,12 @@ public class ServiceTestBase {
             throw new Exception("apiEndPoint can not be null.");
         }
 
-        apiV0Params = new HashMap<String, Object>();
-        apiV0Params.put( "apiKey", apiKey);
-        apiV0Params.put( "apiSecret", apiSecret);
-        apiV0Params.put( "apiEndpoint", apiEndPoint);
+        apiParams = new HashMap<String, Object>();
+        apiParams.put( "apiKey", apiKey);
+        apiParams.put( "apiSecret", apiSecret);
+        apiParams.put( "apiEndpoint", apiEndPoint);
 
-        ostsdk = new OSTSDK( apiV0Params );
+        ostsdk = new OSTSDK(apiParams);
         services = ostsdk.services;
     }
 
@@ -51,15 +60,9 @@ public class ServiceTestBase {
         validateResponseWithSuccess(response, resultType, false);
     }
     protected static void validateResponseWithSuccess(JsonObject response, String resultType, Boolean isArrayResultType) {
-        // Lets sleep for a while.
-//        try {
-//            int randomTimeBuffer = getRandomNumberInRange(10, 99);
-//            Thread.sleep(sleepMilliSeconds + randomTimeBuffer);
-//        } catch (InterruptedException e) {
-//            //Ignore it.
-//        }
 
-        //
+
+        // Validate presence of basic keys in response.
         Assert.assertEquals( "success key missing in response.", true, response.has("success") );
         Assert.assertEquals( "data key missing in response.", true,  response.has("data") );
 
@@ -115,8 +118,8 @@ public class ServiceTestBase {
     @After
     public void tearDown() throws Exception {
         ostsdk = null;
-        apiV0Params.clear();
-        apiV0Params = null;
+        apiParams.clear();
+        apiParams = null;
     }
 
     protected void setService(OSTAPIService service) {
