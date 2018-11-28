@@ -56,6 +56,7 @@ Initialize the SDK object:
 
 ```java
 // the latest valid API endpoint is "https://sandboxapi.ost.com/v1.1/", this may change in the future
+// set OST_SDK_DEBUG=true for debuging purpose
 HashMap <String,Object> sdkConfig = new HashMap<String,Object>();
 sdkConfig.put("apiEndpoint","[V1_API_ENDPOINT]");
 sdkConfig.put("apiKey","[YOUR_API_KEY]");
