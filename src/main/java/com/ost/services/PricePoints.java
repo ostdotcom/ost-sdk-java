@@ -1,21 +1,21 @@
-package com.ost.services.v1;
+package com.ost.services;
 
 import com.google.gson.JsonObject;
 import com.ost.lib.OSTRequestClient;
-import com.ost.services.OSTAPIService;
 
 import java.io.IOException;
 import java.util.Map;
 
-public class Token extends OSTAPIService {
-    private static String servicePrefix = "/token";
+public class PricePoints extends OSTAPIService {
+    private static String servicePrefix = "/price-points";
+    private static String serviceSuffix = "";
 
-    public Token(OSTRequestClient ostRequestClient) {
-        super(ostRequestClient, servicePrefix);
+    public PricePoints(OSTRequestClient ostRequestClient) {
+        super(ostRequestClient, servicePrefix, serviceSuffix);
     }
 
     /**
-     * Get transaction details
+     * Get Price Points
      * @param params Request Params
      * @return API Response
      */

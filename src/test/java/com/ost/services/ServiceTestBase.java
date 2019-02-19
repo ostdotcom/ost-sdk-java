@@ -15,18 +15,8 @@ public abstract class ServiceTestBase {
     private HashMap<String, Object> apiParams;
     protected com.ost.services.OSTServiceManifest services;
     private OSTAPIService service;
-    private static final int sleepMilliSeconds = 300;
-    private String apiEndPoint;
-
-
-    protected abstract void setUpApiEndPoint() throws Exception;
-
-    protected void setApiEndPoint( String apiEndPoint ) {
-        this.apiEndPoint = apiEndPoint;
-    }
 
     public void setUp() throws Exception {
-        setUpApiEndPoint();
 
         String apiKey = System.getenv("OST_KIT_API_KEY");
         if ( null == apiKey ) {
@@ -39,6 +29,7 @@ public abstract class ServiceTestBase {
         }
 
 
+        String apiEndPoint = System.getenv("OST_KYC_API_ENDPOINT");
         if ( null == apiEndPoint ) {
             throw new Exception("apiEndPoint can not be null.");
         }
@@ -86,6 +77,17 @@ public abstract class ServiceTestBase {
 
         JsonArray results = data.get( resultType ).getAsJsonArray();
         Assert.assertTrue( results.size() > 0 );
+    }
+
+    protected static void validateResponseWithFaliure(JsonObject response) {
+
+        // Validate presence of success key in response.
+        Assert.assertEquals( "success key missing in response.", true, response.has("success") );
+
+        // Validate Success Flag.
+        boolean success = response.get("success").getAsBoolean();
+        Assert.assertEquals( success, false);
+
     }
 
     protected static void validateResult( Map<String,Object> params, JsonObject result ) {

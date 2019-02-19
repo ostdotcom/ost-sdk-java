@@ -1,17 +1,17 @@
-package com.ost.services.v1;
+package com.ost.services;
 
 import com.google.gson.JsonObject;
 import com.ost.lib.OSTRequestClient;
-import com.ost.services.OSTAPIService;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class Users extends OSTAPIService {
     private static String servicePrefix = "/users";
+    private static String serviceSuffix = "";
 
     public Users(OSTRequestClient ostRequestClient) {
-        super(ostRequestClient, servicePrefix);
+        super(ostRequestClient, servicePrefix, serviceSuffix);
     }
 
     /**
@@ -24,23 +24,12 @@ public class Users extends OSTAPIService {
         return this.request.post(resource, params);
     }
 
-
-    /**
-     * Edit an existing User
-     * @param params Request Params
-     * @return API Response
-     */
-    public JsonObject edit( Map<String,Object> params ) throws MissingParameter, IOException {
-        String resource = this.urlPrefix + "/" + this.getId( params ) + "/";
-        return this.request.post(resource, params);
-    }
-
     /**
      * List Users
      * @param params Request Params
      * @return API Response
      */
-    public JsonObject list( Map<String,Object> params ) throws IOException {
+    public JsonObject getList( Map<String,Object> params ) throws IOException {
         String resource = this.urlPrefix + "/";
         return this.request.get(resource, params);
     }
@@ -50,7 +39,7 @@ public class Users extends OSTAPIService {
      * @param params Request Params
      * @return API Response
      */
-    public JsonObject get( Map<String,Object> params ) throws MissingParameter, IOException {
+    public JsonObject get( Map<String,Object> params ) throws MissingParameter, IOException, InvalidParameter {
         String resource = this.urlPrefix + "/" + this.getId( params ) + "/";
         return this.request.get(resource, params);
     }

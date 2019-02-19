@@ -11,8 +11,7 @@ import static org.junit.Assert.*;
 
 public class OSTSDKTest {
 
-    private HashMap<String, Object> apiV0Params;
-    private HashMap<String, Object> apiV1Params;
+    private HashMap<String, Object> apiV2Params;
 
     @Before
     public void setUp() throws Exception {
@@ -33,49 +32,25 @@ public class OSTSDKTest {
             throw new Exception("Environment Variable OST_KIT_API_ENDPOINT is not set.");
         }
 
-        String v1Endpoint = System.getenv("OST_KIT_API_V1_ENDPOINT");
-        if ( null == v1Endpoint ) {
-            throw new Exception("Environment Variable OST_KIT_API_V1_ENDPOINT is not set.");
-        }
+        apiV2Params = new HashMap<String, Object>();
+        apiV2Params.put( "apiKey", apiKey);
+        apiV2Params.put( "apiSecret", apiSecret);
+        apiV2Params.put( "apiEndpoint", v0Endpoint);
 
-        apiV0Params = new HashMap<String, Object>();
-        apiV0Params.put( "apiKey", apiKey);
-        apiV0Params.put( "apiSecret", apiSecret);
-        apiV0Params.put( "apiEndpoint", v0Endpoint);
-
-        apiV1Params = new HashMap<String, Object>();
-        apiV1Params.put( "apiKey", apiKey);
-        apiV1Params.put( "apiSecret", apiSecret);
-        apiV1Params.put( "apiEndpoint", v1Endpoint);
     }
 
     @Test
-    public void createOSTSdkForV0Api() {
-        OSTSDK ostsdk = createSDKInstanceForV0API();
+    public void createOSTSdkForV2Api() {
+        OSTSDK ostsdk = createSDKInstanceForV2API();
         assertNotNull( ostsdk );
 
         OSTServiceManifest services = ostsdk.services;
-        assert( services instanceof com.ost.services.v0.Manifest);
-        assertEquals(services.getApiVersion(), "v0");
-    }
-
-    @Test
-    public void createOSTSdkForV1Api() {
-        OSTSDK ostsdk = createSDKInstanceForV1API();
-        assertNotNull( ostsdk );
-
-        OSTServiceManifest services = ostsdk.services;
-        assert( services instanceof com.ost.services.v1.Manifest);
-        assertEquals(services.getApiVersion(), "v1");
+        assert( services instanceof com.ost.services.Manifest);
     }
 
 
-    private OSTSDK createSDKInstanceForV0API() {
-        return new OSTSDK( apiV0Params );
-    }
-
-    private OSTSDK createSDKInstanceForV1API() {
-        return new OSTSDK( apiV1Params );
+    private OSTSDK createSDKInstanceForV2API() {
+        return new OSTSDK( apiV2Params );
     }
 
     @After
