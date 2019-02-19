@@ -28,7 +28,8 @@ public class UsersTest extends ServiceTestBase {
     @Test
     public void get() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+        String id = System.getenv("OST_KIT_USER_ID");
+        params.put("id", id);
 
         // Test-Case: Get an User.
         JsonObject response;

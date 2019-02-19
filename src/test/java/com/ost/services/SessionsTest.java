@@ -40,7 +40,8 @@ public class SessionsTest extends ServiceTestBase {
     @Test
     public void getList() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+        String userId = System.getenv("OST_KIT_USER_ID");
+        params.put("user_id", userId);
 
         // Test-Case: Get a Token.
         JsonObject response;

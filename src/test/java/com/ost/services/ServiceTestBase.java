@@ -7,7 +7,6 @@ import org.junit.After;
 import org.junit.Assert;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 public abstract class ServiceTestBase {
@@ -90,31 +89,16 @@ public abstract class ServiceTestBase {
 
     }
 
-    protected static void validateResult( Map<String,Object> params, JsonObject result ) {
-        for( Map.Entry<String,Object> param: params.entrySet() ) {
-            String paramKey  = param.getKey();
-
-            Assert.assertEquals("result does not contain key" + paramKey, true, result.has( paramKey ) );
-
-            String paramVal  = param.getValue().toString();
-            String resultVal = result.get( paramKey ).getAsString();
-            Assert.assertEquals("result value for key " + paramKey + " does not match expected value.", paramVal, resultVal );
-
+    protected static String getRandomAddress() {
+        char[] chars = "abcdefABCDEF0123456789".toCharArray();
+        StringBuilder sb = new StringBuilder(40);
+        Random random = new Random();
+        for (int i = 0; i < 40; i++) {
+            char c = chars[random.nextInt(chars.length)];
+            sb.append(c);
         }
-    }
-
-    protected static String generateNamePostFix() {
-        return String.valueOf(System.currentTimeMillis()) +  (getRandomNumberInRange(0, 99)).toString();
-    }
-
-    protected static Integer getRandomNumberInRange(int min, int max) {
-
-        if (min >= max) {
-            throw new IllegalArgumentException("max must be greater than min");
-        }
-
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
+        String address = "0x" + sb.toString();
+        return address;
     }
 
     @After
