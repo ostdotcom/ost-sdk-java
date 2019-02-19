@@ -24,18 +24,21 @@ public class SessionsTest extends ServiceTestBase {
         return (Manifest) super.getServiceManifest();
     }
 
-//    @Test
-//    public void get() throws Exception {
-//        HashMap<String, Object> params = new HashMap<String, Object>();
-//        params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-//        params.put("session_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
-//
-//        // Test-Case: Get a Token.
-//        JsonObject response;
-//        response = getService().get(params);
-//        validateResponseWithFaliure(response);
-//
-//    }
+    @Test
+    public void get() throws Exception {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        String userId = System.getenv("OST_KIT_USER_ID");
+        String sessionAddress = System.getenv("OST_KIT_SESSION_ADDRESS");
+        params.put("user_id", userId);
+        params.put("session_address", sessionAddress);
+
+        // Test-Case: Get a Session.
+        if (sessionAddress != null && !sessionAddress.trim().isEmpty()) {
+            JsonObject response;
+            response = getService().get(params);
+            validateResponseWithSuccess(response);
+        }
+    }
 
     @Test
     public void getList() throws Exception {
@@ -43,7 +46,7 @@ public class SessionsTest extends ServiceTestBase {
         String userId = System.getenv("OST_KIT_USER_ID");
         params.put("user_id", userId);
 
-        // Test-Case: Get a Token.
+        // Test-Case: Get List of Sessions.
         JsonObject response;
         response = getService().getList(params);
         validateResponseWithSuccess(response);

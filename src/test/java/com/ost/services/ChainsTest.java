@@ -30,7 +30,7 @@ public class ChainsTest extends ServiceTestBase {
         String chainId = System.getenv("OST_KIT_CHAIN_ID");
         params.put("chain_id", chainId);
 
-        // Test-Case: Get a Token.
+        // Test-Case: Get a Chain Information.
         JsonObject response;
         response = getService().get(params);
         validateResponseWithSuccess(response);

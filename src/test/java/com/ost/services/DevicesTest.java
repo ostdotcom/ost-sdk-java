@@ -33,7 +33,7 @@ public class DevicesTest extends ServiceTestBase {
         params.put("user_id", userId);
         params.put("device_address", deviceAddress);
 
-        // Test-Case: Get an User.
+        // Test-Case: Get User Device.
         JsonObject response;
         response = getService().get(params);
         validateResponseWithSuccess(response);
@@ -53,10 +53,10 @@ public class DevicesTest extends ServiceTestBase {
         params.put("device_uuid", deviceUuid);
         params.put("device_name", "Iphone S");
 
-        // Test-Case: Create an User.
+        // Test-Case: Create a device for User.
         JsonObject response;
         response = getService().create(params);
-        validateResponseWithFaliure(response);
+        validateResponseWithSuccess(response);
 
     }
 
@@ -66,7 +66,7 @@ public class DevicesTest extends ServiceTestBase {
         String userId = System.getenv("OST_KIT_USER_ID");
         params.put("user_id", userId);
 
-        // Test-Case: Get List of users.
+        // Test-Case: Get User Device(s) List.
         JsonObject response;
         response = getService().getList(params);
         validateResponseWithSuccess(response);
