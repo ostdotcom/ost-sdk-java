@@ -64,6 +64,32 @@ public abstract class OSTAPIService {
         return specialCharacterEscape(chainId);
     }
 
+    public String getTransactionId(Map<String, Object> params) throws MissingParameter, InvalidParameter {
+        String transactionId = "";
+        if (null == params || !params.containsKey("transaction_id") || null == params.get("transaction_id")) {
+            throw new MissingParameter("transaction_id");
+        }
+        if (!isValidParameter(params.get("transaction_id"))) {
+            throw new InvalidParameter("transaction_id");
+        }
+        transactionId = params.get("transaction_id").toString();
+        params.remove("transaction_id");
+        return specialCharacterEscape(transactionId);
+    }
+
+    public String getRecoveryOwnerAddress(Map<String, Object> params) throws MissingParameter, InvalidParameter {
+        String recoveryOwnerAddress = "";
+        if (null == params || !params.containsKey("recovery_owner_address") || null == params.get("recovery_owner_address")) {
+            throw new MissingParameter("recovery_owner_address");
+        }
+        if (!isValidParameter(params.get("recovery_owner_address"))) {
+            throw new InvalidParameter("recovery_owner_address");
+        }
+        recoveryOwnerAddress = params.get("recovery_owner_address").toString();
+        params.remove("recovery_owner_address");
+        return specialCharacterEscape(recoveryOwnerAddress);
+    }
+
     public String getId(Map<String, Object> params) throws MissingParameter, InvalidParameter {
         String id = "";
         if (null == params || !params.containsKey("id") || null == params.get("id")) {

@@ -6,21 +6,22 @@ import com.ost.lib.OSTRequestClient;
 import java.io.IOException;
 import java.util.Map;
 
-public class PricePoints extends OSTAPIService {
-    private static String servicePrefix = "/chains";
-    private static String serviceSuffix = "/price-points";
+public class RecoveryOwners extends OSTAPIService {
+    private static String servicePrefix = "/users";
+    private static String serviceSuffix = "/recovery-owners";
 
-    public PricePoints(OSTRequestClient ostRequestClient) {
+    public RecoveryOwners(OSTRequestClient ostRequestClient) {
         super(ostRequestClient, servicePrefix, serviceSuffix);
     }
 
     /**
-     * Get Price Points
+     * Get recovery owner
      * @param params Request Params
      * @return API Response
      */
     public JsonObject get( Map<String,Object> params ) throws IOException, InvalidParameter, MissingParameter {
-        String resource = this.urlPrefix + "/" + this.getChainId(params) + this.urlSuffix + "/";
+        String resource = this.urlPrefix + "/" + this.getUserId(params) + this.urlSuffix + "/" + this.getRecoveryOwnerAddress(params);
         return this.request.get(resource, params);
     }
 }
+
