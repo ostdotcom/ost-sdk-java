@@ -17,6 +17,7 @@ public class DeviceManagersTest extends ServiceTestBase {
     public void setUp() throws Exception {
         super.setUp();
         setService(getServiceManifest().deviceManagers);
+        super.setEnvironmentVariables();
     }
 
     @Override
@@ -27,6 +28,7 @@ public class DeviceManagersTest extends ServiceTestBase {
     @Test
     public void get() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", getEnvironmentVariables().get("userId"));
 
         // Test-Case: Get device managers detail.
         JsonObject response;

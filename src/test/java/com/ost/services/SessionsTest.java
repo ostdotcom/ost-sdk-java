@@ -17,6 +17,7 @@ public class SessionsTest extends ServiceTestBase {
     public void setUp() throws Exception {
         super.setUp();
         setService(getServiceManifest().sessions);
+        super.setEnvironmentVariables();
     }
 
     @Override
@@ -27,24 +28,19 @@ public class SessionsTest extends ServiceTestBase {
     @Test
     public void get() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        String userId = System.getenv("OST_KIT_USER_ID");
-        String sessionAddress = System.getenv("OST_KIT_SESSION_ADDRESS");
-        params.put("user_id", userId);
-        params.put("session_address", sessionAddress);
+        params.put("user_id", getEnvironmentVariables().get("userId"));
+        params.put("session_address", getEnvironmentVariables().get("sessionAddress"));
 
         // Test-Case: Get a Session.
-        if (sessionAddress != null && !sessionAddress.trim().isEmpty()) {
-            JsonObject response;
-            response = getService().get(params);
-            validateResponseWithSuccess(response);
-        }
+        JsonObject response;
+        response = getService().get(params);
+        validateResponseWithSuccess(response);
     }
 
     @Test
     public void getList() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        String userId = System.getenv("OST_KIT_USER_ID");
-        params.put("user_id", userId);
+        params.put("user_id", getEnvironmentVariables().get("userId"));
 
         // Test-Case: Get List of Sessions.
         JsonObject response;

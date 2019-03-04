@@ -17,6 +17,7 @@ public class RecoveryOwnersTest extends ServiceTestBase {
     public void setUp() throws Exception {
         super.setUp();
         setService(getServiceManifest().recoveryOwners);
+        super.setEnvironmentVariables();
     }
 
     @Override
@@ -27,6 +28,9 @@ public class RecoveryOwnersTest extends ServiceTestBase {
     @Test
     public void get() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
+
+        params.put("user_id", getEnvironmentVariables().get("userId"));
+        params.put("recovery_owner_address", getEnvironmentVariables().get("recoveryOwnerAddress"));
 
         // Test-Case: Get recovery owner.
         JsonObject response;

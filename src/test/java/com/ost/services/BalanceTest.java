@@ -17,6 +17,7 @@ public class BalanceTest extends ServiceTestBase {
     public void setUp() throws Exception {
         super.setUp();
         setService(getServiceManifest().balance);
+        super.setEnvironmentVariables();
     }
 
     @Override
@@ -27,6 +28,7 @@ public class BalanceTest extends ServiceTestBase {
     @Test
     public void get() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user_id", getEnvironmentVariables().get("userId"));
 
         // Test-Case: Get User's Balance.
         JsonObject response;

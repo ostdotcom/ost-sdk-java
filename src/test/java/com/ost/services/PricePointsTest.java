@@ -17,6 +17,7 @@ public class PricePointsTest extends ServiceTestBase {
     public void setUp() throws Exception {
         super.setUp();
         setService(getServiceManifest().pricePoints);
+        super.setEnvironmentVariables();
     }
 
     @Override
@@ -27,6 +28,7 @@ public class PricePointsTest extends ServiceTestBase {
     @Test
     public void get() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("chain_id", getEnvironmentVariables().get("auxChainId"));
 
         // Test-Case: Get a Price Points.
         JsonObject response;

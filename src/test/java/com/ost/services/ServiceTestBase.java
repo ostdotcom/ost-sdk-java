@@ -1,6 +1,5 @@
 package com.ost.services;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.ost.OSTSDK;
 import org.junit.After;
@@ -14,6 +13,7 @@ public abstract class ServiceTestBase {
     private HashMap<String, Object> apiParams;
     protected com.ost.services.OSTServiceManifest services;
     private OSTAPIService service;
+    private HashMap<String, Object> environmentVariables;
 
     public void setUp() throws Exception {
 
@@ -28,7 +28,7 @@ public abstract class ServiceTestBase {
         }
 
 
-        String apiEndPoint = System.getenv("OST_KYC_API_ENDPOINT");
+        String apiEndPoint = System.getenv("OST_KIT_API_ENDPOINT");
         if ( null == apiEndPoint ) {
             throw new Exception("apiEndPoint can not be null.");
         }
@@ -42,40 +42,15 @@ public abstract class ServiceTestBase {
         services = ostsdk.services;
     }
 
+    protected static void validateResponseWithSuccess(JsonObject response) {
 
-    public static void validateResponseWithSuccess( JsonObject response ) {
-        validateResponseWithSuccess(response, null, false);
-    }
-    public static void validateResponseWithSuccess( JsonObject response, String resultType ) {
-        validateResponseWithSuccess(response, resultType, false);
-    }
-    protected static void validateResponseWithSuccess(JsonObject response, String resultType, Boolean isArrayResultType) {
-
-
-        // Validate presence of basic keys in response.
+        // Validate presence of success key in response.
         Assert.assertEquals( "success key missing in response.", true, response.has("success") );
-        Assert.assertEquals( "data key missing in response.", true,  response.has("data") );
 
         // Validate Success Flag.
         boolean success = response.get("success").getAsBoolean();
         Assert.assertEquals( success, true);
 
-        // Validate data is not an empty Object.
-        JsonObject data = response.get("data").getAsJsonObject();
-        Assert.assertTrue( data.size() > 0 );
-
-        if ( null == resultType ) {
-            return;
-        }
-
-        Assert.assertEquals(resultType + " key missing in response.", data.has( resultType ), true );
-
-        if ( !isArrayResultType ) {
-            return;
-        }
-
-        JsonArray results = data.get( resultType ).getAsJsonArray();
-        Assert.assertTrue( results.size() > 0 );
     }
 
     protected static void validateResponseWithFaliure(JsonObject response) {
@@ -112,10 +87,73 @@ public abstract class ServiceTestBase {
         this.service = service;
     }
 
+    public void setEnvironmentVariables() throws Exception {
+        String userId = System.getenv("OST_KIT_USER_ID");
+        if ( null == userId ) {
+            throw new Exception("userId can not be null.");
+        }
+
+        String auxChainId = System.getenv("OST_KIT_AUX_CHAIN_ID");
+        if ( null == auxChainId ) {
+            throw new Exception("auxChainId can not be null.");
+        }
+
+        String deviceUserAddress = System.getenv("OST_KIT_USER_DEVICE_ADDRESS");
+        if ( null == deviceUserAddress ) {
+            throw new Exception("deviceUserAddress can not be null.");
+        }
+
+        String recoveryOwnerAddress = System.getenv("OST_KIT_RECOVERY_OWNER_ADDRESS");
+        if ( null == recoveryOwnerAddress ) {
+            throw new Exception("recoveryOwnerAddress can not be null.");
+        }
+
+        String sessionAddress = System.getenv("OST_KIT_SESSION_ADDRESS");
+        if ( null == sessionAddress ) {
+            throw new Exception("sessionAddress can not be null.");
+        }
+
+        String ruleAddress = System.getenv("OST_KIT_RULE_ADDRESS");
+        if ( null == ruleAddress ) {
+            throw new Exception("ruleAddress can not be null.");
+        }
+
+        String user2TokenHolderAddress = System.getenv("OST_KIT_USER2_TOKEN_HOLDER_ADDRESS");
+        if ( null == user2TokenHolderAddress ) {
+            throw new Exception("user2TokenHolderAddress can not be null.");
+        }
+
+        String transactionId = System.getenv("OST_KIT_TRANSACTION_ID");
+        if ( null == transactionId ) {
+            throw new Exception("transactionId can not be null.");
+        }
+
+        String companyUserId = System.getenv("OST_KIT_COMPANY_USER_ID");
+        if ( null == companyUserId ) {
+            throw new Exception("companyUserId can not be null.");
+        }
+
+
+        environmentVariables = new HashMap<String, Object>();
+        environmentVariables.put("userId", userId);
+        environmentVariables.put("auxChainId", auxChainId);
+        environmentVariables.put("deviceUserAddress", deviceUserAddress);
+        environmentVariables.put("recoveryOwnerAddress", recoveryOwnerAddress);
+        environmentVariables.put("sessionAddress", sessionAddress);
+        environmentVariables.put("ruleAddress", ruleAddress);
+        environmentVariables.put("user2TokenHolderAddress", user2TokenHolderAddress);
+        environmentVariables.put("transactionId", transactionId);
+        environmentVariables.put("companyUserId", companyUserId);
+    }
+
     public OSTAPIService getService() {
         return service;
     }
     public OSTServiceManifest getServiceManifest() {
         return services;
+    }
+
+    public HashMap<String, Object> getEnvironmentVariables() {
+        return environmentVariables;
     }
 }

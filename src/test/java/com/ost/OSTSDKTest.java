@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class OSTSDKTest {
 
-    private HashMap<String, Object> apiV2Params;
+    private HashMap<String, Object> apiParams;
 
     @Before
     public void setUp() throws Exception {
@@ -27,15 +27,15 @@ public class OSTSDKTest {
             throw new Exception("Environment Variable OST_KIT_API_SECRET is not set.");
         }
 
-        String v0Endpoint = System.getenv("OST_KIT_API_ENDPOINT");
-        if ( null == v0Endpoint ) {
+        String apiEndpoint = System.getenv("OST_KIT_API_ENDPOINT");
+        if ( null == apiEndpoint ) {
             throw new Exception("Environment Variable OST_KIT_API_ENDPOINT is not set.");
         }
 
-        apiV2Params = new HashMap<String, Object>();
-        apiV2Params.put( "apiKey", apiKey);
-        apiV2Params.put( "apiSecret", apiSecret);
-        apiV2Params.put( "apiEndpoint", v0Endpoint);
+        apiParams = new HashMap<String, Object>();
+        apiParams.put( "apiKey", apiKey);
+        apiParams.put( "apiSecret", apiSecret);
+        apiParams.put( "apiEndpoint", apiEndpoint);
 
     }
 
@@ -50,7 +50,7 @@ public class OSTSDKTest {
 
 
     private OSTSDK createSDKInstanceForV2API() {
-        return new OSTSDK( apiV2Params );
+        return new OSTSDK( apiParams );
     }
 
     @After

@@ -17,7 +17,8 @@ public class DevicesTest extends ServiceTestBase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        setService(getServiceManifest().users);
+        setService(getServiceManifest().devices);
+        super.setEnvironmentVariables();
     }
 
     @Override
@@ -28,10 +29,8 @@ public class DevicesTest extends ServiceTestBase {
     @Test
     public void get() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        String userId = System.getenv("OST_KIT_USER_ID");
-        String deviceAddress = System.getenv("OST_KIT_DEVICE_ADDRESS");
-        params.put("user_id", userId);
-        params.put("device_address", deviceAddress);
+        params.put("user_id", getEnvironmentVariables().get("userId"));
+        params.put("device_address", getEnvironmentVariables().get("deviceUserAddress"));
 
         // Test-Case: Get User Device.
         JsonObject response;
@@ -43,11 +42,10 @@ public class DevicesTest extends ServiceTestBase {
     @Test
     public void create() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        String userId = System.getenv("OST_KIT_USER_ID");
-        String deviceUuid = System.getenv("OST_KIT_DEVICE_UUID");
+        String deviceUuid = "29f57b59-60af-4579-9d6c-2ebcb36a9142";
         String address = getRandomAddress();
         String apiSignerAddress = getRandomAddress();
-        params.put("user_id", userId);
+        params.put("user_id", getEnvironmentVariables().get("userId"));
         params.put("address", address);
         params.put("api_signer_address", apiSignerAddress);
         params.put("device_uuid", deviceUuid);
@@ -63,8 +61,7 @@ public class DevicesTest extends ServiceTestBase {
     @Test
     public void getList() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        String userId = System.getenv("OST_KIT_USER_ID");
-        params.put("user_id", userId);
+        params.put("user_id", getEnvironmentVariables().get("userId"));
 
         // Test-Case: Get User Device(s) List.
         JsonObject response;
