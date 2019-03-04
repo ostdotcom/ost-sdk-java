@@ -15,7 +15,7 @@ public class Transactions extends OSTAPIService {
     }
 
     /**
-     * execute transaction from company
+     * execute company to user transaction
      * @param params Request Params
      * @return API Response
      */

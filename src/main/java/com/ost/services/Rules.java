@@ -19,7 +19,7 @@ public class Rules extends OSTAPIService {
      * @param params Request Params
      * @return API Response
      */
-    public JsonObject get( Map<String,Object> params ) throws IOException {
+    public JsonObject getList( Map<String,Object> params ) throws IOException {
         String resource = this.urlPrefix + "/";
         return this.request.get(resource, params);
     }

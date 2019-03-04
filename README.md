@@ -1,9 +1,7 @@
 # OST Java SDK
+[![Build Status](https://travis-ci.org/ostdotcom/ost-sdk-java.svg?branch=master)](https://travis-ci.org/ostdotcom/ost-sdk-java)
+
 The official [OST Java SDK](https://dev.ost.com/).
-
-
-[![Travis](https://travis-ci.org/OpenSTFoundation/ost-sdk-java.svg?branch=master)](https://travis-ci.org/OpenSTFoundation/ost-sdk-java)
-[![Gitter: JOIN CHAT](https://img.shields.io/badge/gitter-JOIN%20CHAT-brightgreen.svg)](https://gitter.im/OpenSTFoundation/SimpleToken)
 
 ## Requirements
 
@@ -32,10 +30,9 @@ To use this node module, developers will need to:
 
 Clone the repository
 ```bash
-git clone https://github.com/OpenSTFoundation/ost-sdk-java.git
+git clone https://github.com/ostdotcom/ost-sdk-java.git
 cd ost-sdk-java
 ```
-
 
 Package using MVN (without dependencies)
 ```bash
@@ -51,17 +48,82 @@ The jar file can be found in the target folder.
 
 ## Example Usage
 
-
 Initialize the SDK object:
 
 ```java
-// the latest valid API endpoint is "https://s5-api.sandboxost.com/testnet/v2/", this may change in the future
+// the latest valid API endpoint is "https://api.ost.com/mainnet/v2/", this may change in the future
 HashMap <String,Object> sdkConfig = new HashMap<String,Object>();
-sdkConfig.put("apiEndpoint","[V1_API_ENDPOINT]");
+sdkConfig.put("apiEndpoint","[YOUR_API_ENDPOINT]");
 sdkConfig.put("apiKey","[YOUR_API_KEY]");
 sdkConfig.put("apiSecret","[YOUR_API_SECRET]");
+
+// The config field is optional for sdkConfig Object
+HashMap <String,Object> nestedparam = new HashMap<String,Object>();
+// This is the timeout in seconds for which the socket connection will remain open
+// The value of timeout will always be of type long
+nestedparam.put("timeout", (long) 15);
+sdkConfig.put("config", nestedparam);
+
 OSTSDK ostObj = new OSTSDK(sdkConfig);
 com.ost.services.Manifest services = (com.ost.services.Manifest) ostObj.services;
+```
+
+### Chains Module
+
+```java
+com.ost.services.Chains chainsService = services.chains;
+```
+
+Get Chains Information:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("chain_id", "2000");
+JsonObject response = chainsService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Price Points Module
+
+```java
+com.ost.services.PricePoints pricePointsService = services.pricePoints;
+```
+
+Get Price Points:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("chain_id", "200");
+JsonObject response = pricePointsService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Tokens Module
+
+```java
+com.ost.services.Tokens tokensService = services.tokens;
+```
+
+Get Token Detail:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+JsonObject response = tokensService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Rules Module
+
+```java
+com.ost.services.Rules rulesService = services.rules;
+```
+
+List all Rules:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+JsonObject response = rulesService.getList( params );
+System.out.println("response: " + response.toString() );
 ```
 
 ### Users Module 
@@ -92,60 +154,6 @@ Get a list of users and other data:
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
 JsonObject response = userService.getList( params );
-System.out.println("response: " + response.toString() );
-```
-
-### Tokens Module
-
-```java
-com.ost.services.Tokens tokensService = services.tokens;
-```
-
-Get Token Detail:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = tokensService.get( params );
-System.out.println("response: " + response.toString() );
-```
-
-### Sessions Module
-
-```java
-com.ost.services.Sessions sessionsService = services.sessions;
-```
-
-Get User Session:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-params.put("session_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
-JsonObject response = sessionsService.get( params );
-System.out.println("response: " + response.toString() );
-```
-
-Get User Session(s) List:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-JsonObject response = sessionsService.getList( params );
-System.out.println("response: " + response.toString() );
-```
-
-### Price Points Module
-
-
-```java
-com.ost.services.PricePoints pricePointsService = services.pricePoints;
-```
-
-Get Price Points:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = pricePointsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
@@ -186,17 +194,126 @@ JsonObject response = devicesService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-### Chains Module
+### DeviceManagers Module
 
 ```java
-com.ost.services.Chains chainsService = services.chains;
+com.ost.services.DeviceManagers deviceManagersService = services.deviceManagers;
 ```
 
-Get Chains Information:
+Get Device Managers detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("chain_id", "2000");
-JsonObject response = chainsService.get( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+JsonObject response = deviceManagersService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Sessions Module
+
+```java
+com.ost.services.Sessions sessionsService = services.sessions;
+```
+
+Get User Session:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("session_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
+JsonObject response = sessionsService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+Get User Session(s) List:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+JsonObject response = sessionsService.getList( params );
+System.out.println("response: " + response.toString() );
+```
+
+### RecoveryOwners Module
+
+```java
+com.ost.services.RecoveryOwners recoveryOwnersService = services.recoveryOwners;
+```
+
+Get recovery owner:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("recovery_owner_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
+JsonObject response = recoveryOwnersService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Balance Module
+
+```java
+com.ost.services.Balance balanceService = services.balance;
+```
+
+Get User's Balance:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+JsonObject response = balanceService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Transactions Module
+
+```java
+com.ost.services.Transactions transactionsService = services.transactions;
+```
+
+Get a transaction info:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("transaction_id", "e96450b8-f46a-40ee-adf1-9d65a4b53241");
+JsonObject response = transactionsService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+Get all transactions for a user:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("transaction_id", "e96450b8-f46a-40ee-adf1-9d65a4b53241");
+JsonObject response = transactionsService.getList( params );
+System.out.println("response: " + response.toString() );
+```
+
+execute transaction from company:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+HashMap <String,Object> nestedparams = new HashMap<String,Object>();
+String userId = "29f57b59-60af-4579-9d6c-2ebcb36a9142";
+String toAddress = "0xe37906219ad67cc1301b970539c9860f9ce8d991";
+String parameter1 = "0xa31e988eebc89d0bc3e4a9a5463545ea534593e4";
+String parameter2 = 5
+params.put("user_id", userId);
+params.put("to", toAddress);
+nestedparams.put("method", "directTransfers");
+ArrayList<ArrayList> nestedarraylist = new ArrayList<ArrayList>();
+ArrayList<Object> arrayList1 = new ArrayList<Object>();
+arrayList1.add(parameter1);
+ArrayList<Object> arrayList2 = new ArrayList<Object>();
+Gson gsonObj = new Gson();
+arrayList2.add(parameter2);
+nestedarraylist.add(arrayList1);
+nestedarraylist.add(arrayList2);
+nestedparams.put("parameters", nestedarraylist);
+String jsonStr = gsonObj.toJson(nestedparams);
+params.put("raw_calldata", jsonStr);
+JsonObject response = transactionsService.execute( params );
 System.out.println("response: " + response.toString() );
 ```

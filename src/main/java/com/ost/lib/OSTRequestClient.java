@@ -150,7 +150,7 @@ public class OSTRequestClient {
 
         FormBody.Builder formBodyBuilder    = new FormBody.Builder();
         if ( null == urlBuilder ) {
-            throw new IOException("Failed to instanciate HttpUrl.Builder. resource or Api Endpoint is incorrect.");
+            throw new IOException("Failed to instantiate HttpUrl.Builder. resource or Api Endpoint is incorrect.");
         }
 
         // Evaluate the url generated so far.

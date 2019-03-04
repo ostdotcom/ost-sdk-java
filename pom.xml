@@ -132,9 +132,9 @@
         </developer>
     </developers>
     <scm>
-        <connection>scm:git:https://github.com/OpenSTFoundation/ost-sdk-java.git</connection>
-        <developerConnection>scm:git:git@github.com:OpenSTFoundation/ost-sdk-java.git</developerConnection>
-        <url>https://github.com/OpenSTFoundation/ost-sdk-java</url>
+        <connection>scm:git:https://github.com/ostdotcom/ost-sdk-java.git</connection>
+        <developerConnection>scm:git:git@github.com:ostdotcom/ost-sdk-java.git</developerConnection>
+        <url>https://github.com/ostdotcom/ost-sdk-java</url>
       <tag>HEAD</tag>
   </scm>
     <distributionManagement>

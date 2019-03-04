@@ -21,7 +21,7 @@ public class Tokens extends OSTAPIService {
      * @return API Response
      */
     public JsonObject get( Map<String,Object> params ) throws MissingParameter, IOException {
-        String resource = this.urlPrefix + "";
+        String resource = this.urlPrefix + "/";
         return this.request.get(resource, params);
     }
 }

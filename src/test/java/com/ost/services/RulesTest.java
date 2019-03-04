@@ -17,6 +17,7 @@ public class RulesTest extends ServiceTestBase {
     public void setUp() throws Exception {
         super.setUp();
         setService(getServiceManifest().rules);
+        super.setEnvironmentVariables();
     }
 
     @Override
@@ -30,7 +31,7 @@ public class RulesTest extends ServiceTestBase {
 
         // Test-Case: List all Rules.
         JsonObject response;
-        response = getService().get(params);
+        response = getService().getList(params);
         validateResponseWithSuccess(response);
 
     }
