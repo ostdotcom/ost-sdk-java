@@ -18,6 +18,7 @@ public class UsersTest extends ServiceTestBase {
     public void setUp() throws Exception {
         super.setUp();
         setService(getServiceManifest().users);
+        super.setEnvironmentVariables();
     }
 
     @Override
@@ -28,8 +29,7 @@ public class UsersTest extends ServiceTestBase {
     @Test
     public void get() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        String id = System.getenv("OST_KIT_USER_ID");
-        params.put("id", id);
+        params.put("id", getEnvironmentVariables().get("userId"));
 
         // Test-Case: Get an User.
         JsonObject response;

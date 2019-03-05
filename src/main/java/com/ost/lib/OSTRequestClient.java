@@ -34,7 +34,7 @@ public class OSTRequestClient {
     private static Boolean DEBUG = ("true").equalsIgnoreCase( System.getenv("OST_SDK_DEBUG") );
     private static Boolean VERBOSE = false;
 
-    static class HttpParam {
+    public static class HttpParam {
         private String paramName;
         private String paramValue;
 
@@ -156,46 +156,29 @@ public class OSTRequestClient {
         // Evaluate the url generated so far.
         HttpUrl url = urlBuilder.build();
 
-        // Start Building HMAC Input Buffer by parsing the url.
-        Buffer hmacInputBuffer = new Buffer();
-        for (String path : url.pathSegments()) {
-            if ( DEBUG && VERBOSE ) System.out.println("path:" + path);
-            hmacInputBuffer.writeByte('/').writeUtf8( PathSegmentEscaper.escape( path ) );
-        }
-        hmacInputBuffer.writeByte('?');
-
         //Reset urlBuilder.
         urlBuilder = baseUrl.newBuilder();
+
+
+        ArrayList<HttpParam> params = new ArrayList<HttpParam>();
 
         mapParams.put("api_key", apiKey);
         mapParams.put("api_signature_kind", "OST1-HMAC-SHA256");
         mapParams.put("api_request_timestamp", String.valueOf(System.currentTimeMillis() / 1000));
-        ArrayList<HttpParam> params = new ArrayList<HttpParam>();
+
+        params = getRequestParam(resource, mapParams);
+
         String paramKey;
         String paramVal;
 
-        params = buildNestedQuery(params, "", mapParams);
-
         // Add params to url/form-body & hmacInputBuffer.
         Iterator it = params.iterator();
-        boolean firstParam = true;
+
         while (it.hasNext()) {
             HttpParam pair = (HttpParam) it.next();
 
             paramKey = pair.getParamName();
             paramVal = pair.getParamValue();
-
-            paramVal = specialCharacterEscape(paramVal);
-
-            if (!firstParam) {
-                hmacInputBuffer.writeByte('&');
-            }
-            firstParam = false;
-
-            hmacInputBuffer.writeUtf8(paramKey);
-            hmacInputBuffer.writeByte('=');
-            hmacInputBuffer.writeUtf8(paramVal);
-            if (DEBUG) System.out.println("paramKey " + paramKey + " paramVal " + paramVal);
 
             if (GET_REQUEST.equalsIgnoreCase(requestType)) {
                 urlBuilder.addEncodedQueryParameter(paramKey, paramVal);
@@ -204,41 +187,28 @@ public class OSTRequestClient {
             }
         }
 
-
-        // Add signature to Params.
-        paramKey = "api_signature";
-        paramVal = signQueryParams( hmacInputBuffer );
-        if ( GET_REQUEST.equalsIgnoreCase( requestType) ) {
-            urlBuilder.addEncodedQueryParameter(paramKey, paramVal);
-        } else {
-            formBodyBuilder.addEncoded( paramKey, paramVal);
-        }
-
-
         // Build the url.
         url = urlBuilder.build();
-        if ( DEBUG ) System.out.println("url = " + url.toString() );
+        if (DEBUG) System.out.println("url = " + url.toString());
 
         // Set url in requestBuilder.
-        requestBuilder.url( url );
+        requestBuilder.url(url);
 
         // Build the request Object.
         Request request;
-        if ( GET_REQUEST.equalsIgnoreCase( requestType) ) {
-            requestBuilder.get();
+        if (GET_REQUEST.equalsIgnoreCase(requestType)) {
+            requestBuilder.get().addHeader("content-type", "x-www-form-urlencoded");
         } else {
             FormBody formBody = formBodyBuilder.build();
-            if ( DEBUG && VERBOSE ) {
+            if (DEBUG && VERBOSE) {
                 for (int i = 0; i < formBody.size(); i++) {
                     System.out.println(formBody.name(i) + "\t\t" + formBody.value(i));
                 }
             }
 
-            requestBuilder.post( formBody );
+            requestBuilder.post(formBody);
         }
         request = requestBuilder.build();
-
-
 
         // Make the call and execute.
         String responseBody;
@@ -250,11 +220,59 @@ public class OSTRequestClient {
         {
             responseBody =  SocketTimeoutExceptionString;
         }
-        return buildApiResponse( responseBody );
+        return buildApiResponse(responseBody);
+    }
+
+    public ArrayList<HttpParam> getRequestParam(String resource, Map<String, Object> paramValObj) {
+
+        // Start Building HMAC Input Buffer by parsing the url.
+        Buffer hmacInputBuffer = new Buffer();
+
+        hmacInputBuffer.writeUtf8(resource);
+        hmacInputBuffer.writeByte('?');
+
+
+        ArrayList<HttpParam> params = new ArrayList<HttpParam>();
+        ArrayList<HttpParam> escapedParams = new ArrayList<HttpParam>();
+        String paramKey;
+        String paramVal;
+
+        params = buildNestedQuery(params, "", paramValObj);
+
+        // Add params to url/form-body & hmacInputBuffer.
+        Iterator it = params.iterator();
+        boolean firstParam = true;
+
+        while (it.hasNext()) {
+            HttpParam pair = (HttpParam) it.next();
+
+            paramKey = pair.getParamName();
+            paramVal = pair.getParamValue();
+
+            paramKey = specialCharacterEscape(paramKey);
+            paramVal = specialCharacterEscape(paramVal);
+
+            if (!firstParam) {
+                hmacInputBuffer.writeByte('&');
+            }
+            firstParam = false;
+
+            hmacInputBuffer.writeUtf8(paramKey);
+            hmacInputBuffer.writeByte('=');
+            hmacInputBuffer.writeUtf8(paramVal);
+
+            escapedParams.add(new HttpParam(paramKey, paramVal));
+            if (DEBUG) System.out.println("paramKey " + paramKey + " paramVal " + paramVal);
+        }
+
+        paramVal = signQueryParams(hmacInputBuffer);
+        escapedParams.add(new HttpParam("api_signature", paramVal));
+        return escapedParams;
     }
 
     private String signQueryParams( Buffer hmacInputBuffer ) {
-        // Generate Signature for Params.
+
+        // Generate api_signature for Params.
         SecretKeySpec keySpec = new SecretKeySpec( apiSecret.getBytes( UTF_8 ), HMAC_SHA256);
         Mac mac;
         try {
@@ -269,9 +287,9 @@ public class OSTRequestClient {
         if ( DEBUG ) System.out.println("bytes to sign: " + new String(bytes, UTF_8 ));
         byte[] result = mac.doFinal(bytes);
 
-        String signature = ByteString.of(result).hex();
-        if ( DEBUG ) System.out.println("signature: " + signature );
-        return signature;
+        String api_signature = ByteString.of(result).hex();
+        if ( DEBUG ) System.out.println("api_signature: " + api_signature );
+        return api_signature;
     }
 
     private static String SOMETHING_WRONG_RESPONSE = "{'success': false, 'err': {'code': 'SOMETHING_WENT_WRONG', 'internal_id': 'SDK(SOMETHING_WENT_WRONG)', 'msg': '', 'error_data':[]}}";
@@ -367,7 +385,8 @@ public class OSTRequestClient {
 
     private static String specialCharacterEscape(String stringToEscape){
         stringToEscape = FormParameterEscaper.escape(stringToEscape);
-        stringToEscape = stringToEscape.replace("*", "%26");
+        stringToEscape = stringToEscape.replace("*", "%2A");
+        stringToEscape = stringToEscape.replace("%7E", "~");
         return stringToEscape;
     }
 }

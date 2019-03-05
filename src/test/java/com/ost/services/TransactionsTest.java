@@ -46,7 +46,7 @@ public class TransactionsTest extends ServiceTestBase {
     public void execute() throws Exception {
         HashMap <String,Object> params = new HashMap<String,Object>();
         HashMap <String,Object> nestedparams = new HashMap<String,Object>();
-        Integer parameter2 = 1;
+        String parameter2 = "1";
 
         params.put("user_id", getEnvironmentVariables().get("companyUserId"));
         params.put("to", getEnvironmentVariables().get("ruleAddress"));
