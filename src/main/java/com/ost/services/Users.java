@@ -40,7 +40,7 @@ public class Users extends OSTAPIService {
      * @return API Response
      */
     public JsonObject get( Map<String,Object> params ) throws MissingParameter, IOException, InvalidParameter {
-        String resource = this.urlPrefix + "/" + this.getId( params ) + "/";
+        String resource = this.urlPrefix + "/" + this.getUserId( params ) + "/";
         return this.request.get(resource, params);
     }
 }
