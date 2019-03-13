@@ -129,7 +129,7 @@ Get an existing user:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
 JsonObject response = userService.get( params );
 System.out.println("response: " + response.toString() );
 ```
