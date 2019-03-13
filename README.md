@@ -138,6 +138,10 @@ Get a list of users and other data:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
+//ArrayList<Object> idsArray = new ArrayList<Object>();
+//idsArray.add("29f57b59-60af-4579-9d6c-2ebcb36a9142");
+//idsArray.add("12f57b59-60af-4579-9d6c-2ebcb36a9123");
+//params.put("ids", idsArray);
 //params.put("limit", 10);
 JsonObject response = userService.getList( params );
 System.out.println("response: " + response.toString() );
