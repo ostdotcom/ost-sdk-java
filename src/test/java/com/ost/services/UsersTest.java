@@ -29,7 +29,7 @@ public class UsersTest extends ServiceTestBase {
     @Test
     public void get() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("id", getEnvironmentVariables().get("userId"));
+        params.put("user_id", getEnvironmentVariables().get("userId"));
 
         // Test-Case: Get an User.
         JsonObject response;
