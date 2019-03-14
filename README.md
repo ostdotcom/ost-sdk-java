@@ -341,8 +341,8 @@ Get all transactions info for a user:
 
 HashMap <String,Object> params = new HashMap<String,Object>();
 params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-//params.put("status", statusArray);
-//params.put("meta_property", metaPropertyArrayJsonStr);
+//params.put("statuses", statusArray);
+//params.put("meta_properties", metaPropertyArrayJsonStr);
 //params.put("limit", 10);
 JsonObject response = transactionsService.getList( params );
 System.out.println("response: " + response.toString() );
