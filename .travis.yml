@@ -16,4 +16,5 @@ branches:
   only:
   - master
   - develop
+  - /^release-.*/
 script: mvn clean verify

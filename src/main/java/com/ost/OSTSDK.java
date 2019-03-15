@@ -1,9 +1,12 @@
 package com.ost;
+import com.ost.services.Manifest;
 import com.ost.services.OSTServiceManifest;
 import java.util.Map;
 
 public class OSTSDK {
     String apiEndpoint;
+    String apiKey;
+    String apiSecret;
     String apiEndpointVersion;
     public OSTServiceManifest services;
 
@@ -14,21 +17,27 @@ public class OSTSDK {
             throw new IllegalArgumentException("Invalid apiEndpoint.");
         }
 
+        if (params.containsKey("apiKey") && params.get("apiKey") instanceof String &&
+                params.get("apiKey") != "") {
+            apiKey = (String) params.get("apiKey");
+        } else {
+            throw new IllegalArgumentException("Invalid apiKey.");
+        }
+
+        if (params.containsKey("apiSecret") && params.get("apiSecret") instanceof String &&
+                params.get("apiSecret") != "") {
+            apiSecret = (String) params.get("apiSecret");
+        } else {
+            throw new IllegalArgumentException("Invalid apiSecret.");
+        }
+
         String[] endPointSplits = apiEndpoint.split("/");
-        if (endPointSplits.length > 3) {
-            apiEndpointVersion = endPointSplits[3];
+        if (endPointSplits[4] instanceof String && endPointSplits[4].equalsIgnoreCase("v2")) {
+            apiEndpointVersion = endPointSplits[4];
         } else {
-            apiEndpointVersion = "";
+            throw new IllegalArgumentException("Invalid apiEndpointVersion.");
         }
 
-        apiEndpointVersion = apiEndpointVersion.toLowerCase();
-
-        if ( apiEndpointVersion.equalsIgnoreCase("v1.1") ) {
-            services = new com.ost.services.v1_1.Manifest( params );
-        } else if ( apiEndpointVersion.equalsIgnoreCase("v1") ) {
-            services = new com.ost.services.v1.Manifest( params );
-        } else {
-            services = new com.ost.services.v0.Manifest( params );
-        }
+        services = new Manifest(params);
     }
 }

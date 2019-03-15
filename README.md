@@ -1,16 +1,35 @@
 # OST Java SDK
-The official [OST Java SDK](https://dev.ost.com/).
+[![Build Status](https://travis-ci.org/ostdotcom/ost-sdk-java.svg?branch=master)](https://travis-ci.org/ostdotcom/ost-sdk-java)
 
+The official [OST](https://dev.ost.com/) Java SDK.
 
-[![Travis](https://travis-ci.org/OpenSTFoundation/ost-sdk-java.svg?branch=master)](https://travis-ci.org/OpenSTFoundation/ost-sdk-java)
-[![Gitter: JOIN CHAT](https://img.shields.io/badge/gitter-JOIN%20CHAT-brightgreen.svg)](https://gitter.im/OpenSTFoundation/SimpleToken)
+## Introduction
+
+OST is a complete technology solution enabling mainstream businesses 
+to easily launch blockchain-based economies without 
+requiring blockchain development.
+
+At the core of OST is the concept of OST-powered Brand Tokens (BTs). 
+BTs are white-label cryptocurrency tokens with utility representations 
+running on highly-scalable Ethereum-based side blockchains, 
+backed by OST tokens staked on Ethereum mainnet. Within a business’s 
+token economy, BTs can only be transferred to whitelisted user addresses. 
+This ensures that they stay within the token economy.
+
+The OST technology stack is designed to give businesses everything they need 
+to integrate, test, and deploy BTs. Within the OST suite of products, developers 
+can use OST KIT to create, test, and launch Brand Tokens backed by OST. 
+
+OST APIs and server-side SDKs make it simple and easy for developers to 
+integrate blockchain tokens into their apps.
 
 ## Requirements
 
-To use this node module, developers will need to:
+Integrating an OST SDK into your application can begin as soon as you create an account 
+with OST KIT, requiring only three steps:
 1. Sign-up on [https://kit.ost.com](https://kit.ost.com).
-2. Launch a branded token economy with the OST KIT Economy Planner.
-3. Obtain an API Key and API Secret from [https://kit.ost.com/developer-api-console](https://kit.ost.com/developer-api-console).
+2. Create your Brand Token in OST KIT.
+3. Obtain an API Key and API Secret from [https://kit.ost.com/mainnet/developer](https://kit.ost.com/mainnet/developer).
 
 ## Documentation
 
@@ -24,280 +43,504 @@ To use this node module, developers will need to:
 <dependency>
   <groupId>com.ost</groupId>
   <artifactId>ost-sdk-java</artifactId>
-  <version>1.1.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
 ### Building from source using Maven
 
-Clone the repository
+Clone the repository:
 ```bash
-git clone https://github.com/OpenSTFoundation/ost-sdk-java.git
+git clone https://github.com/ostdotcom/ost-sdk-java.git
 cd ost-sdk-java
 ```
 
-
-Package using MVN (without dependencies)
+Package using MVN (without dependencies):
 ```bash
 mvn clean pacakge -DskipTests
 ```
 
-With dependencies
+With dependencies:
 ```bash
 mvn clean compile assembly:single -DskipTests
 ```
 
 The jar file can be found in the target folder.
 
-## Example Usage
-
+## Getting Started
 
 Initialize the SDK object:
 
 ```java
-// the latest valid API endpoint is "https://sandboxapi.ost.com/v1.1/", this may change in the future
+// the latest valid API endpoint is "https://api.ost.com/mainnet/v2/", this may change in the future
 HashMap <String,Object> sdkConfig = new HashMap<String,Object>();
-sdkConfig.put("apiEndpoint","[V1_API_ENDPOINT]");
+sdkConfig.put("apiEndpoint","[YOUR_API_ENDPOINT]");
 sdkConfig.put("apiKey","[YOUR_API_KEY]");
 sdkConfig.put("apiSecret","[YOUR_API_SECRET]");
+
+// The config field is optional for sdkConfig Object
+HashMap <String,Object> nestedparam = new HashMap<String,Object>();
+// This is the timeout in seconds for which the socket connection will remain open
+// The value of timeout will always be of type long
+nestedparam.put("timeout", (long) 15);
+sdkConfig.put("config", nestedparam);
+
 OSTSDK ostObj = new OSTSDK(sdkConfig);
-com.ost.services.v1_1.Manifest services = (com.ost.services.v1_1.Manifest) ostObj.services;
+com.ost.services.Manifest services = (com.ost.services.Manifest) ostObj.services;
 ```
 
-### Users Module 
+## SDK Modules
+
+If a user's private key is lost, they could lose access 
+to their tokens. To tackle this risk, OST promotes a 
+mobile-first approach and provides mobile (client) and server SDKs. 
+
+
+* The server SDKs enable you to register users with KIT.
+* The client SDKs provide the additional support required for 
+the ownership and management of Brand Tokens by users so 
+that they can create keys and control their tokens. 
+
+### Users Module
+
+To register users with KIT, you can use the services provided in the Users module. 
+
+Initialize a Users object to perform user-specific actions, like creating users:
 
 ```java
-com.ost.services.v1_1.Users userService = services.users;
+com.ost.services.Users usersService = services.users;
 ```
 
-Create a new user:
+Create a User with KIT:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("name", "Alice");
-JsonObject response = userService.create( params );
+JsonObject response = usersService.create( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Edit an existing user:
+Get User Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", "1234-1928-1081dsds-djhksjd");
-params.put("name", "Bob");
-JsonObject response = userService.edit( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+JsonObject response = usersService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Get an existing user:
+Get Users List:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", "1234-1928-1081dsds-djhksjd");
-JsonObject response = userService.get( params );
+//ArrayList<Object> idsArray = new ArrayList<Object>();
+//idsArray.add("29f57b59-60af-4579-9d6c-2ebcb36a9142");
+//idsArray.add("12f57b59-60af-4579-9d6c-2ebcb36a9123");
+//params.put("ids", idsArray);
+//params.put("limit", 10);
+JsonObject response = usersService.getList( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Get a list of users and other data:
+### Devices Module
+
+Once a user is created via the API, you can register the 
+user’s device with KIT. Next, activate the user’s 
+wallet on the user's device. Multiple devices can be 
+registered per user. 
+
+
+Initialize a Devices object to perform device-specific actions, 
+like registering devices:
+
+```java
+com.ost.services.Devices devicesService = services.devices;
+```
+
+Create a Device for User:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = userService.list( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
+params.put("api_signer_address", "0x5F860598383868e8E8Ee0ffC5ADD92369Db37455");
+params.put("device_uuid", "593a967f-87bd-49a6-976c-52edf46c4df4");
+params.put("device_name", "Iphone S");
+JsonObject response = devicesService.create( params );
 System.out.println("response: " + response.toString() );
 ```
 
-### Airdrops Module 
-
-```java
-com.ost.services.v1_1.Airdrops airdropService = services.airdrops;
-```
-
-Execute Airdrop:
+Get User Device Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("amount", 1);
-params.put("user_ids", "f87346e4-61f6-4d55-8cb8-234c65437b01");
-JsonObject response = airdropService.execute( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("device_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
+JsonObject response = devicesService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Get Airdrop Status:
+Get User Devices List:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", 'ecd9b0b2-a0f4-422c-95a4-f25f8fc88334');
-JsonObject response = airdropService.get( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+//params.put("pagination_identifier", "eyJsYXN0RXZhbHVhdGVkS2V5Ijp7InVpZCI6eyJTIjoiZDE5NGFhNzUtYWNkNS00ZjQwLWIzZmItZTczYTdjZjdjMGQ5In0sIndhIjp7IlMiOiIweDU4YjQxMDY0NzQ4OWI4ODYzNTliNThmZTIyMjYwZWIxOTYwN2IwZjYifX19");
+//ArrayList<Object> addressesArray = new ArrayList<Object>();
+//addressesArray.add("0x5906ae461eb6283cf15b0257d3206e74d83a6bd4");
+//addressesArray.add("0xab248ef66ee49f80e75266595aa160c8c1abdd5a");
+//params.put("addresses", addressesArray);
+//params.put("limit", 10);
+JsonObject response = devicesService.getList( params );
+```
+
+### Device Managers Module
+
+After a user is created and their device is registered via the API, 
+their wallet can be activated. Activating a wallet involves the deployment of the following contracts:
+
+* TokenHolder - each user in the economy is represented by a TokenHolder that holds the user's token balance.
+* Device Manager (multi-signature) - this contract is configured to control the user's TokenHolder contract.
+* DelayedRecoveryModule - this contract enables recovery in the event a key is lost.
+
+In order to enable a user to access their tokens, i.e., interact 
+with their TokenHolder contract, from multiple devices without 
+having to share private keys across devices, a multi-signature 
+contract is employed. We refer to this entity as the Device 
+Manager in OST APIs.
+
+To get information about a user’s Device Manager, use services provided in the Device Managers module.
+
+```java
+com.ost.services.DeviceManagers deviceManagersService = services.deviceManagers;
+```
+
+Get Device Manager Detail:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+JsonObject response = deviceManagersService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-List Airdrop
+### Sessions Module
+
+In order to create a more seamless user experience, so that users don't have to 
+sign a new transaction at every move in the application, we use session keys. 
+These keys are authorized to sign transactions on the user's behalf 
+for a predetermined amount of time and with a defined maximum spending 
+limit per transaction.
+
+These session keys are created in a user's wallet. A user’s TokenHolder 
+contract can have multiple authorized session keys.
+
+To get information about a user’s session keys, use services provided in the Sessions module.
+
+```java
+com.ost.services.Sessions sessionsService = services.sessions;
+```
+
+Get User Session Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("page_no", 1);
-params.put("limit", 50);
-params.put("current_status", "processing,complete");
-JsonObject response = airdropService.list( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("session_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
+JsonObject response = sessionsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-
-### Token Module 
-
-```java
-com.ost.services.v1_1.Token tokenService = services.token;
-```
-
-Get details:
+Get User Sessions List:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = tokenService.get( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+//params.put("pagination_identifier", "eyJsYXN0RXZhbHVhdGVkS2V5Ijp7InVpZCI6eyJTIjoiZDE5NGFhNzUtYWNkNS00ZjQwLWIzZmItZTczYTdjZjdjMGQ5In0sIndhIjp7IlMiOiIweDU4YjQxMDY0NzQ4OWI4ODYzNTliNThmZTIyMjYwZWIxOTYwN2IwZjYifX19");
+//ArrayList<Object> addressesArray = new ArrayList<Object>();
+//addressesArray.add("0x5906ae461eb6283cf15b0257d3206e74d83a6bd4");
+//addressesArray.add("0xab248ef66ee49f80e75266595aa160c8c1abdd5a");
+//params.put("addresses", addressesArray);
+//params.put("limit", 10);
+JsonObject response = sessionsService.getList( params );
 System.out.println("response: " + response.toString() );
 ```
 
-### Actions Module 
+### Executing Transactions
 
+For executing transactions, you need to understand the 4 modules described below.
+
+#### Rules Module
+
+When executing a token transfer, a user's TokenHolder contract 
+interacts with a token rule contract. A token economy can have 
+multiple token rule contracts. To enable a user to execute a 
+token transfer, you need to start with fetching details of 
+registered rule contracts and understanding their methods and the 
+corresponding parameters passed in those methods.
+
+To get information about deployed rule contracts, use services provided in the Rules module.
 
 ```java
-com.ost.services.v1_1.Actions actionService = services.actions;
+com.ost.services.Rules rulesService = services.rules;
 ```
 
-Create a new action:
+List Rules:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("name", "Voteup");
-params.put("kind", "user_to_user");
-params.put("currency", "USD");
-params.put("arbitrary_amount", false);
-params.put("amount", 1.01);
-params.put("arbitrary_commission", false);
-params.put("commission_percent", 1);
-JsonObject response = actionService.create( params );
+JsonObject response = rulesService.getList( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Edit an action:
+#### Price Points Module
+
+To know the OST price point in USD and when it was last updated, 
+use services provided by the Price Points module.
 
 ```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", 22599);
-params.put("name", "Like");
-JsonObject response = actionService.edit( params );
+com.ost.services.PricePoints pricePointsService = services.pricePoints;
 ```
 
-Get an action:
+Get Price Points Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", 22599);
-JsonObject response = actionService.get( params );
+params.put("chain_id", "200");
+JsonObject response = pricePointsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-List actions:
+#### Transactions Module
+
+After reviewing the rules information received using services in the Rules 
+module, you will know what data is required to execute transfers 
+with a token rule using the services provided in the Transaction module.
+
+```java
+com.ost.services.Transactions transactionsService = services.transactions;
+```
+
+Get a transaction info for existing user:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = actionService.list( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("transaction_id", "e96450b8-f46a-40ee-adf1-9d65a4b53241");
+JsonObject response = transactionsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-### Transaction Module 
+Get all transactions info for a user:
 
 ```java
-com.ost.services.v1_1.Transactions transactionService = services.transactions;
-```
+//ArrayList<HashMap<String, Object>> metaPropertyArray = new ArrayList<HashMap<String, Object>>();
+//HashMap <String,Object> metaPropertyArrayParams = new HashMap<String,Object>();
+//metaPropertyArrayParams.put("name", "transaction_name"); //like, download IMP : Max length 25 characters (numbers alphabets spaces _ - allowed)
+//metaPropertyArrayParams.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
+//metaPropertyArrayParams.put("details", "test"); // memo field to add additional info about the transaction .  IMP : Max length 120 characters (numbers alphabets spaces _ - allowed)
+//metaPropertyArray.add(metaPropertyArrayParams);
+//Gson gsonObj = new Gson();
+//String metaPropertyArrayJsonStr = gsonObj.toJson(metaPropertyArray);
 
-Execute Transaction:
+//ArrayList<Object> statusArray = new ArrayList<Object>();
+//statusArray.add("CREATED");
+//statusArray.add("SUBMITTED");
+//statusArray.add("SUCCESS");
+//statusArray.add("FAILED");
 
-```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("from_user_id", "0a201640-77a7-49c8-b289-b6b5d7325323");
-params.put("to_user_id", "24580db2-bf29-4d73-bf5a-e1d0cf8c8928");
-params.put("action_id", "22599");
-JsonObject response = transactionService.execute( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+//params.put("statuses", statusArray);
+//params.put("meta_properties", metaPropertyArrayJsonStr);
+//params.put("limit", 10);
+JsonObject response = transactionsService.getList( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Get Transaction Status:
+Execute Transaction DIRECT-TRANSFERS:
 
 ```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", "84d97848-074f-4a9a-a214-19076cfe9dd1");
-JsonObject response = transactionService.get( params );
-```
+//HashMap <String,Object> metaProperty = new HashMap<String,Object>();
+//metaProperty.put("name", "transaction_name"); // like, download
+//metaProperty.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
+//metaProperty.put("details", ""); // memo field to add additional info about the transaction
 
-List Transactions:
-
-```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("page_no", 1);
-params.put("limit", 10);
-JsonObject response = transactionService.list( params );
+HashMap <String,Object> nestedparams = new HashMap<String,Object>();
+String userId = "29f57b59-60af-4579-9d6c-2ebcb36a9142";
+String toAddress = "0xe37906219ad67cc1301b970539c9860f9ce8d991";
+String user2TokenHolderAddress = "0xa31e988eebc89d0bc3e4a9a5463545ea534593e4";
+String amount = "1";
+params.put("user_id", userId);
+params.put("to", toAddress);
+nestedparams.put("method", "directTransfers");
+ArrayList<ArrayList> nestedarraylist = new ArrayList<ArrayList>();
+ArrayList<Object> arrayListForUser2TokenHolderAddress = new ArrayList<Object>();
+arrayListForUser2TokenHolderAddress.add(user2TokenHolderAddress);
+ArrayList<Object> arrayListAmount = new ArrayList<Object>();
+arrayListAmount.add(amount);
+Gson gsonObj = new Gson();
+nestedarraylist.add(arrayListForUser2TokenHolderAddress);
+nestedarraylist.add(arrayListAmount);
+nestedparams.put("parameters", nestedarraylist);
+String jsonStr = gsonObj.toJson(nestedparams);
+params.put("raw_calldata", jsonStr);
+//params.put("meta_property", metaProperty);
+JsonObject response = transactionsService.execute( params );
 System.out.println("response: " + response.toString() );
 ```
 
-### Transfer Module 
+Execute Transaction PAY:
 
 ```java
-com.ost.services.v1_1.Transfer transferService = ostObj.services.transfers;
-```
+//HashMap <String,Object> metaProperty = new HashMap<String,Object>();
+//metaProperty.put("name", "transaction_name"); // like, download
+//metaProperty.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
+//metaProperty.put("details", ""); // memo field to add additional info about the transaction
 
-Execute ST Prime Transfer:
-
-```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("to_address", "0xd2b789293674faEE51bEb2d0338d15401dEbfdE3");
-params.put("amount", 1);
-JsonObject response = transferService.execute( params );
+HashMap <String,Object> nestedparams = new HashMap<String,Object>();
+String userId = "29f57b59-60af-4579-9d6c-2ebcb36a9142";
+String toAddress = "0xe37906219ad67cc1301b970539c9860f9ce8d991";
+String user2TokenHolderAddress = "0xa31e988eebc89d0bc3e4a9a5463545ea534593e4";
+String amount = "1";
+params.put("user_id", userId);
+params.put("to", toAddress);
+nestedparams.put("method", "pay");
+ArrayList<ArrayList> nestedarraylist = new ArrayList<ArrayList>();
+ArrayList<Object> arrayListForUser2TokenHolderAddress = new ArrayList<Object>();
+arrayListForUser2TokenHolderAddress.add(user2TokenHolderAddress);
+ArrayList<Object> arrayListAmount = new ArrayList<Object>();
+arrayListAmount.add(amount);
+Gson gsonObj = new Gson();
+String tokenHolderSender = "0xa9632350057c2226c5a10418b1c3bc9acdf7e2ee";
+String payCurrencyCode = "USD";
+String ostToUsdInWei = "23757000000000000";
+nestedarraylist.add(tokenHolderSender);
+nestedarraylist.add(arrayListForUser2TokenHolderAddress);
+nestedarraylist.add(arrayListAmount);
+nestedarraylist.add(payCurrencyCode);
+nestedarraylist.add(ostToUsdInWei);
+nestedparams.put("parameters", nestedarraylist);
+String jsonStr = gsonObj.toJson(nestedparams);
+params.put("raw_calldata", jsonStr);
+//params.put("meta_property", metaProperty);
+JsonObject response = transactionsService.execute( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Get Transfer Status:
+Get Transaction Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", "38895b82-737e-4b23-b111-fec96e52f3b2");
-JsonObject response = transferService.get( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("transaction_id", "e96450b8-f46a-40ee-adf1-9d65a4b53241");
+JsonObject response = transactionsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-List Transfers:
+Get User Transactions:
 
 ```java
+//ArrayList<HashMap<String, Object>> metaPropertyArray = new ArrayList<HashMap<String, Object>>();
+//HashMap <String,Object> metaPropertyArrayParams = new HashMap<String,Object>();
+//metaPropertyArrayParams.put("name", "transaction_name"); //like, download IMP : Max length 25 characters (numbers alphabets spaces _ - allowed)
+//metaPropertyArrayParams.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
+//metaPropertyArrayParams.put("details", "test"); // memo field to add additional info about the transaction .  IMP : Max length 120 characters (numbers alphabets spaces _ - allowed)
+//metaPropertyArray.add(metaPropertyArrayParams);
+//Gson gsonObj = new Gson();
+//String metaPropertyArrayJsonStr = gsonObj.toJson(metaPropertyArray);
+
+//ArrayList<Object> statusArray = new ArrayList<Object>();
+//statusArray.add("CREATED");
+//statusArray.add("SUBMITTED");
+//statusArray.add("SUCCESS");
+//statusArray.add("FAILED");
+
 HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = transferService.list( params );
-```
-
-### Balance Module 
-
-```java
-com.ost.services.v1_1.Balances balanceService = ostObj.services.balances;
-```
-
-Get user balance:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", "38895b82-737e-4b23-b111-fec96e52f3b2");
-JsonObject response = balanceService.get( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+//params.put("status", statusArray);
+//params.put("meta_property", metaPropertyArrayJsonStr);
+//params.put("limit", 10);
+JsonObject response = transactionsService.getList( params );
 System.out.println("response: " + response.toString() );
 ```
 
-### Ledger Module 
+#### Balances Module
+
+Balance services offer the functionality to view a user’s balances.
 
 ```java
-com.ost.services.v1_1.Ledger ledgerService = ostObj.services.ledger;
+com.ost.services.Balance balancesService = services.balance;
 ```
 
-Get transaction ledger for user:
+Get User Balance:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("id", "38895b82-737e-4b23-b111-fec96e52f3b2");
-JsonObject response = ledgerService.get( params );
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+JsonObject response = balancesService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Recovery Owners Module
+A user’s Brand Tokens are held by a TokenHolder contract that is controlled ("owned") 
+by a Device Manager; the device manager is controlled ("owned") by device keys created 
+and held by the user in their wallets; and if any of those keys is lost, the Device 
+Manager (which is a multi-signature contract) is programmed to allow replacement of a 
+key by the recovery owner key for the user, via the DelayedRecoveryModule, which is deployed
+at the time of the creation of the user's initial wallet.
+
+To fetch the recovery owner address for a particular user, use services provided 
+in the Users module. To fetch that recovery owner's information, then services 
+provided in the Recovery Owners Module are used.
+
+```java
+com.ost.services.RecoveryOwners recoveryOwnersService = services.recoveryOwners;
+```
+
+Get Recovery Owner Detail:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("recovery_owner_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
+JsonObject response = recoveryOwnersService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Tokens Module
+
+To get information about the Brand Token created on the OST KIT interface, use services provided 
+by the Tokens module. You can use this service to obtain the chain ID of the auxiliary 
+chain on which the token economy is running, in addition to other information.
+
+```java
+com.ost.services.Tokens tokensService = services.tokens;
+```
+
+Get Token Detail:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+JsonObject response = tokensService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Chains Module
+
+To get information about the auxiliary chain on which the token economy is running, use services 
+provided by the Chains module.
+
+```java
+com.ost.services.Chains chainsService = services.chains;
+```
+
+Get Chain Detail:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("chain_id", "200");
+JsonObject response = chainsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
