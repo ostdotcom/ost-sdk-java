@@ -267,7 +267,7 @@ System.out.println("response: " + response.toString() );
 
 ### Executing Transactions
 
-For executing transactions, you need to understand the 3 modules described below.
+For executing transactions, you need to understand the 4 modules described below.
 
 #### Rules Module
 
@@ -289,6 +289,24 @@ List Rules:
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
 JsonObject response = rulesService.getList( params );
+System.out.println("response: " + response.toString() );
+```
+
+#### Price Points Module
+
+To know the OST price point in USD and when it was last updated, 
+use services provided by the Price Points module.
+
+```java
+com.ost.services.PricePoints pricePointsService = services.pricePoints;
+```
+
+Get Price Points Detail:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("chain_id", "200");
+JsonObject response = pricePointsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
@@ -524,23 +542,5 @@ Get Chain Detail:
 HashMap <String,Object> params = new HashMap<String,Object>();
 params.put("chain_id", "200");
 JsonObject response = chainsService.get( params );
-System.out.println("response: " + response.toString() );
-```
-
-### Price Points Module
-
-To know the OST price point in USD and when it was last updated, 
-use services provided by the Price Points module.
-
-```java
-com.ost.services.PricePoints pricePointsService = services.pricePoints;
-```
-
-Get Price Points Detail:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("chain_id", "200");
-JsonObject response = pricePointsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
