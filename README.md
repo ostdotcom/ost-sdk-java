@@ -398,7 +398,7 @@ String amount = "1";
 params.put("user_id", userId);
 params.put("to", toAddress);
 nestedparams.put("method", "pay");
-ArrayList<ArrayList> nestedarraylist = new ArrayList<ArrayList>();
+ArrayList<Object> nestedarraylist = new ArrayList<Object>();
 ArrayList<Object> arrayListForUser2TokenHolderAddress = new ArrayList<Object>();
 arrayListForUser2TokenHolderAddress.add(user2TokenHolderAddress);
 ArrayList<Object> arrayListAmount = new ArrayList<Object>();
