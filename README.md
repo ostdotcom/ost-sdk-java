@@ -1,41 +1,34 @@
 # OST Java SDK
 [![Build Status](https://travis-ci.org/ostdotcom/ost-sdk-java.svg?branch=master)](https://travis-ci.org/ostdotcom/ost-sdk-java)
 
-The official [OST Java SDK](https://dev.ost.com/).
+The official [OST](https://dev.ost.com/) Java SDK.
 
 ## Introduction
 
 OST is a complete technology solution enabling mainstream businesses 
-to easily launch blockchain-based economies at low risk and without 
+to easily launch blockchain-based economies without 
 requiring blockchain development.
 
 At the core of OST is the concept of OST-powered Brand Tokens (BTs). 
-BTs are white-label cryptocurrency tokens running on highly scalable 
-Ethereum-based side blockchains, backed by staking OST Tokens into smart 
-contracts on Ethereum mainnet. BTs can only be transferred to whitelisted 
-user addresses within a business’s community. This ensures that they stay 
-within a specific BT community.
+BTs are white-label cryptocurrency tokens with utility representations 
+running on highly-scalable Ethereum-based side blockchains, 
+backed by OST tokens staked on Ethereum mainnet. Within a business’s 
+token economy, BTs can only be transferred to whitelisted user addresses. 
+This ensures that they stay within the token economy.
 
 The OST technology stack is designed to give businesses everything they need 
-to integrate, test, and deploy BTs.Within the OST suite of products developers 
-can use OST KIT to create, test and launch Branded Tokens backed by OST. 
+to integrate, test, and deploy BTs. Within the OST suite of products, developers 
+can use OST KIT to create, test, and launch Brand Tokens backed by OST. 
 
-OST APIs and Server Side SDKs make it simple and easy for developers to 
+OST APIs and server-side SDKs make it simple and easy for developers to 
 integrate blockchain tokens into their apps.
-
-## Advantages
-
-Using the OST SDKs provides a number of advantages
-* Simplicity: The SDKs reduce the complexity of integration by handling multiple authentication scenarios automatically. This means that the appropriate method call will be to minimize the end-user interactions.
-* Performance: Caching, key management and nonce management ensure that end-users overall experience is improved.
-* Security: Separating the Server Side API interactions from the client ensures that user's private keys are generated and stored securely on the user's device and not shared across the network.
 
 ## Requirements
 
-Integrating OST SDK into your application can begin as soon as you create an account, 
-with OST KIT requiring only three steps:
+Integrating an OST SDK into your application can begin as soon as you create an account 
+with OST KIT, requiring only three steps:
 1. Sign-up on [https://kit.ost.com](https://kit.ost.com).
-2. Create your branded token in OST KIT.
+2. Create your Brand Token in OST KIT.
 3. Obtain an API Key and API Secret from [https://kit.ost.com/mainnet/developer](https://kit.ost.com/mainnet/developer).
 
 ## Documentation
@@ -56,25 +49,25 @@ with OST KIT requiring only three steps:
 
 ### Building from source using Maven
 
-Clone the repository
+Clone the repository:
 ```bash
 git clone https://github.com/ostdotcom/ost-sdk-java.git
 cd ost-sdk-java
 ```
 
-Package using MVN (without dependencies)
+Package using MVN (without dependencies):
 ```bash
 mvn clean pacakge -DskipTests
 ```
 
-With dependencies
+With dependencies:
 ```bash
 mvn clean compile assembly:single -DskipTests
 ```
 
 The jar file can be found in the target folder.
 
-## Example Usage
+## Getting Started
 
 Initialize the SDK object:
 
@@ -96,45 +89,46 @@ OSTSDK ostObj = new OSTSDK(sdkConfig);
 com.ost.services.Manifest services = (com.ost.services.Manifest) ostObj.services;
 ```
 
-### Users Module
+## SDK Modules
 
-Given that Brand Tokens are valuable to users,  if their private 
-keys are compromised it could result in the user being unable to 
-access their tokens. To tackle this OST promotes a mobile-first 
-approach and provides mobile(client) and server SDKs. 
+If a user's private key is lost, they could lose access 
+to their tokens. To tackle this risk, OST promotes a 
+mobile-first approach and provides mobile (client) and server SDKs. 
 
 
-* The server SDKs enable you to register users with KIT server.
-* The client SDKs provides the additional support required for 
-the ownership and management of Brand Tokens by end users so 
+* The server SDKs enable you to register users with KIT.
+* The client SDKs provide the additional support required for 
+the ownership and management of Brand Tokens by users so 
 that they can create keys and control their tokens. 
 
-To register user with KIT you can use the services provided in user module. 
+### Users Module
 
-Initialize a Users object to perform user specific actions, like creating users:
+To register users with KIT, you can use the services provided in the Users module. 
+
+Initialize a Users object to perform user-specific actions, like creating users:
 
 ```java
-com.ost.services.Users userService = services.users;
+com.ost.services.Users usersService = services.users;
 ```
 
-Creating a user with KIT:
+Create a User with KIT:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = userService.create( params );
+JsonObject response = usersService.create( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Get an existing user:
+Get User Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
 params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-JsonObject response = userService.get( params );
+JsonObject response = usersService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Get a list of users and other data:
+Get Users List:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
@@ -143,26 +137,26 @@ HashMap <String,Object> params = new HashMap<String,Object>();
 //idsArray.add("12f57b59-60af-4579-9d6c-2ebcb36a9123");
 //params.put("ids", idsArray);
 //params.put("limit", 10);
-JsonObject response = userService.getList( params );
+JsonObject response = usersService.getList( params );
 System.out.println("response: " + response.toString() );
 ```
 
 ### Devices Module
 
-Once a user is created via API, partner company should register 
-user’s device with KIT.  Post which they can activate user’s 
-wallet on their device. Partner company can register multiple 
-devices per user. 
- 
+Once a user is created via the API, you can register the 
+user’s device with KIT. Next, activate the user’s 
+wallet on the user's device. Multiple devices can be 
+registered per user. 
 
-Initialize a Device object to perform device specific actions, 
+
+Initialize a Devices object to perform device-specific actions, 
 like registering devices:
 
 ```java
 com.ost.services.Devices devicesService = services.devices;
 ```
 
-Create a device for User:
+Create a Device for User:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
@@ -175,7 +169,17 @@ JsonObject response = devicesService.create( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Get User Device(s) List:
+Get User Device Detail:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+params.put("device_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
+JsonObject response = devicesService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+Get User Devices List:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
@@ -189,37 +193,28 @@ params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
 JsonObject response = devicesService.getList( params );
 ```
 
-Get User Device:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-params.put("device_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
-JsonObject response = devicesService.get( params );
-System.out.println("response: " + response.toString() );
-```
-
 ### Device Managers Module
 
-After  user is created and their device is registered via API,  
-a wallet can be activated. Activating a wallet involves the deployment of :
+After a user is created and their device is registered via the API, 
+their wallet can be activated. Activating a wallet involves the deployment of the following contracts:
 
-* TokenHolder contract - each user in the economy is be represented by this smart contract on blockchain.  It holde the user's balances.
-* Device Manager (Multisig contract) - This contract is configured to control the user's TokenHolder contract.
-* DelayedRecoveryModule contract - that supports recovery via a 6 digit PIN. 
+* TokenHolder - each user in the economy is represented by a TokenHolder that holds the user's token balance.
+* Device Manager (multi-signature) - this contract is configured to control the user's TokenHolder contract.
+* DelayedRecoveryModule - this contract enables recovery in the event a key is lost.
 
-In order to enable user to access their tokens i.e their TokenHolder contract 
-from multiple devices without having to share private keys across devices we 
-came up with a multi-signature contract. We refer to this entity as device 
-manager in OST APIs.
+In order to enable a user to access their tokens, i.e., interact 
+with their TokenHolder contract, from multiple devices without 
+having to share private keys across devices, a multi-signature 
+contract is employed. We refer to this entity as the Device 
+Manager in OST APIs.
 
-To get information about user’s device manager use services provided in device manager module.
+To get information about a user’s Device Manager, use services provided in the Device Managers module.
 
 ```java
 com.ost.services.DeviceManagers deviceManagersService = services.deviceManagers;
 ```
 
-Get Device Managers detail of an existing user:
+Get Device Manager Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
@@ -230,24 +225,22 @@ System.out.println("response: " + response.toString() );
 
 ### Sessions Module
 
-In order to create a seamless user experience so that users don't have to 
-sign a new transaction at every move in the application we came up with 
-the concept of sessionKeys. These keys are used to sign messages on user's 
-behalf for a predetermined amount of time and with a defined maximum spending 
-limit per-transaction.
+In order to create a more seamless user experience, so that users don't have to 
+sign a new transaction at every move in the application, we use session keys. 
+These keys are authorized to sign transactions on the user's behalf 
+for a predetermined amount of time and with a defined maximum spending 
+limit per transaction.
 
-These keys are created on the mobile device from where the end user participates 
-in the economy. Each key has a corresponding public key, which in-turn has a 
-corresponding public address. User’s TokenHolder contract can have multiple 
-sessionKeys for signing messages on user’s behalf.
+These session keys are created in a user's wallet. A user’s TokenHolder 
+contract can have multiple authorized session keys.
 
-To get information about user’s session keys use services provided in session module.
+To get information about a user’s session keys, use services provided in the Sessions module.
 
 ```java
 com.ost.services.Sessions sessionsService = services.sessions;
 ```
 
-Get User Session:
+Get User Session Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
@@ -257,7 +250,7 @@ JsonObject response = sessionsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-Get User Session(s) List:
+Get User Sessions List:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
@@ -272,28 +265,26 @@ JsonObject response = sessionsService.getList( params );
 System.out.println("response: " + response.toString() );
 ```
 
-## For executing transactions we need to understand 3 modules listed below
-To enable partner companies to design Rules that align with their economy goals 
-and define the behavior of the token transfer, they have the flexibility to 
-write their custom rules contract. OST has written one rule contract the 
-[PricerRule Contract](https://github.com/OpenSTFoundation/openst-contracts/blob/develop/contracts/rules/PricerRule.sol) 
-for partner companies to use.
+### Executing Transactions
 
-For executing a token transfer, end-user's TokenHolder contract interacts with Rules Contract.
+For executing transactions, you need to understand the 4 modules described below.
 
-### Rules Module
+#### Rules Module
 
-So for executing a token transfer, partner company need to start with fetching details of 
-deployed rules contract and understand the methods written within them and the corresponding 
-parameters passed in those methods.
+When executing a token transfer, a user's TokenHolder contract 
+interacts with a token rule contract. A token economy can have 
+multiple token rule contracts. To enable a user to execute a 
+token transfer, you need to start with fetching details of 
+registered rule contracts and understanding their methods and the 
+corresponding parameters passed in those methods.
 
-To get information about rules contracts deployed use services provided in rule module.
+To get information about deployed rule contracts, use services provided in the Rules module.
 
 ```java
 com.ost.services.Rules rulesService = services.rules;
 ```
 
-List all Rules:
+List Rules:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
@@ -301,11 +292,29 @@ JsonObject response = rulesService.getList( params );
 System.out.println("response: " + response.toString() );
 ```
 
-### Transactions Module
+#### Price Points Module
 
-Once you’ve fetched the rule method and rule parameters to be passed using services 
-in rule module you can start with executing the transfer using the services provided 
-in transaction module.
+To know the OST price point in USD and when it was last updated, 
+use services provided by the Price Points module.
+
+```java
+com.ost.services.PricePoints pricePointsService = services.pricePoints;
+```
+
+Get Price Points Detail:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("chain_id", "200");
+JsonObject response = pricePointsService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+#### Transactions Module
+
+After reviewing the rules information received using services in the Rules 
+module, you will know what data is required to execute transfers 
+with a token rule using the services provided in the Transaction module.
 
 ```java
 com.ost.services.Transactions transactionsService = services.transactions;
@@ -420,53 +429,77 @@ JsonObject response = transactionsService.execute( params );
 System.out.println("response: " + response.toString() );
 ```
 
-### Balance Module
-
-Balance services offer the functionality to view user’s balances.
-
-```java
-com.ost.services.Balance balanceService = services.balance;
-```
-
-Get User's Balance:
+Get Transaction Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
 params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-JsonObject response = balanceService.get( params );
+params.put("transaction_id", "e96450b8-f46a-40ee-adf1-9d65a4b53241");
+JsonObject response = transactionsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
 
-### RecoveryOwners Module
-End user’s brand tokens are held by a token holder contract that is controlled ("owned") 
-by device manager; the device manager  is controlled ("owned") by device keys created 
-and held by the user in their wallets; and if those keys are compromised, the device 
-manager (which is a multi-signature contract) is programmed to allow replacement of a 
-key by a recovery key.
+Get User Transactions:
 
-The DelayedRecoveryModule is deployed at the time of the creation of the wallet. The 
-recoveryOwner public-private key pair is created using inputs from the Partner, OST 
-and the user. The public addresse of the recoveryOwner is stored on this DelayedRecoveryModule 
-contract.
+```java
+//ArrayList<HashMap<String, Object>> metaPropertyArray = new ArrayList<HashMap<String, Object>>();
+//HashMap <String,Object> metaPropertyArrayParams = new HashMap<String,Object>();
+//metaPropertyArrayParams.put("name", "transaction_name"); //like, download IMP : Max length 25 characters (numbers alphabets spaces _ - allowed)
+//metaPropertyArrayParams.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
+//metaPropertyArrayParams.put("details", "test"); // memo field to add additional info about the transaction .  IMP : Max length 120 characters (numbers alphabets spaces _ - allowed)
+//metaPropertyArray.add(metaPropertyArrayParams);
+//Gson gsonObj = new Gson();
+//String metaPropertyArrayJsonStr = gsonObj.toJson(metaPropertyArray);
 
-Recovering access to tokens after the owner key becomes compromised
+//ArrayList<Object> statusArray = new ArrayList<Object>();
+//statusArray.add("CREATED");
+//statusArray.add("SUBMITTED");
+//statusArray.add("SUCCESS");
+//statusArray.add("FAILED");
 
-User requests recovery from partner company application by entering their 6-digit 
-recovery PIN. Once the request has been raised user waits for defined delay which 
-is 12 hours currently.
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+//params.put("status", statusArray);
+//params.put("meta_property", metaPropertyArrayJsonStr);
+//params.put("limit", 10);
+JsonObject response = transactionsService.getList( params );
+System.out.println("response: " + response.toString() );
+```
 
-OST wallet SDK Create the recoveryOwner private key using the inputs from the Partner, 
-OST and the user.  This should exactly match the recoveryOwner that was made when the 
-wallet was initially created. 
+#### Balances Module
 
-To fetch the recoveryOwner address for a particular user services provided in Recovery 
-Owner Module are used.
+Balance services offer the functionality to view a user’s balances.
+
+```java
+com.ost.services.Balance balancesService = services.balance;
+```
+
+Get User Balance:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
+JsonObject response = balancesService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Recovery Owners Module
+A user’s Brand Tokens are held by a TokenHolder contract that is controlled ("owned") 
+by a Device Manager; the device manager is controlled ("owned") by device keys created 
+and held by the user in their wallets; and if any of those keys is lost, the Device 
+Manager (which is a multi-signature contract) is programmed to allow replacement of a 
+key by the recovery owner key for the user, via the DelayedRecoveryModule, which is deployed
+at the time of the creation of the user's initial wallet.
+
+To fetch the recovery owner address for a particular user, use services provided 
+in the Users module. To fetch that recovery owner's information, then services 
+provided in the Recovery Owners Module are used.
 
 ```java
 com.ost.services.RecoveryOwners recoveryOwnersService = services.recoveryOwners;
 ```
 
-Get recovery owner:
+Get Recovery Owner Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
@@ -478,9 +511,9 @@ System.out.println("response: " + response.toString() );
 
 ### Tokens Module
 
-To get information about the token created on the OST KIT interface use services provided 
-by token module. Partner company can use this service to know the chain id , the auxiliary 
-chain on which their economy is running apart from other information.
+To get information about the Brand Token created on the OST KIT interface, use services provided 
+by the Tokens module. You can use this service to obtain the chain ID of the auxiliary 
+chain on which the token economy is running, in addition to other information.
 
 ```java
 com.ost.services.Tokens tokensService = services.tokens;
@@ -496,36 +529,18 @@ System.out.println("response: " + response.toString() );
 
 ### Chains Module
 
-To get information about the auxiliary chain on which the token economy is running use services 
-provided by chain module.
+To get information about the auxiliary chain on which the token economy is running, use services 
+provided by the Chains module.
 
 ```java
 com.ost.services.Chains chainsService = services.chains;
 ```
 
-Get Chains Information:
+Get Chain Detail:
 
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
 params.put("chain_id", "200");
 JsonObject response = chainsService.get( params );
-System.out.println("response: " + response.toString() );
-```
-
-### Price Points Module
-
-To know the OST price point in USD and the last timestamp when it was updateds 
-use services provided by Price Point module.
-
-```java
-com.ost.services.PricePoints pricePointsService = services.pricePoints;
-```
-
-Get Price Points:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("chain_id", "200");
-JsonObject response = pricePointsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
