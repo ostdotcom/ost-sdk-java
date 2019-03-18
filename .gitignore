@@ -76,4 +76,7 @@ fabric.properties
 .DS_Store
 target
 
+# Environment
+.env
+
 release.properties
