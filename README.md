@@ -163,8 +163,6 @@ HashMap <String,Object> params = new HashMap<String,Object>();
 params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
 params.put("address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
 params.put("api_signer_address", "0x5F860598383868e8E8Ee0ffC5ADD92369Db37455");
-params.put("device_uuid", "593a967f-87bd-49a6-976c-52edf46c4df4");
-params.put("device_name", "Iphone S");
 JsonObject response = devicesService.create( params );
 System.out.println("response: " + response.toString() );
 ```

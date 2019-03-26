@@ -42,14 +42,11 @@ public class DevicesTest extends ServiceTestBase {
     @Test
     public void create() throws Exception {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        String deviceUuid = "29f57b59-60af-4579-9d6c-2ebcb36a9142";
         String address = getRandomAddress();
         String apiSignerAddress = getRandomAddress();
         params.put("user_id", getEnvironmentVariables().get("userId"));
         params.put("address", address);
         params.put("api_signer_address", apiSignerAddress);
-        params.put("device_uuid", deviceUuid);
-        params.put("device_name", "Iphone S");
 
         // Test-Case: Create a device for User.
         JsonObject response;
