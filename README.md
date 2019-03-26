@@ -189,6 +189,7 @@ params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
 //params.put("addresses", addressesArray);
 //params.put("limit", 10);
 JsonObject response = devicesService.getList( params );
+System.out.println("response: " + response.toString() );
 ```
 
 ### Device Managers Module
@@ -361,7 +362,7 @@ Execute Transaction DIRECT-TRANSFERS:
 //HashMap <String,Object> metaProperty = new HashMap<String,Object>();
 //metaProperty.put("name", "transaction_name"); // like, download
 //metaProperty.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
-//metaProperty.put("details", ""); // memo field to add additional info about the transaction
+//metaProperty.put("details", "test"); // memo field to add additional info about the transaction
 
 HashMap <String,Object> params = new HashMap<String,Object>();
 HashMap <String,Object> nestedparams = new HashMap<String,Object>();
@@ -394,7 +395,7 @@ Execute Transaction PAY:
 //HashMap <String,Object> metaProperty = new HashMap<String,Object>();
 //metaProperty.put("name", "transaction_name"); // like, download
 //metaProperty.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
-//metaProperty.put("details", ""); // memo field to add additional info about the transaction
+//metaProperty.put("details", "test"); // memo field to add additional info about the transaction
 
 HashMap <String,Object> params = new HashMap<String,Object>();
 HashMap <String,Object> nestedparams = new HashMap<String,Object>();
