@@ -1,10 +1,8 @@
 package com.ost.lib;
 
-
 import java.io.IOException;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.Iterator;
+import java.net.SocketTimeoutException;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -22,12 +20,11 @@ import java.util.concurrent.TimeUnit;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-
-
 public class OSTRequestClient {
     private String apiKey;
     private String apiSecret;
     private String apiEndpoint;
+    private Long timeout;
     private static final Gson gson = new Gson();
     private OkHttpClient client;
     private static final Escaper FormParameterEscaper = UrlEscapers.urlFormParameterEscaper();
@@ -37,11 +34,53 @@ public class OSTRequestClient {
     private static Boolean DEBUG = ("true").equalsIgnoreCase( System.getenv("OST_SDK_DEBUG") );
     private static Boolean VERBOSE = false;
 
+    public static class HttpParam {
+        private String paramName;
+        private String paramValue;
+
+        public HttpParam() {
+
+        }
+
+        public HttpParam(String paramName, String paramValue) {
+            this.paramName = paramName;
+            this.paramValue = paramValue;
+        }
+
+        public String getParamValue() {
+            return paramValue;
+        }
+
+        public void setParamValue(String paramValue) {
+            this.paramValue = paramValue;
+        }
+
+        public String getParamName() {
+            return paramName;
+        }
+
+        public void setParamName(String paramName) {
+            this.paramName = paramName;
+        }
+
+    }
+
 
     public OSTRequestClient( Map<String,Object> params) {
         Object apiKey = params.get("apiKey");
         Object apiSecret = params.get("apiSecret");
         Object apiEndpoint = params.get("apiEndpoint");
+
+        //default timeout is 10 seconds for socket connection
+        long timeout = (long) 10;
+        if(params.containsKey("config"))
+        {
+            HashMap<String, Object> config = (HashMap<String, Object>) params.get("config");
+
+            if(config.containsKey("timeout")){
+                timeout = (Long) config.get("timeout");
+            }
+        }
 
         if (!(apiKey instanceof String)) {
             throw new IllegalArgumentException("Api key not present.");
@@ -59,6 +98,8 @@ public class OSTRequestClient {
         this.apiKey = (String) apiKey;
         this.apiSecret = (String) apiSecret;
         this.apiEndpoint =  (String) apiEndpoint;
+        this.timeout = timeout;
+
         if ( this.apiEndpoint.endsWith("/") ) {
             this.apiEndpoint = this.apiEndpoint.substring(0, this.apiEndpoint.length() - 1);
         }
@@ -73,6 +114,7 @@ public class OSTRequestClient {
         client = new OkHttpClient.Builder()
                 .connectionPool(new ConnectionPool(10, 2, TimeUnit.MINUTES))
                 .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(timeout, TimeUnit.SECONDS)
                 .dispatcher(dispatcher)
                 .retryOnConnectionFailure(false)
                 .build();
@@ -81,6 +123,8 @@ public class OSTRequestClient {
 
     private static String GET_REQUEST = "GET";
     private static String POST_REQUEST = "POST";
+    private static String SocketTimeoutExceptionString = "{'success':'false','err':{'code':'GATEWAY_TIMEOUT','internal_id':'TIMEOUT_ERROR','msg':'','error_data':[]}}";
+
 
     public JsonObject get(String resource, Map<String, Object> queryParams) throws IOException {
         return send(GET_REQUEST, resource, queryParams);
@@ -106,115 +150,129 @@ public class OSTRequestClient {
 
         FormBody.Builder formBodyBuilder    = new FormBody.Builder();
         if ( null == urlBuilder ) {
-            throw new IOException("Failed to instanciate HttpUrl.Builder. resource or Api Endpoint is incorrect.");
+            throw new IOException("Failed to instantiate HttpUrl.Builder. resource or Api Endpoint is incorrect.");
         }
 
         // Evaluate the url generated so far.
         HttpUrl url = urlBuilder.build();
 
-        // Start Building HMAC Input Buffer by parsing the url.
-        Buffer hmacInputBuffer = new Buffer();
-        for (String path : url.pathSegments()) {
-            if ( DEBUG && VERBOSE ) System.out.println("path:" + path);
-            hmacInputBuffer.writeByte('/').writeUtf8( PathSegmentEscaper.escape( path ) );
-        }
-        hmacInputBuffer.writeByte('?');
-
         //Reset urlBuilder.
         urlBuilder = baseUrl.newBuilder();
 
-        // Convert mapParams to SortedMap.
-        // SortedMap is needed to generate correct signature.
-        SortedMap <String,String> params = new ConcurrentSkipListMap<String, String>();
+
+        ArrayList<HttpParam> params = new ArrayList<HttpParam>();
+
+        mapParams.put("api_key", apiKey);
+        mapParams.put("api_signature_kind", "OST1-HMAC-SHA256");
+        mapParams.put("api_request_timestamp", String.valueOf(System.currentTimeMillis() / 1000));
+
+        params = getRequestParam(resource, mapParams);
+
         String paramKey;
         String paramVal;
-        for ( Object paramPair : mapParams.entrySet()) {
-            Map.Entry pair = (Map.Entry) paramPair;
-            paramKey = (String) pair.getKey();
-            paramKey = paramKey.toLowerCase();
-            paramVal = pair.getValue().toString();
-            params.put(paramKey, paramVal);
-        }
-
-        // Add Api-Key & Timestamp to params.
-        params.put("api_key", apiKey);
-        params.put("request_timestamp", String.valueOf(System.currentTimeMillis() / 1000) );
-
 
         // Add params to url/form-body & hmacInputBuffer.
-        Iterator it = params.entrySet().iterator();
-        boolean firstParam = true;
+        Iterator it = params.iterator();
+
         while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            paramKey = (String) pair.getKey();
-            paramVal = (String) pair.getValue();
+            HttpParam pair = (HttpParam) it.next();
 
-            paramVal = FormParameterEscaper.escape( paramVal );
+            paramKey = pair.getParamName();
+            paramVal = pair.getParamValue();
 
-            if (!firstParam) {
-                hmacInputBuffer.writeByte('&');
-            }
-            firstParam = false;
-            hmacInputBuffer.writeUtf8( paramKey );
-            hmacInputBuffer.writeByte( '=' );
-            hmacInputBuffer.writeUtf8( paramVal );
-            if ( DEBUG ) System.out.println("paramKey " + paramKey + " paramVal " + paramVal);
-
-            if ( GET_REQUEST.equalsIgnoreCase( requestType) ) {
+            if (GET_REQUEST.equalsIgnoreCase(requestType)) {
                 urlBuilder.addEncodedQueryParameter(paramKey, paramVal);
             } else {
-                formBodyBuilder.addEncoded( paramKey, paramVal);
+                formBodyBuilder.addEncoded(paramKey, paramVal);
             }
         }
 
-
-        // Add signature to Params.
-        paramKey = "signature";
-        paramVal = signQueryParams( hmacInputBuffer );
-        if ( GET_REQUEST.equalsIgnoreCase( requestType) ) {
-            urlBuilder.addEncodedQueryParameter(paramKey, paramVal);
-        } else {
-            formBodyBuilder.addEncoded( paramKey, paramVal);
-        }
-
-
         // Build the url.
-        String urlStr = urlBuilder.build().toString();
-
         url = urlBuilder.build();
-        if ( DEBUG ) System.out.println("url = " + url.toString() );
+        if (DEBUG) System.out.println("url = " + url.toString());
 
         // Set url in requestBuilder.
-        requestBuilder.url( url );
+        requestBuilder.url(url);
 
         // Build the request Object.
         Request request;
-        if ( GET_REQUEST.equalsIgnoreCase( requestType) ) {
-            requestBuilder.get();
+        if (GET_REQUEST.equalsIgnoreCase(requestType)) {
+            requestBuilder.get().addHeader("content-type", "x-www-form-urlencoded");
         } else {
             FormBody formBody = formBodyBuilder.build();
-            if ( DEBUG && VERBOSE ) {
+            if (DEBUG && VERBOSE) {
                 for (int i = 0; i < formBody.size(); i++) {
                     System.out.println(formBody.name(i) + "\t\t" + formBody.value(i));
                 }
             }
 
-            requestBuilder.post( formBody );
+            requestBuilder.post(formBody);
         }
         request = requestBuilder.build();
 
-
-
         // Make the call and execute.
-        Call call = client.newCall( request );
-        okhttp3.Response response = call.execute();
-        String responseBody = getResponseBodyAsString( response );
+        String responseBody;
+        Call call = client.newCall(request);
+        try {
+            okhttp3.Response response = call.execute();
+            responseBody = getResponseBodyAsString(response);
+        }catch (SocketTimeoutException e)
+        {
+            responseBody =  SocketTimeoutExceptionString;
+        }
+        return buildApiResponse(responseBody);
+    }
 
-        return buildApiResponse( responseBody );
+    public ArrayList<HttpParam> getRequestParam(String resource, Map<String, Object> paramValObj) {
+
+        // Start Building HMAC Input Buffer by parsing the url.
+        Buffer hmacInputBuffer = new Buffer();
+
+        hmacInputBuffer.writeUtf8(resource);
+        hmacInputBuffer.writeByte('?');
+
+
+        ArrayList<HttpParam> params = new ArrayList<HttpParam>();
+        ArrayList<HttpParam> escapedParams = new ArrayList<HttpParam>();
+        String paramKey;
+        String paramVal;
+
+        params = buildNestedQuery(params, "", paramValObj);
+
+        // Add params to url/form-body & hmacInputBuffer.
+        Iterator it = params.iterator();
+        boolean firstParam = true;
+
+        while (it.hasNext()) {
+            HttpParam pair = (HttpParam) it.next();
+
+            paramKey = pair.getParamName();
+            paramVal = pair.getParamValue();
+
+            paramKey = specialCharacterEscape(paramKey);
+            paramVal = specialCharacterEscape(paramVal);
+
+            if (!firstParam) {
+                hmacInputBuffer.writeByte('&');
+            }
+            firstParam = false;
+
+            hmacInputBuffer.writeUtf8(paramKey);
+            hmacInputBuffer.writeByte('=');
+            hmacInputBuffer.writeUtf8(paramVal);
+
+            escapedParams.add(new HttpParam(paramKey, paramVal));
+            if (DEBUG) System.out.println("paramKey " + paramKey + " paramVal " + paramVal);
+        }
+
+        paramVal = signQueryParams(hmacInputBuffer);
+        escapedParams.add(new HttpParam("api_signature", paramVal));
+        return escapedParams;
     }
 
     private String signQueryParams( Buffer hmacInputBuffer ) {
-        // Generate Signature for Params.
+
+        // Generate api_signature for Params.
         SecretKeySpec keySpec = new SecretKeySpec( apiSecret.getBytes( UTF_8 ), HMAC_SHA256);
         Mac mac;
         try {
@@ -229,9 +287,9 @@ public class OSTRequestClient {
         if ( DEBUG ) System.out.println("bytes to sign: " + new String(bytes, UTF_8 ));
         byte[] result = mac.doFinal(bytes);
 
-        String signature = ByteString.of(result).hex();
-        if ( DEBUG ) System.out.println("signature: " + signature );
-        return signature;
+        String api_signature = ByteString.of(result).hex();
+        if ( DEBUG ) System.out.println("api_signature: " + api_signature );
+        return api_signature;
     }
 
     private static String SOMETHING_WRONG_RESPONSE = "{'success': false, 'err': {'code': 'SOMETHING_WENT_WRONG', 'internal_id': 'SDK(SOMETHING_WENT_WRONG)', 'msg': '', 'error_data':[]}}";
@@ -242,7 +300,7 @@ public class OSTRequestClient {
             try {
                 responseBody = response.body().string();
                 if ( responseBody.length() > 0 ) {
-                    if ( DEBUG ) System.out.println("responseBody:\n" + responseBody + "\n");
+                    if ( DEBUG ) System.out.println("responseCode: "+response.code()+"\nresponseBody:\n" + responseBody + "\n");
                     return responseBody;
                 }
             } catch (IOException e) {
@@ -284,5 +342,51 @@ public class OSTRequestClient {
         }
         if ( DEBUG ) System.out.println("Failed to parse response. local responseBody:\n" + SOMETHING_WRONG_RESPONSE + "\n");
         return gson.fromJson(SOMETHING_WRONG_RESPONSE, JsonObject.class);
+    }
+
+    private static ArrayList<HttpParam> buildNestedQuery(ArrayList<HttpParam> params, String paramKeyPrefix, Object paramValObj) {
+
+        if (paramValObj instanceof Map) {
+
+            //            sort map.
+            Map<String, Object> sortedMap = new TreeMap<String, Object>((Map<? extends String, ?>) paramValObj);
+            for (Object paramPair : sortedMap.entrySet()) {
+                Map.Entry pair = (Map.Entry) paramPair;
+                String key = (String) pair.getKey();
+                Object value = pair.getValue();
+                String prefix = "";
+                if (paramKeyPrefix.isEmpty()){
+                    prefix = key;
+                }else{
+                    prefix = paramKeyPrefix + "[" + key + "]";
+                }
+
+                params = buildNestedQuery(params, prefix, value);
+            }
+
+        } else if (paramValObj instanceof Collection) {
+            Iterator<Object> iterator = ((Collection) paramValObj).iterator();
+
+            while (iterator.hasNext()) {
+                Object value = iterator.next();
+                String prefix = paramKeyPrefix + "[]";
+                params = buildNestedQuery(params, prefix, value);
+            }
+        } else {
+            if(paramValObj != null){
+                params.add(new HttpParam(paramKeyPrefix, paramValObj.toString()));
+            }else{
+                params.add(new HttpParam(paramKeyPrefix, ""));
+            }
+
+        }
+        return params;
+    }
+
+    private static String specialCharacterEscape(String stringToEscape){
+        stringToEscape = FormParameterEscaper.escape(stringToEscape);
+        stringToEscape = stringToEscape.replace("*", "%2A");
+        stringToEscape = stringToEscape.replace("%7E", "~");
+        return stringToEscape;
     }
 }

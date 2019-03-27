@@ -11,5 +11,4 @@ public abstract class OSTServiceManifest {
         request = new OSTRequestClient( params );
     }
 
-    public abstract String getApiVersion();
 }
