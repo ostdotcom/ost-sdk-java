@@ -1,7 +1,7 @@
 # OST Java SDK
 [![Build Status](https://travis-ci.org/ostdotcom/ost-sdk-java.svg?branch=develop)](https://travis-ci.org/ostdotcom/ost-sdk-java)
 
-The official [OST](https://dev.ost.com/) Java SDK.
+[OST](https://dev.ost.com/) Platform SDK for Java.
 
 ## Introduction
 
