@@ -71,8 +71,8 @@ public class OSTRequestClient {
         Object apiSecret = params.get("apiSecret");
         Object apiEndpoint = params.get("apiEndpoint");
 
-        //default timeout is 10 seconds for socket connection
-        long timeout = (long) 10;
+        //default timeout is 60 seconds for socket connection
+        long timeout = (long) 60;
         if(params.containsKey("config"))
         {
             HashMap<String, Object> config = (HashMap<String, Object>) params.get("config");
@@ -123,7 +123,7 @@ public class OSTRequestClient {
 
     private static String GET_REQUEST = "GET";
     private static String POST_REQUEST = "POST";
-    private static String SocketTimeoutExceptionString = "{'success':'false','err':{'code':'GATEWAY_TIMEOUT','internal_id':'TIMEOUT_ERROR','msg':'','error_data':[]}}";
+    private static String SocketTimeoutExceptionString = "{'success':'false','err':{'code':'GATEWAY_TIMEOUT','internal_id':'SDK(GATEWAY_TIMEOUT)','msg':'','error_data':[]}}";
 
 
     public JsonObject get(String resource, Map<String, Object> queryParams) throws IOException {

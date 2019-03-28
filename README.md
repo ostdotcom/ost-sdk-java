@@ -82,7 +82,7 @@ sdkConfig.put("apiSecret","[YOUR_API_SECRET]");
 HashMap <String,Object> nestedparam = new HashMap<String,Object>();
 // This is the timeout in seconds for which the socket connection will remain open
 // The value of timeout will always be of type long
-nestedparam.put("timeout", (long) 15);
+nestedparam.put("timeout", (long) 60);
 sdkConfig.put("config", nestedparam);
 
 OSTSDK ostObj = new OSTSDK(sdkConfig);
@@ -414,12 +414,12 @@ arrayListAmount.add(amount);
 Gson gsonObj = new Gson();
 String tokenHolderSender = "0xa9632350057c2226c5a10418b1c3bc9acdf7e2ee";
 String payCurrencyCode = "USD";
-String ostToUsdInWei = "23757000000000000";
+String ostToUsd = "23757000000000000";
 nestedarraylist.add(tokenHolderSender);
 nestedarraylist.add(arrayListForUser2TokenHolderAddress);
 nestedarraylist.add(arrayListAmount);
 nestedarraylist.add(payCurrencyCode);
-nestedarraylist.add(ostToUsdInWei);
+nestedarraylist.add(ostToUsd);
 nestedparams.put("parameters", nestedarraylist);
 String jsonStr = gsonObj.toJson(nestedparams);
 params.put("raw_calldata", jsonStr);
