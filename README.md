@@ -543,3 +543,21 @@ params.put("chain_id", "200");
 JsonObject response = chainsService.get( params );
 System.out.println("response: " + response.toString() );
 ```
+
+### Base Tokens Module
+
+To get information about the base tokens available on the OST Platform interface, use services
+provided by the Base Tokens module. You can use this service to obtain the base token details
+on OST Platform interface.
+
+```java
+com.ost.services.BaseTokens baseTokensService = services.baseTokens;
+```
+
+Get Base Token Detail:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+JsonObject response = baseTokensService.get( params );
+System.out.println("response: " + response.toString() );
+```
