@@ -293,7 +293,7 @@ System.out.println("response: " + response.toString() );
 
 #### Price Points Module
 
-To know the OST price point in USD and when it was last updated, 
+To know the base token price point in pay currency and when it was last updated, 
 use services provided by the Price Points module.
 
 ```java
@@ -414,12 +414,12 @@ arrayListAmount.add(amount);
 Gson gsonObj = new Gson();
 String tokenHolderSender = "0xa9632350057c2226c5a10418b1c3bc9acdf7e2ee";
 String payCurrencyCode = "USD";
-String ostToUsd = "23757000000000000";
+String intendedPricePoint = "23757000000000000";
 nestedarraylist.add(tokenHolderSender);
 nestedarraylist.add(arrayListForUser2TokenHolderAddress);
 nestedarraylist.add(arrayListAmount);
 nestedarraylist.add(payCurrencyCode);
-nestedarraylist.add(ostToUsd);
+nestedarraylist.add(intendedPricePoint);
 nestedparams.put("parameters", nestedarraylist);
 String jsonStr = gsonObj.toJson(nestedparams);
 params.put("raw_calldata", jsonStr);
