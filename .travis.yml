@@ -13,7 +13,6 @@ notifications:
 sudo: false
 branches:
   only:
-  - base_tokens_api
   - develop
   - /^release-.*/
 script: mvn clean verify
