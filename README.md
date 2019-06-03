@@ -9,16 +9,15 @@ OST is a complete technology solution enabling mainstream businesses
 to easily launch blockchain-based economies without 
 requiring blockchain development.
 
-At the core of OST is the concept of OST-powered Brand Tokens (BTs). 
-BTs are white-label cryptocurrency tokens with utility representations 
+Brand Tokens (BTs) are white-label cryptocurrency tokens with utility representations 
 running on highly-scalable Ethereum-based side blockchains, 
-backed by OST tokens staked on Ethereum mainnet. Within a business’s 
+backed by value token (such as OST, USDC) staked on Ethereum mainnet. Within a business’s 
 token economy, BTs can only be transferred to whitelisted user addresses. 
 This ensures that they stay within the token economy.
 
 The OST technology stack is designed to give businesses everything they need 
 to integrate, test, and deploy BTs. Within the OST suite of products, developers 
-can use OST Platform to create, test, and launch Brand Tokens backed by OST. 
+can use OST Platform to create, test, and launch Brand Tokens backed by value token (such as OST, USDC). 
 
 OST APIs and server-side SDKs make it simple and easy for developers to 
 integrate blockchain tokens into their apps.
@@ -43,7 +42,7 @@ with OST Platform, requiring only three steps:
 <dependency>
   <groupId>com.ost</groupId>
   <artifactId>ost-sdk-java</artifactId>
-  <version>2.0.0</version>
+  <version>2.1.0</version>
 </dependency>
 ```
 
@@ -293,7 +292,7 @@ System.out.println("response: " + response.toString() );
 
 #### Price Points Module
 
-To know the OST price point in USD and when it was last updated, 
+To know the value token (such as OST, USDC) price point in pay currency and when it was last updated, 
 use services provided by the Price Points module.
 
 ```java
@@ -414,12 +413,12 @@ arrayListAmount.add(amount);
 Gson gsonObj = new Gson();
 String tokenHolderSender = "0xa9632350057c2226c5a10418b1c3bc9acdf7e2ee";
 String payCurrencyCode = "USD";
-String ostToUsd = "23757000000000000";
+String intendedPricePoint = "23757000000000000";
 nestedarraylist.add(tokenHolderSender);
 nestedarraylist.add(arrayListForUser2TokenHolderAddress);
 nestedarraylist.add(arrayListAmount);
 nestedarraylist.add(payCurrencyCode);
-nestedarraylist.add(ostToUsd);
+nestedarraylist.add(intendedPricePoint);
 nestedparams.put("parameters", nestedarraylist);
 String jsonStr = gsonObj.toJson(nestedparams);
 params.put("raw_calldata", jsonStr);
@@ -541,5 +540,23 @@ Get Chain Detail:
 HashMap <String,Object> params = new HashMap<String,Object>();
 params.put("chain_id", "200");
 JsonObject response = chainsService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Base Tokens Module
+
+To get information about the value tokens (such as OST, USDC) available on the OST Platform interface, use services
+provided by the Base Tokens module. You can use this service to obtain the base token details
+on OST Platform interface.
+
+```java
+com.ost.services.BaseTokens baseTokensService = services.baseTokens;
+```
+
+Get Base Token Detail:
+
+```java
+HashMap <String,Object> params = new HashMap<String,Object>();
+JsonObject response = baseTokensService.get( params );
 System.out.println("response: " + response.toString() );
 ```

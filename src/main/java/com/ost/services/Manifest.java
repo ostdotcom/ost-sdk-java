@@ -15,6 +15,7 @@ public class Manifest extends OSTServiceManifest {
     public RecoveryOwners recoveryOwners;
     public Devices devices;
     public Chains chains;
+    public BaseTokens baseTokens;
 
 
     public Manifest( Map<String, Object> params) {
@@ -34,6 +35,7 @@ public class Manifest extends OSTServiceManifest {
         this.recoveryOwners = new RecoveryOwners( this.request );
         this.devices = new Devices( this.request );
         this.chains = new Chains( this.request );
+        this.baseTokens = new BaseTokens( this.request );
     }
 
 }
