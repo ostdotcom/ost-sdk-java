@@ -1,8 +1,8 @@
 language: java
 # The cross product of the jdk and env settings form the matrix of builds Travis will run.
 jdk:
-  - oraclejdk8
   - oraclejdk9
+  - oraclejdk10
   - openjdk7
   - openjdk8
 notifications:
@@ -14,6 +14,7 @@ notifications:
 sudo: false
 branches:
   only:
+  - base_tokens_api
   - develop
   - /^release-.*/
 script: mvn clean verify
