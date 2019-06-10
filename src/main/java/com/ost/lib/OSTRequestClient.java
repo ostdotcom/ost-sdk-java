@@ -123,19 +123,26 @@ public class OSTRequestClient {
 
     private static String GET_REQUEST = "GET";
     private static String POST_REQUEST = "POST";
+    private static String DELETE_REQUEST = "DELETE";
     private static String SocketTimeoutExceptionString = "{'success':'false','err':{'code':'GATEWAY_TIMEOUT','internal_id':'SDK(GATEWAY_TIMEOUT)','msg':'','error_data':[]}}";
 
 
     public JsonObject get(String resource, Map<String, Object> queryParams) throws IOException {
         return send(GET_REQUEST, resource, queryParams);
     }
+
     public JsonObject post(String resource, Map<String,Object> queryParams) throws IOException {
         return send(POST_REQUEST, resource, queryParams);
     }
 
+    public JsonObject delete(String resource, Map<String,Object> queryParams) throws IOException {
+        return send(DELETE_REQUEST, resource, queryParams);
+    }
+
     private JsonObject send(String requestType, String resource, Map<String, Object> mapParams) throws IOException {
         // Basic Sanity.
-        if ( !requestType.equalsIgnoreCase(POST_REQUEST) && !requestType.equalsIgnoreCase(GET_REQUEST) ) {
+        if ( !requestType.equalsIgnoreCase(POST_REQUEST) && !requestType.equalsIgnoreCase(GET_REQUEST)
+        && !requestType.equalsIgnoreCase(DELETE_REQUEST)) {
             throw new IOException("Invalid requestType");
         }
         if ( null == mapParams ) {
@@ -198,7 +205,17 @@ public class OSTRequestClient {
         Request request;
         if (GET_REQUEST.equalsIgnoreCase(requestType)) {
             requestBuilder.get().addHeader("content-type", "x-www-form-urlencoded");
-        } else {
+        } else if(DELETE_REQUEST.equalsIgnoreCase(requestType)){
+            FormBody formBody = formBodyBuilder.build();
+            if (DEBUG && VERBOSE) {
+                for (int i = 0; i < formBody.size(); i++) {
+                    System.out.println(formBody.name(i) + "\t\t" + formBody.value(i));
+                }
+            }
+
+            requestBuilder.delete(formBody);
+        }
+        else {
             FormBody formBody = formBodyBuilder.build();
             if (DEBUG && VERBOSE) {
                 for (int i = 0; i < formBody.size(); i++) {

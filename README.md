@@ -42,7 +42,7 @@ with OST Platform, requiring only three steps:
 <dependency>
   <groupId>com.ost</groupId>
   <artifactId>ost-sdk-java</artifactId>
-  <version>2.1.0</version>
+  <version>2.2.0</version>
 </dependency>
 ```
 
@@ -558,5 +558,80 @@ Get Base Token Detail:
 ```java
 HashMap <String,Object> params = new HashMap<String,Object>();
 JsonObject response = baseTokensService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+### Webhooks Module
+
+To manage webhooks on the OST Platform Interface, use services provided by the 
+Chains module. You can use this service to create new webhooks and manage existing 
+webhooks.
+
+```java
+com.ost.services.Webhooks webhooksService = services.webhooks;
+```
+
+Get Webhooks Detail:
+
+```java
+HashMap<String, Object> params = new HashMap<String, Object>();
+params.put("webhook_id", "4107e308-0146-4c6f-b2f3-617e2c0d2354");
+JsonObject response = webhooksService.get( params );
+System.out.println("response: " + response.toString() );
+```
+
+Create Webhook:
+
+```java
+HashMap<String, Object> params = new HashMap<String, Object>();
+ArrayList<String> arrayListofTopics = new ArrayList<String>();
+arrayListofTopics.add("devices/authorization_initiate");
+params.put("url", "https://www.yourdomain12345.com");
+params.put("status", "active");
+params.put("topics", arrayListofTopics);
+JsonObject response = webhooksService.create( params );
+System.out.println("response: " + response.toString() );
+```
+
+Update Webhook:
+
+```java
+HashMap<String, Object> params = new HashMap<String, Object>();
+ArrayList<String> arrayListofTopics = new ArrayList<String>();
+arrayListofTopics.add("devices/authorization_initiate");
+params.put("webhook_id", "4107e308-0146-4c6f-b2f3-617e2c0d2354");
+params.put("status", "active");
+params.put("topics", arrayListofTopics);
+JsonObject response = webhooksService.update( params );
+System.out.println("response: " + response.toString() );
+```
+
+Delete Webhook:
+
+```java
+HashMap<String, Object> params = new HashMap<String, Object>();
+params.put("webhook_id", "4107e308-0146-4c6f-b2f3-617e2c0d2354");
+JsonObject response = webhooksService.deleteWebhook( params );
+System.out.println("response: " + response.toString() );
+```
+
+List Webhooks Detail:
+
+```java
+HashMap<String, Object> params = new HashMap<String, Object>();
+params.put("webhook_id", "4107e308-0146-4c6f-b2f3-617e2c0d2354");
+JsonObject response = webhooksService.getList( params );
+System.out.println("response: " + response.toString() );
+```
+
+Verify Signature for webhook:
+
+```java
+String version = "2";
+String stringifiedData = "YourStringifiedObjectData"
+String requestTimestamp = "1559902637";
+String signature = "e9206f9feecccd8f9653a4bdb56ea74531e6528bae8f6de1797aa77dc5235923";
+params.put("webhook_id", "4107e308-0146-4c6f-b2f3-617e2c0d2354");
+JsonObject response = webhooksService.verifySignature( version, stringifiedData, requestTimestamp, signature );
 System.out.println("response: " + response.toString() );
 ```
