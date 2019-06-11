@@ -187,7 +187,7 @@ public class OSTRequestClient {
             paramKey = pair.getParamName();
             paramVal = pair.getParamValue();
 
-            if (GET_REQUEST.equalsIgnoreCase(requestType)) {
+            if (GET_REQUEST.equalsIgnoreCase(requestType) || DELETE_REQUEST.equalsIgnoreCase(requestType)) {
                 urlBuilder.addEncodedQueryParameter(paramKey, paramVal);
             } else {
                 formBodyBuilder.addEncoded(paramKey, paramVal);
@@ -206,14 +206,7 @@ public class OSTRequestClient {
         if (GET_REQUEST.equalsIgnoreCase(requestType)) {
             requestBuilder.get().addHeader("content-type", "x-www-form-urlencoded");
         } else if(DELETE_REQUEST.equalsIgnoreCase(requestType)){
-            FormBody formBody = formBodyBuilder.build();
-            if (DEBUG && VERBOSE) {
-                for (int i = 0; i < formBody.size(); i++) {
-                    System.out.println(formBody.name(i) + "\t\t" + formBody.value(i));
-                }
-            }
-
-            requestBuilder.delete(formBody);
+            requestBuilder.delete().addHeader("content-type", "x-www-form-urlencoded");
         }
         else {
             FormBody formBody = formBodyBuilder.build();
