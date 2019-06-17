@@ -619,7 +619,8 @@ List Webhooks Detail:
 
 ```java
 HashMap<String, Object> params = new HashMap<String, Object>();
-params.put("webhook_id", "4107e308-0146-4c6f-b2f3-617e2c0d2354");
+//params.put("limit", 10);
+//params.put("pagination_identifier", "eyJsYXN0RXZhbHVhdGVkS2V5Ijp7InVpZCI6eyJTIjoiZDE5NGFhNzUtYWNkNS00ZjQwLWIzZmItZTczYTdjZjdjMGQ5In0sIndhIjp7IlMiOiIweDU4YjQxMDY0NzQ4OWI4ODYzNTliNThmZTIyMjYwZWIxOTYwN2IwZjYifX19");
 JsonObject response = webhooksService.getList( params );
 System.out.println("response: " + response.toString() );
 ```
@@ -631,7 +632,7 @@ String version = "2";
 String stringifiedData = "YourStringifiedObjectData"
 String requestTimestamp = "1559902637";
 String signature = "e9206f9feecccd8f9653a4bdb56ea74531e6528bae8f6de1797aa77dc5235923";
-params.put("webhook_id", "4107e308-0146-4c6f-b2f3-617e2c0d2354");
-JsonObject response = webhooksService.verifySignature( version, stringifiedData, requestTimestamp, signature );
+String webhookSecret = "09121ae7614856777fa36d63aca828e0ef14be77fb48fa149e0c0b50fec847a7";
+JsonObject response = webhooksService.verifySignature( version, stringifiedData, requestTimestamp, signature, webhookSecret );
 System.out.println("response: " + response.toString() );
 ```
