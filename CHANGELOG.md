@@ -1,8 +1,8 @@
 [OST JAVA SDK v2.2.0](https://github.com/ostdotcom/ost-sdk-java/tree/v2.2.0)
 ---
 
-* Added webhooks module to call webhook management OST APIs
-* Support for verify webhook signature
+* Added webhooks module to call webhook management OST APIs.
+* Support for verify webhook signature.
 
 [OST JAVA SDK v2.1.0](https://github.com/ostdotcom/ost-sdk-java/tree/v2.1.0)
 ---
