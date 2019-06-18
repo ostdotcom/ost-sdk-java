@@ -30,7 +30,7 @@ public class WebhooksTest extends ServiceTestBase {
     }
 
     @Test
-    public void create() throws Exception {
+    public void webhookEndpoints() throws Exception {
         String version = System.getProperty("java.version");
         String randomUrl = "https://testingWebhooks.com/" + (System.currentTimeMillis() / 1000) + "/" + version;
 
@@ -52,37 +52,36 @@ public class WebhooksTest extends ServiceTestBase {
         JsonElement JsonElementWithWebhookId = createResponseWithWebhook.get("id");
         webhookId = JsonElementWithWebhookId.getAsString();
 
-    }
-
-
-    @Test
-    public void get() throws Exception {
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("webhook_id", this.webhookId);
-
-        // Test-Case: Get a Webhook.
-        JsonObject response;
-        response = getService().get(params);
-        validateResponseWithSuccess(response);
-
-    }
-
-
-    @Test
-    public void update() throws Exception {
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        ArrayList<String> arrayList = new ArrayList<String>();
-        arrayList.add("devices/authorization_initiate");
-        params.put("webhook_id", getEnvironmentVariables().get("webhookId"));
-        params.put("status", "active");
-        params.put("topics", arrayList);
+        HashMap<String, Object> paramsForUpdate = new HashMap<String, Object>();
+        ArrayList<String> arrayListforUpdate = new ArrayList<String>();
+        arrayListforUpdate.add("devices/authorization_initiate");
+        paramsForUpdate.put("webhook_id", this.webhookId);
+        paramsForUpdate.put("status", "active");
+        paramsForUpdate.put("topics", arrayList);
 
         // Test-Case: Create an User.
-        JsonObject response;
-        response = getService().update(params);
-        validateResponseWithSuccess(response);
+        JsonObject updateResponse;
+        updateResponse = getService().update(paramsForUpdate);
+        validateResponseWithSuccess(updateResponse);
+
+        HashMap<String, Object> paramsForGet = new HashMap<String, Object>();
+        paramsForGet.put("webhook_id", this.webhookId);
+
+        // Test-Case: Get a Webhook.
+        JsonObject responseForGet;
+        responseForGet = getService().get(paramsForGet);
+        validateResponseWithSuccess(responseForGet);
+
+        HashMap<String, Object> paramsForDelete = new HashMap<String, Object>();
+        paramsForDelete.put("webhook_id", this.webhookId);
+
+        // Test-Case: Delete a Webhook.
+        JsonObject responseForDelete;
+        responseForDelete = getService().deleteWebhook(paramsForDelete);
+        validateResponseWithSuccess(responseForDelete);
 
     }
+
 
     @Test
     public void getList() throws Exception {
@@ -91,18 +90,6 @@ public class WebhooksTest extends ServiceTestBase {
         // Test-Case: Get List of webhooks.
         JsonObject response;
         response = getService().getList(params);
-        validateResponseWithSuccess(response);
-
-    }
-
-    @Test
-    public void deleteWebhook() throws Exception {
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("webhook_id", this.webhookId);
-
-        // Test-Case: Delete a Webhook.
-        JsonObject response;
-        response = getService().deleteWebhook(params);
         validateResponseWithSuccess(response);
 
     }
