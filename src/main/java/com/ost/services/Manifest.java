@@ -16,6 +16,7 @@ public class Manifest extends OSTServiceManifest {
     public Devices devices;
     public Chains chains;
     public BaseTokens baseTokens;
+    public Webhooks webhooks;
 
 
     public Manifest( Map<String, Object> params) {
@@ -36,6 +37,7 @@ public class Manifest extends OSTServiceManifest {
         this.devices = new Devices( this.request );
         this.chains = new Chains( this.request );
         this.baseTokens = new BaseTokens( this.request );
+        this.webhooks = new Webhooks( this.request);
     }
 
 }
