@@ -628,11 +628,11 @@ System.out.println("response: " + response.toString() );
 Verify Signature for webhook:
 
 ```java
-String version = "2";
-String stringifiedData = "YourStringifiedObjectData"
-String requestTimestamp = "1559902637";
+String version = "v2"; // webhook response version should be here
+String stringifiedData = "YourStringifiedObjectData" // webhook response should be here
+String requestTimestamp = "1559902637"; // webhook response requested_timestamp should be here
 String signature = "e9206f9feecccd8f9653a4bdb56ea74531e6528bae8f6de1797aa77dc5235923";
 String webhookSecret = "09121ae7614856777fa36d63aca828e0ef14be77fb48fa149e0c0b50fec847a7";
-JsonObject response = webhooksService.verifySignature( version, stringifiedData, requestTimestamp, signature, webhookSecret );
-System.out.println("response: " + response.toString() );
+Boolean response = webhooksService.verifySignature( version, stringifiedData, requestTimestamp, signature, webhookSecret );
+System.out.println("response: " + response );
 ```
