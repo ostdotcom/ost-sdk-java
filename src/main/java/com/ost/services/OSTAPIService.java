@@ -118,6 +118,21 @@ public abstract class OSTAPIService {
         return user_id;
     }
 
+    public String getWebhookId(Map<String, Object> params) throws MissingParameter, InvalidParameter {
+        String webhook_id = "";
+        if (null == params || !params.containsKey("webhook_id") || null == params.get("webhook_id")) {
+            throw new MissingParameter("webhook_id");
+        }
+        if (!isValidParameter(params.get("webhook_id"))) {
+            throw new InvalidParameter("webhook_id");
+        }
+
+        webhook_id = params.get("webhook_id").toString();
+        params.remove("webhook_id");
+
+        return webhook_id;
+    }
+
     public Boolean isValidParameter(Object params) throws InvalidParameter {
         if(params instanceof Number){
             return true;
