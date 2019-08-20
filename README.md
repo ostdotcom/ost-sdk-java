@@ -87,15 +87,15 @@ The jar file can be found in the target folder.
 
 	// Optional API parameters
 
-	// This is the timeout in seconds for which the socket connection will remain open
-	long timeoutInSeconds = 60; // The value of timeout will always be of type long
+	// This is the timeout in seconds for which the socket connection will remain open.
+	long timeoutInSeconds = 60; // The value of timeout will always be of type long.
 	
 	HashMap <String,Object> nestedparam = new HashMap<String,Object>();
 
 	nestedparam.put("timeout", timeoutInSeconds);
 	sdkConfig.put("config", nestedparam);
 
-  // OST server side sdk object 
+    // OST server side sdk object.
 	OSTSDK ostObj = new OSTSDK(sdkConfig);
 	com.ost.services.Manifest services = (com.ost.services.Manifest) ostObj.services;
 	```
@@ -103,11 +103,13 @@ The jar file can be found in the target folder.
 ### Users Module
 
 * Initialize Users service object to perform user specific actions.
+
 	```java
 	com.ost.services.Users usersService = services.users;
 	```
 
 * Create User. This creates a unique identifier for each user.
+
 	```java
 	HashMap <String,Object> params = new HashMap<String,Object>();
 	JsonObject response = usersService.create( params );
@@ -115,6 +117,7 @@ The jar file can be found in the target folder.
 	```
 
 * Get User Detail using the userId obtained in user create.
+
 	```java
 	// Mandatory API parameters
 
@@ -128,6 +131,7 @@ The jar file can be found in the target folder.
 	```
 
 * Get Users List. Pagination is supported in this API.
+
 	```java
 	// Mandatory API parameters
 	// No mandatory parameters.
@@ -157,11 +161,13 @@ The jar file can be found in the target folder.
 ### Devices Module
 
 * Initialize Devices service object to perform device specific actions.
+
 	```java
 	com.ost.services.Devices devicesService = services.devices;
 	```
 
 * Create a Device for User.
+
 	```java
 	// Mandatory API parameters
 
@@ -184,6 +190,7 @@ The jar file can be found in the target folder.
 	```
 
 * Get User Device Detail using userId and deviceAddress.
+
 	```java
 	// Mandatory API parameters
 
@@ -201,7 +208,8 @@ The jar file can be found in the target folder.
 	System.out.println("response: " + response.toString() );
 	```
 
-* Get User Devices List. Pagination is supported.
+* Get User Devices List. Pagination is supported by this API.
+
 	```java
 	// Mandatory API parameters
 
@@ -234,11 +242,13 @@ The jar file can be found in the target folder.
 ### Device Managers Module
 
 * Initialize Device Manager service object to perform device manager specific actions.
+
 	```java
 	com.ost.services.DeviceManagers deviceManagersService = services.deviceManagers;
 	```
 
 * Get Device Manager Detail using userId.
+
 	```java
 	// Mandatory API parameters
 
@@ -255,11 +265,13 @@ The jar file can be found in the target folder.
 ### Sessions Module
 
 * Initialize Sessions service object to perform session specific actions.
+
 	```java
 	com.ost.services.Sessions sessionsService = services.sessions;
 	```
 
 * Get User Session Detail using userId and session address.
+
 	```java
 	// Mandatory API parameters
 
@@ -277,7 +289,8 @@ The jar file can be found in the target folder.
 	System.out.println("response: " + response.toString() );
 	```
 
-* Get User Sessions List using userId. Pagination is supported in this API.
+* Get User Sessions List using userId. Pagination is supported by this API.
+
 	```java
 	// Mandatory API parameters
 
@@ -314,11 +327,13 @@ For executing transactions, you need to understand the 4 modules described below
 #### Rules Module
 
 * Initialize Rules service object to perform rules specific actions.
+
 	```java
 	com.ost.services.Rules rulesService = services.rules;
 	```
 
 * List Rules.
+
 	```java
 	HashMap <String,Object> params = new HashMap<String,Object>();
 	JsonObject response = rulesService.getList( params );
@@ -328,11 +343,13 @@ For executing transactions, you need to understand the 4 modules described below
 #### Price Points Module
 
 * Initialize Price Points service object to perform price points specific actions.
+
 	```java
 	com.ost.services.PricePoints pricePointsService = services.pricePoints;
 	```
 
 * Get Price Points Detail.
+
 	```java
 	// Mandatory API parameters
 
@@ -349,11 +366,13 @@ For executing transactions, you need to understand the 4 modules described below
 #### Transactions Module
 
 * Initialize Transactions service object to perform transaction specific actions.
+
 	```java
 	com.ost.services.Transactions transactionsService = services.transactions;
 	```
 
 * DIRECT-TRANSFERS execute transaction should be used to transfer BTs to your end-users.
+
 	```java
 	// Mandatory API parameters
 
@@ -364,27 +383,27 @@ For executing transactions, you need to understand the 4 modules described below
 	String transferAmount = "1";
 
 	// Company userId.
-	String senderUserId = "ee89___";
+	String companyUserId = "ee89___";
 
 	// Address of DirectTransfer rule. Use list rules API of Rules module to get the address of rules.
 	// In the rules array which you will get in response, use the address having name "Direct Transfer".
 	String directTransferRuleAddress = "0xe379___";
 
 	// Parameters required for rule execution.
-	ArrayList<Object> arrayListForUser2TokenHolderAddress = new ArrayList<Object>();
-	arrayListForUser2TokenHolderAddress.add(transferToAddress);
+	ArrayList<Object> arrayListForReceiverTokenHolderAddress = new ArrayList<Object>();
+	arrayListForReceiverTokenHolderAddress.add(transferToAddress);
 
 	ArrayList<Object> arrayListAmount = new ArrayList<Object>();
 	arrayListAmount.add(transferAmount);
 
-	ArrayList<ArrayList> nestedarraylist = new ArrayList<ArrayList>();
-	nestedarraylist.add(arrayListForUser2TokenHolderAddress);
-	nestedarraylist.add(arrayListAmount);
+	ArrayList<ArrayList> nestedArraylist = new ArrayList<ArrayList>();
+	nestedArraylist.add(arrayListForReceiverTokenHolderAddress);
+	nestedArraylist.add(arrayListAmount);
 
 	// Parameters required for rule execution.
 	HashMap <String,Object> nestedparams = new HashMap<String,Object>();
-	nestedparams.put("method", "directTransfers");
-	nestedparams.put("parameters", nestedarraylist);
+	nestedparams.put("method", "directTransfers");  // Rule name which needs to be passed as-is.
+	nestedparams.put("parameters", nestedArraylist);
 
 	Gson gsonObj = new Gson();
 	String jsonStr = gsonObj.toJson(nestedparams);
@@ -392,7 +411,7 @@ For executing transactions, you need to understand the 4 modules described below
 
 	HashMap <String,Object> params = new HashMap<String,Object>();
 
-	params.put("user_id", senderUserId);
+	params.put("user_id", companyUserId);
 	params.put("to", directTransferRuleAddress);
 	params.put("raw_calldata", jsonStr);
 
@@ -411,7 +430,6 @@ For executing transactions, you need to understand the 4 modules described below
 
 	// Additional transaction information. There is no dependency between any of the metaProperty keys. 
 	// However, if a key is present, its value cannot be null or undefined.       
-
 	HashMap <String,Object> metaProperty = new HashMap<String,Object>();
 	metaProperty.put("name", transactionName); 
 	metaProperty.put("type", transactionType); 
@@ -424,6 +442,7 @@ For executing transactions, you need to understand the 4 modules described below
 	```
 
 * PAY Execute Transaction should be used when transactions of BTs equivalent to some fiat amount need to be executed.
+
 	```java
 	// Mandatory API parameters
 
@@ -450,34 +469,34 @@ For executing transactions, you need to understand the 4 modules described below
 	double transferAmountInFiat = 0.1;
 
 	// Decimal places obtained from the get price points API of Price Points module. Possible values: 6 and 18.
-  int decimalPlaces = 6;
+    int decimalPlaces = 6;
 
-  // Transfer amount in wei. Multiply the fiat transfer amount with 10^decimalPlaces. 
-  double fiatTransferAmountInWei = (transferAmountInFiat * 10^decimalPlaces);
+    // Transfer amount in wei. Multiply the fiat transfer amount with 10^decimalPlaces. 
+    double fiatTransferAmountInWei = (transferAmountInFiat * 10^decimalPlaces);
 	  
 	// Parameters required for rule execution.
-	ArrayList<Object> arrayListForUser2TokenHolderAddress = new ArrayList<Object>();
-	arrayListForUser2TokenHolderAddress.add(transferToAddress);
+	ArrayList<Object> arrayListForReceiverTokenHolderAddress = new ArrayList<Object>();
+	arrayListForReceiverTokenHolderAddress.add(transferToAddress);
 
 	ArrayList<Object> arrayListAmount = new ArrayList<Object>();
 	arrayListAmount.add(fiatTransferAmountInWei);
 	Gson gsonObj = new Gson();
 
-	ArrayList<Object> nestedarraylist = new ArrayList<Object>();
-	nestedarraylist.add(companyTokenHolderAddress);
-	nestedarraylist.add(arrayListForUser2TokenHolderAddress);
-	nestedarraylist.add(arrayListAmount);
-	nestedarraylist.add(payCurrencyCode);
-	nestedarraylist.add(intendedPricePoint);
+	ArrayList<Object> nestedArraylist = new ArrayList<Object>();
+	nestedArraylist.add(companyTokenHolderAddress);
+	nestedArraylist.add(arrayListForReceiverTokenHolderAddress);
+	nestedArraylist.add(arrayListAmount);
+	nestedArraylist.add(payCurrencyCode);
+	nestedArraylist.add(intendedPricePoint);
 
 	HashMap <String,Object> nestedparams = new HashMap<String,Object>();
-	nestedparams.put("method", "pay");
-	nestedparams.put("parameters", nestedarraylist);
+	nestedparams.put("method", "pay");  // Rule name which needs to be passed as-is.
+	nestedparams.put("parameters", nestedArraylist);
   
 	String jsonRawCallData = gsonObj.toJson(nestedparams);
 
 	// Company userId.
-	String senderUserId = "ee8___";
+	String companyUserId = "ee8___";
 
 	// Address of Pay rule. Use list rules API to get the address of rules.
 	// In the rules array which you will get in response, use the address having name "Pricer".
@@ -503,7 +522,7 @@ For executing transactions, you need to understand the 4 modules described below
 
 
 	HashMap <String,Object> params = new HashMap<String,Object>();
-	params.put("user_id", senderUserId);
+	params.put("user_id", companyUserId);
 	params.put("to", payRuleAddress);
 
 	params.put("meta_property", metaProperty);
@@ -514,6 +533,7 @@ For executing transactions, you need to understand the 4 modules described below
 	```
 
 * Get Transaction Detail using userId and transactionId.
+
 	```java
 	// Mandatory API parameters
 
@@ -531,7 +551,8 @@ For executing transactions, you need to understand the 4 modules described below
 	System.out.println("response: " + response.toString() );
 	```
 
-* Get User Transactions using userId. Pagination is supported in this API.
+* Get User Transactions using userId. Pagination is supported by this API.
+
 	```java
 	// Mandatory API parameters
 
@@ -541,7 +562,6 @@ For executing transactions, you need to understand the 4 modules described below
 	// Optional API parameters
 
 	// Array of status values.
-
 	ArrayList<Object> statusesArray = new ArrayList<Object>();
 	statusesArray.add("CREATED");
 	statusesArray.add("SUBMITTED");
@@ -560,7 +580,6 @@ For executing transactions, you need to understand the 4 modules described below
 
 	// Additional transaction information. There is no dependency between any of the metaProperty keys. 
 	// However, if a key is present, its value cannot be null or undefined. 
-
 	ArrayList<HashMap<String, Object>> metaPropertyArray = new ArrayList<HashMap<String, Object>>();
 	HashMap <String,Object> metaPropertyArrayParams = new HashMap<String,Object>();
 	metaPropertyArrayParams.put("name", transactionName); 
@@ -591,11 +610,13 @@ For executing transactions, you need to understand the 4 modules described below
 #### Balances Module
 
 * Initialize Balances service object to perform balances specific actions.
+
 	```java
 	com.ost.services.Balance balancesService = services.balance;
 	```
 
 * Get User Balance using userId.
+
 	```java
 	// Mandatory API parameters
 
@@ -612,11 +633,13 @@ For executing transactions, you need to understand the 4 modules described below
 ### Recovery Owners Module
 
 * Initialize Recovery Owners service object to perform recovery owners specific actions.
+
 	```java
 	com.ost.services.RecoveryOwners recoveryOwnersService = services.recoveryOwners;
 	```
 
 * Get Recovery Owner Detail using userId and recovery owner address.
+
 	```java
 	// Mandatory API parameters
 
@@ -637,11 +660,13 @@ For executing transactions, you need to understand the 4 modules described below
 ### Tokens Module
 
 * Initialize Tokens service object to perform tokens specific actions.
+
 	```java
 	com.ost.services.Tokens tokensService = services.tokens;
 	```
 
 * Get Token Detail.
+
 	```java
 	HashMap <String,Object> params = new HashMap<String,Object>();
 	JsonObject response = tokensService.get( params );
@@ -651,11 +676,13 @@ For executing transactions, you need to understand the 4 modules described below
 ### Chains Module
 
 * Initialize Chains service object to perform chains specific actions.
+
 	```java
 	com.ost.services.Chains chainsService = services.chains;
 	```
 
 * Get Chain Detail using chainId.
+
 	```java
 	// Mandatory API parameters
 
@@ -672,11 +699,13 @@ For executing transactions, you need to understand the 4 modules described below
 ### Base Tokens Module
 
 * Initialize Base Tokens service object to perform base tokens specific actions.
+
 	```java
 	com.ost.services.BaseTokens baseTokensService = services.baseTokens;
 	```
 
 * Get Base Tokens Detail.
+
 	```java
 	HashMap <String,Object> params = new HashMap<String,Object>();
 	JsonObject response = baseTokensService.get( params );
@@ -686,11 +715,13 @@ For executing transactions, you need to understand the 4 modules described below
 ### Webhooks Module
 
 * Initialize Webhooks service object to perform webhooks specific actions.
+
 	```java
 	com.ost.services.Webhooks webhooksService = services.webhooks;
 	```
 
 * Create Webhook using the topics and the subscription url.
+
 	```java
 	// Mandatory API parameters
 
@@ -717,6 +748,7 @@ For executing transactions, you need to understand the 4 modules described below
 	```
 
 * Update existing Webhook using a webhookId and an array of topics.
+
 	```java
 	// Mandatory API parameters
 
@@ -743,10 +775,11 @@ For executing transactions, you need to understand the 4 modules described below
 	```
 
 * Get Webhook using webhookId.
+
 	```java
 	// Mandatory API parameters
 
-  // Unique identifier for a webhook.
+    // Unique identifier for a webhook.
 	String webhookId = "a743___";
 
 
@@ -758,6 +791,7 @@ For executing transactions, you need to understand the 4 modules described below
 	```
 
 * Get Webhook List. Pagination is supported by this API.
+
 	```java
 	// Mandatory API parameters
 	// No mandatory parameters.
@@ -779,6 +813,7 @@ For executing transactions, you need to understand the 4 modules described below
 	```
 
 * Delete Webhook using webhookId.
+
 	```java
 	// Mandatory API parameters
 
@@ -793,6 +828,7 @@ For executing transactions, you need to understand the 4 modules described below
 	```
 
 * Verify webhook request signature. This can be used to validate if the webhook received at your end from OST platform is correctly signed.
+	
 	```java
 	// Webhook data obtained.
 	String webhookEventData = "{\"id\":\"54e3cd1c-afd7-4dcf-9c78-137c56a53582\",\"topic\":\"transactions/success\",\"created_at\":1560838772,\"webhook_id\":\"0823a4ea-5d87-44cf-8ca8-1e5a31bf8e46\",\"version\":\"v2\",\"data\":{\"result_type\":\"transaction\",\"transaction\":{\"id\":\"ddebe817-b94f-4b51-9227-f543fae4715a\",\"transaction_hash\":\"0x7ee737db22b58dc4da3f4ea4830ca709b388d84f31e77106cb79ee09fc6448f9\",\"from\":\"0x69a581096dbddf6d1e0fff7ebc1254bb7a2647c6\",\"to\":\"0xc2f0dde92f6f3a3cb13bfff43e2bd136f7dcfe47\",\"nonce\":3,\"value\":\"0\",\"gas_price\":\"1000000000\",\"gas_used\":120558,\"transaction_fee\":\"120558000000000\",\"block_confirmation\":24,\"status\":\"SUCCESS\",\"updated_timestamp\":1560838699,\"block_timestamp\":1560838698,\"block_number\":1554246,\"rule_name\":\"Pricer\",\"meta_property\":{},\"transfers\":[{\"from\":\"0xc2f0dde92f6f3a3cb13bfff43e2bd136f7dcfe47\",\"from_user_id\":\"acfdea7d-278e-4ffc-aacb-4a21398a280c\",\"to\":\"0x0a754aaab96d634337aac6556312de396a0ca46a\",\"to_user_id\":\"7bc8e0bd-6761-4604-8f8e-e33f86f81309\",\"amount\":\"112325386\",\"kind\":\"transfer\"}]}}}";
