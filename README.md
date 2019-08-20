@@ -463,16 +463,18 @@ For executing transactions, you need to understand the 4 modules described below
 	double pricePoint = 0.020606673;
 
 	// Price point needs to be passed in atto. Also, this value should be a string.
-	String intendedPricePoint = String(pricePoint * 10^18);
+	BigDecimal intendedPricePointBD = new BigDecimal(pricePoint).multiply((new BigDecimal(10)).pow(18));
+	String intendedPricePoint = intendedPricePointBD.toString().split("\\.")[0];
 
 	// Amount of Fiat to be transferred.
 	double transferAmountInFiat = 0.1;
 
 	// Decimal places obtained from the get price points API of Price Points module. Possible values: 6 and 18.
-    int decimalPlaces = 6;
+  double decimalPlaces = 6;
 
-    // Transfer amount in wei. Multiply the fiat transfer amount with 10^decimalPlaces. 
-    double fiatTransferAmountInWei = (transferAmountInFiat * 10^decimalPlaces);
+  // Transfer amount in wei. Multiply the fiat transfer amount with 10^decimalPlaces. 
+  BigDecimal fiatTransferAmountInWeiBD = new BigDecimal(transferAmountInFiat).multiply((new BigDecimal(10)).pow(decimalPlaces));
+	String fiatTransferAmountInWei = fiatTransferAmountInWeiBD.toString().split("\\.")[0];
 	  
 	// Parameters required for rule execution.
 	ArrayList<Object> arrayListForReceiverTokenHolderAddress = new ArrayList<Object>();
