@@ -450,10 +450,8 @@ For executing transactions, you need to understand the 4 modules described below
 	String transferToAddress = "0xa31__";
 
 	// Company token holder address.
-	let companyTokenHolderAddress = "0xa963___";
+	String companyTokenHolderAddress = "0xa963___";
 
-	// Amount of Fiat in atto units to be transferred. If 1 USD needs to be transferred, use 10^18, i.e. in atto units.
-	double transferAmountInFiat = 0.1;
 
 	// Pay currency code. Supported currency codes are "USD", "EUR" and "GBP".
 	String payCurrencyCode = "USD";
@@ -470,7 +468,7 @@ For executing transactions, you need to understand the 4 modules described below
 	double transferAmountInFiat = 0.1;
 
 	// Decimal places obtained from the get price points API of Price Points module. Possible values: 6 and 18.
-  double decimalPlaces = 6;
+  int decimalPlaces = 6;
 
   // Transfer amount in wei. Multiply the fiat transfer amount with 10^decimalPlaces. 
   BigDecimal fiatTransferAmountInWeiBD = new BigDecimal(transferAmountInFiat).multiply((new BigDecimal(10)).pow(decimalPlaces));
