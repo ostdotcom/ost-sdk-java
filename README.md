@@ -460,26 +460,23 @@ For executing transactions, you need to understand the 4 modules described below
 	// into tokens. Use get price point detail API of Price Points module to get this value.
 	double pricePoint = 0.020606673;
 
-	// Price point needs to be passed in atto. Also, this value should be a string.
+	// Price point needs to be passed in atto. Multiply the price point with 10^18. Also, this value should be a string.
 	BigDecimal intendedPricePointBD = new BigDecimal(pricePoint).multiply((new BigDecimal(10)).pow(18));
 	String intendedPricePoint = intendedPricePointBD.toString().split("\\.")[0];
 
 	// Amount of Fiat to be transferred.
 	double transferAmountInFiat = 0.1;
 
-	// Decimal places obtained from the get price points API of Price Points module. Possible values: 6 and 18.
-  int decimalPlaces = 6;
-
-  // Transfer amount in wei. Multiply the fiat transfer amount with 10^decimalPlaces. 
-  BigDecimal fiatTransferAmountInWeiBD = new BigDecimal(transferAmountInFiat).multiply((new BigDecimal(10)).pow(decimalPlaces));
-	String fiatTransferAmountInWei = fiatTransferAmountInWeiBD.toString().split("\\.")[0];
+    // Transfer amount in wei needs to be passed in atto. Multiply the fiat transfer amount with 10^18. Also, this value should be a string. 
+    BigDecimal fiatTransferAmountInWeiBD = new BigDecimal(transferAmountInFiat).multiply((new BigDecimal(10)).pow(18));
+	String fiatTransferAmountInAtto = fiatTransferAmountInWeiBD.toString().split("\\.")[0];
 	  
 	// Parameters required for rule execution.
 	ArrayList<Object> arrayListForReceiverTokenHolderAddress = new ArrayList<Object>();
 	arrayListForReceiverTokenHolderAddress.add(transferToAddress);
 
 	ArrayList<Object> arrayListAmount = new ArrayList<Object>();
-	arrayListAmount.add(fiatTransferAmountInWei);
+	arrayListAmount.add(fiatTransferAmountInAtto);
 	Gson gsonObj = new Gson();
 
 	ArrayList<Object> nestedArraylist = new ArrayList<Object>();
@@ -487,7 +484,7 @@ For executing transactions, you need to understand the 4 modules described below
 	nestedArraylist.add(arrayListForReceiverTokenHolderAddress);
 	nestedArraylist.add(arrayListAmount);
 	nestedArraylist.add(payCurrencyCode);
-	nestedArraylist.add(intendedPricePoint);
+	nestedArraylist.add(intendedPricePointInAtto);
 
 	HashMap <String,Object> nestedparams = new HashMap<String,Object>();
 	nestedparams.put("method", "pay");  // Rule name which needs to be passed as-is.
