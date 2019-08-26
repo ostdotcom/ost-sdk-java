@@ -151,7 +151,7 @@ The jar file can be found in the target folder.
 
 	HashMap <String,Object> params = new HashMap<String,Object>();
 	params.put("ids", userIdsArray);
-	params.put("limit", 10);
+	params.put("limit", limit);
 	params.put("pagination_identifier", paginationIdentifier);
 
 	JsonObject response = usersService.getList( params );
@@ -462,7 +462,7 @@ For executing transactions, you need to understand the 4 modules described below
 
 	// Price point needs to be passed in atto. Multiply the price point with 10^18. Also, this value should be a string.
 	BigDecimal intendedPricePointBD = new BigDecimal(pricePoint).multiply((new BigDecimal(10)).pow(18));
-	String intendedPricePoint = intendedPricePointBD.toString().split("\\.")[0];
+	String intendedPricePointInAtto = intendedPricePointBD.toString().split("\\.")[0];
 
 	// Amount of Fiat to be transferred.
 	double transferAmountInFiat = 0.1;
