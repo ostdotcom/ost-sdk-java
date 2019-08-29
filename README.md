@@ -37,7 +37,7 @@ For documentation, visit [https://dev.ost.com/](https://dev.ost.com/)
 <dependency>
   <groupId>com.ost</groupId>
   <artifactId>ost-sdk-java</artifactId>
-  <version>2.2.0</version>
+  <version>2.2.1</version>
 </dependency>
 ```
 
