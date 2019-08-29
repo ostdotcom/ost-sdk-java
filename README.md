@@ -32,7 +32,12 @@ For documentation, visit [https://dev.ost.com/](https://dev.ost.com/)
 ### Installation
 
 #### Maven users
-##### Add this dependency to your project's POM:
+* Set JAVA_1_6_HOME ENV variable
+```bash
+export JAVA_1_6_HOME='dir path to java 1.6 home which has bin folder'
+```
+
+* Add this dependency to your project's POM
 ```xml
 <dependency>
   <groupId>com.ost</groupId>
