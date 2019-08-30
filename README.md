@@ -32,12 +32,8 @@ For documentation, visit [https://dev.ost.com/](https://dev.ost.com/)
 ### Installation
 
 #### Maven users
-* Set JAVA_7_HOME ENV variable
-```bash
-export JAVA_7_HOME='dir path to java 7 home which has bin folder'
-```
 
-* Add this dependency to your project's POM
+Add this dependency to your project's POM
 ```xml
 <dependency>
   <groupId>com.ost</groupId>
