@@ -32,9 +32,9 @@ For documentation, visit [https://dev.ost.com/](https://dev.ost.com/)
 ### Installation
 
 #### Maven users
-* Set JAVA_1_6_HOME ENV variable
+* Set JAVA_7_HOME ENV variable
 ```bash
-export JAVA_1_6_HOME='dir path to java 1.6 home which has bin folder'
+export JAVA_7_HOME='dir path to java 7 home which has bin folder'
 ```
 
 * Add this dependency to your project's POM
