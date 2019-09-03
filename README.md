@@ -1,4 +1,4 @@
-# OST Java SDK
+# OST Server-Side Java SDK
 [![Build Status](https://travis-ci.org/ostdotcom/ost-sdk-java.svg?branch=develop)](https://travis-ci.org/ostdotcom/ost-sdk-java)
 
 [OST](https://dev.ost.com/) Platform SDK for Java.
@@ -6,47 +6,43 @@
 ## Introduction
 
 OST is a complete technology solution enabling mainstream businesses 
-to easily launch blockchain-based economies without 
-requiring blockchain development.
+to easily launch blockchain based economies without requiring blockchain development.
 
 Brand Tokens (BTs) are white-label cryptocurrency tokens with utility representations 
-running on highly-scalable Ethereum-based side blockchains, 
-backed by value token (such as OST, USDC) staked on Ethereum mainnet. Within a business’s 
+running on highly-scalable Ethereum-based utility blockchains, 
+backed by value token (such as OST, USDC) staked on Ethereum mainnet. Within a business`s 
 token economy, BTs can only be transferred to whitelisted user addresses. 
 This ensures that they stay within the token economy.
 
 The OST technology stack is designed to give businesses everything they need 
 to integrate, test, and deploy BTs. Within the OST suite of products, developers 
-can use OST Platform to create, test, and launch Brand Tokens backed by value token (such as OST, USDC). 
+can use OST Platform to create, test, and launch Brand Tokens.
 
 OST APIs and server-side SDKs make it simple and easy for developers to 
 integrate blockchain tokens into their apps.
 
-## Requirements
+For documentation, visit [https://dev.ost.com/](https://dev.ost.com/)
 
-Integrating an OST SDK into your application can begin as soon as you create an account 
-with OST Platform, requiring only three steps:
-1. Sign-up on [https://platform.ost.com](https://platform.ost.com).
-2. Create your Brand Token in OST Platform.
-3. Obtain an API Key and API Secret from [https://platform.ost.com/mainnet/developer](https://platform.ost.com/mainnet/developer).
+## Getting Started
 
-## Documentation
+### Setup Brand Token
+1. Sign-up on [OST Platform](https://platform.ost.com) and setup your Brand Token.
+2. Obtain your API Key and API Secret from [developers page](https://platform.ost.com/mainnet/developer).
 
-[https://dev.ost.com/](https://dev.ost.com/)
+### Installation
 
-## Installation
+#### Maven users
 
-### Maven users
-#### Add this dependency to your project's POM:
+Add this dependency to your project's POM
 ```xml
 <dependency>
   <groupId>com.ost</groupId>
   <artifactId>ost-sdk-java</artifactId>
-  <version>2.2.0</version>
+  <version>2.2.1</version>
 </dependency>
 ```
 
-### Building from source using Maven
+#### Building from source using Maven
 
 Clone the repository:
 ```bash
@@ -56,212 +52,274 @@ cd ost-sdk-java
 
 Package using MVN (without dependencies):
 ```bash
-mvn clean pacakge -DskipTests
+mvn clean package -DskipTests
 ```
 
-With dependencies:
+Package using MVN (with dependencies):
 ```bash
 mvn clean compile assembly:single -DskipTests
 ```
 
 The jar file can be found in the target folder.
 
-## Getting Started
+## Usage
 
-Initialize the SDK object:
+* Initialize the SDK object:
+	```java
+	// Declare connection parameters.
 
-```java
-// the latest valid API endpoint is "https://api.ost.com/mainnet/v2/", this may change in the future
-HashMap <String,Object> sdkConfig = new HashMap<String,Object>();
-sdkConfig.put("apiEndpoint","[YOUR_API_ENDPOINT]");
-sdkConfig.put("apiKey","[YOUR_API_KEY]");
-sdkConfig.put("apiSecret","[YOUR_API_SECRET]");
+	// Mandatory API parameters
 
-// The config field is optional for sdkConfig Object
-HashMap <String,Object> nestedparam = new HashMap<String,Object>();
-// This is the timeout in seconds for which the socket connection will remain open
-// The value of timeout will always be of type long
-nestedparam.put("timeout", (long) 60);
-sdkConfig.put("config", nestedparam);
+	String apiKey = "__abc"; // OBTAINED FROM DEVELOPER PAGE
+	String apiSecret = "_xyz";  // OBTAINED FROM DEVELOPER PAGE
 
-OSTSDK ostObj = new OSTSDK(sdkConfig);
-com.ost.services.Manifest services = (com.ost.services.Manifest) ostObj.services;
-```
+	/* 
+	  The valid API endpoints are:
+	  1. Mainnet: "https://api.ost.com/mainnet/v2/"
+	  2. Testnet: "https://api.ost.com/testnet/v2/"
+	*/
 
-## SDK Modules
+	String apiEndPoint = "https://api.ost.com/testnet/v2/";
 
-If a user's private key is lost, they could lose access 
-to their tokens. To tackle this risk, OST promotes a 
-mobile-first approach and provides mobile (client) and server SDKs. 
+	HashMap <String,Object> sdkConfig = new HashMap<String,Object>();
+	sdkConfig.put("apiEndpoint", apiEndPoint);
+	sdkConfig.put("apiKey", apiKey);
+	sdkConfig.put("apiSecret", apiSecret);
 
+	// Optional API parameters
 
-* The server SDKs enable you to register users with OST Platform.
-* The client SDKs provide the additional support required for 
-the ownership and management of Brand Tokens by users so 
-that they can create keys and control their tokens. 
+	// This is the timeout in seconds for which the socket connection will remain open.
+	long timeoutInSeconds = 60; // The value of timeout will always be of type long.
+	
+	HashMap <String,Object> nestedparam = new HashMap<String,Object>();
+
+	nestedparam.put("timeout", timeoutInSeconds);
+	sdkConfig.put("config", nestedparam);
+
+    // OST server side sdk object.
+	OSTSDK ostObj = new OSTSDK(sdkConfig);
+	com.ost.services.Manifest services = (com.ost.services.Manifest) ostObj.services;
+	```
 
 ### Users Module
 
-To register users with OST Platform, you can use the services provided in the Users module. 
+* Initialize Users service object to perform user specific actions.
 
-Initialize a Users object to perform user-specific actions, like creating users:
+	```java
+	com.ost.services.Users usersService = services.users;
+	```
 
-```java
-com.ost.services.Users usersService = services.users;
-```
+* Create User. This creates a unique identifier for each user.
 
-Create a User with OST Platform:
+	```java
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	JsonObject response = usersService.create( params );
+	System.out.println("response: " + response.toString() );
+	```
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = usersService.create( params );
-System.out.println("response: " + response.toString() );
-```
+* Get User Detail using the userId obtained in user create.
 
-Get User Detail:
+	```java
+	// Mandatory API parameters
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-JsonObject response = usersService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	// UserId of user for whom user details needs to be fetched.
+	String userId = "c2c__";
 
-Get Users List:
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	JsonObject response = usersService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-//ArrayList<Object> idsArray = new ArrayList<Object>();
-//idsArray.add("29f57b59-60af-4579-9d6c-2ebcb36a9142");
-//idsArray.add("12f57b59-60af-4579-9d6c-2ebcb36a9123");
-//params.put("ids", idsArray);
-//params.put("limit", 10);
-JsonObject response = usersService.getList( params );
-System.out.println("response: " + response.toString() );
-```
+* Get Users List. Pagination is supported in this API.
+
+	```java
+	// Mandatory API parameters
+	// No mandatory parameters.
+
+	// Optional API parameters  
+
+	// Array of userIds for which data needs to be fetched.
+	ArrayList<Object> userIdsArray = new ArrayList<Object>();
+	userIdsArray.add("c2c__");
+    userIdsArray.add("d2c__");
+
+	// Pagination identifier from the previous API call response. Not needed for page one.
+	String paginationIdentifier = "e77y___";
+
+	// Limit.
+	long limit = 10;
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("ids", userIdsArray);
+	params.put("limit", limit);
+	params.put("pagination_identifier", paginationIdentifier);
+
+	JsonObject response = usersService.getList( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 ### Devices Module
 
-Once a user is created via the API, you can register the 
-user’s device with OST Platform. Next, activate the user’s 
-wallet on the user's device. Multiple devices can be 
-registered per user. 
+* Initialize Devices service object to perform device specific actions.
 
+	```java
+	com.ost.services.Devices devicesService = services.devices;
+	```
 
-Initialize a Devices object to perform device-specific actions, 
-like registering devices:
+* Create a Device for User.
 
-```java
-com.ost.services.Devices devicesService = services.devices;
-```
+	```java
+	// Mandatory API parameters
 
-Create a Device for User:
+	// UserId of user for whom device needs to be created.
+	String userId = "c2c___";
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-params.put("address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
-params.put("api_signer_address", "0x5F860598383868e8E8Ee0ffC5ADD92369Db37455");
-JsonObject response = devicesService.create( params );
-System.out.println("response: " + response.toString() );
-```
+	// Device address of user's device.
+	String deviceAddress = "0x1Ea___";
 
-Get User Device Detail:
+	// Device API signer address.
+	String apiSignerAddress = "0x5F8___";
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-params.put("device_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
-JsonObject response = devicesService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	params.put("address", deviceAddress);
+	params.put("api_signer_address", apiSignerAddress);
 
-Get User Devices List:
+	JsonObject response = devicesService.create( params );
+	System.out.println("response: " + response.toString() );
+	```
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-//params.put("pagination_identifier", "eyJsYXN0RXZhbHVhdGVkS2V5Ijp7InVpZCI6eyJTIjoiZDE5NGFhNzUtYWNkNS00ZjQwLWIzZmItZTczYTdjZjdjMGQ5In0sIndhIjp7IlMiOiIweDU4YjQxMDY0NzQ4OWI4ODYzNTliNThmZTIyMjYwZWIxOTYwN2IwZjYifX19");
-//ArrayList<Object> addressesArray = new ArrayList<Object>();
-//addressesArray.add("0x5906ae461eb6283cf15b0257d3206e74d83a6bd4");
-//addressesArray.add("0xab248ef66ee49f80e75266595aa160c8c1abdd5a");
-//params.put("addresses", addressesArray);
-//params.put("limit", 10);
-JsonObject response = devicesService.getList( params );
-System.out.println("response: " + response.toString() );
-```
+* Get User Device Detail using userId and deviceAddress.
+
+	```java
+	// Mandatory API parameters
+
+	// UserId of user for whom device details needs to be fetched.
+	String userId = "c2c___";
+
+	// Device address of user's device.
+	String deviceAddress = "0x1E___";
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	params.put("device_address", deviceAddress);
+
+	JsonObject response = devicesService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+* Get User Devices List. Pagination is supported by this API.
+
+	```java
+	// Mandatory API parameters
+
+	// UserId of user for whom device details needs to be fetched.
+	String userId = "c2c6___";
+
+	// Optional API parameters
+
+	// Pagination identifier from the previous API call response. Not needed for page one.
+	String paginationIdentifier = "eyJ___";
+
+	// Array of device addresses of end user.
+	ArrayList<Object> deviceAddressesArray = new ArrayList<Object>();
+	deviceAddressesArray.add("0x59___");
+	deviceAddressesArray.add("0xab___");
+
+	// Limit.
+	long limit = 10; 
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	params.put("addresses", deviceAddressesArray);
+	params.put("pagination_identifier", paginationIdentifier);
+	params.put("limit", limit);
+
+	JsonObject response = devicesService.getList( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 ### Device Managers Module
 
-After a user is created and their device is registered via the API, 
-their wallet can be activated. Activating a wallet involves the deployment of the following contracts:
+* Initialize Device Manager service object to perform device manager specific actions.
 
-* TokenHolder - each user in the economy is represented by a TokenHolder that holds the user's token balance.
-* Device Manager (multi-signature) - this contract is configured to control the user's TokenHolder contract.
-* DelayedRecoveryModule - this contract enables recovery in the event a key is lost.
+	```java
+	com.ost.services.DeviceManagers deviceManagersService = services.deviceManagers;
+	```
 
-In order to enable a user to access their tokens, i.e., interact 
-with their TokenHolder contract, from multiple devices without 
-having to share private keys across devices, a multi-signature 
-contract is employed. We refer to this entity as the Device 
-Manager in OST APIs.
+* Get Device Manager Detail using userId.
 
-To get information about a user’s Device Manager, use services provided in the Device Managers module.
+	```java
+	// Mandatory API parameters
 
-```java
-com.ost.services.DeviceManagers deviceManagersService = services.deviceManagers;
-```
+	// UserId of user for whom device manager details needs to be fetched.
+	String userId = "c2c___";
 
-Get Device Manager Detail:
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-JsonObject response = deviceManagersService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	JsonObject response = deviceManagersService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 ### Sessions Module
 
-In order to create a more seamless user experience, so that users don't have to 
-sign a new transaction at every move in the application, we use session keys. 
-These keys are authorized to sign transactions on the user's behalf 
-for a predetermined amount of time and with a defined maximum spending 
-limit per transaction.
+* Initialize Sessions service object to perform session specific actions.
 
-These session keys are created in a user's wallet. A user’s TokenHolder 
-contract can have multiple authorized session keys.
+	```java
+	com.ost.services.Sessions sessionsService = services.sessions;
+	```
 
-To get information about a user’s session keys, use services provided in the Sessions module.
+* Get User Session Detail using userId and session address.
 
-```java
-com.ost.services.Sessions sessionsService = services.sessions;
-```
+	```java
+	// Mandatory API parameters
 
-Get User Session Detail:
+	// UserId of user for whom session details needs to be fetched.
+	String userId = "c2c___";
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-params.put("session_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
-JsonObject response = sessionsService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	// Session address of user for which details needs to be fetched.
+	String sessionAddress = "0x1Ea___";
 
-Get User Sessions List:
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	params.put("session_address", sessionAddress);
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-//params.put("pagination_identifier", "eyJsYXN0RXZhbHVhdGVkS2V5Ijp7InVpZCI6eyJTIjoiZDE5NGFhNzUtYWNkNS00ZjQwLWIzZmItZTczYTdjZjdjMGQ5In0sIndhIjp7IlMiOiIweDU4YjQxMDY0NzQ4OWI4ODYzNTliNThmZTIyMjYwZWIxOTYwN2IwZjYifX19");
-//ArrayList<Object> addressesArray = new ArrayList<Object>();
-//addressesArray.add("0x5906ae461eb6283cf15b0257d3206e74d83a6bd4");
-//addressesArray.add("0xab248ef66ee49f80e75266595aa160c8c1abdd5a");
-//params.put("addresses", addressesArray);
-//params.put("limit", 10);
-JsonObject response = sessionsService.getList( params );
-System.out.println("response: " + response.toString() );
-```
+	JsonObject response = sessionsService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+* Get User Sessions List using userId. Pagination is supported by this API.
+
+	```java
+	// Mandatory API parameters
+
+	// UserId of user for whom session details needs to be fetched.
+	String userId = "c2c___";
+
+	// Optional API parameters:
+
+	// Pagination identifier from the previous API call response. Not needed for page one.
+	String paginationIdentifier = "eyJs___";
+
+	// Array of session addresses of end user.
+	ArrayList<Object> sessionAddressesArray = new ArrayList<Object>();
+	sessionAddressesArray.add("0x59___");
+	sessionAddressesArray.add("0xab___");
+
+	// Limit.
+	long limit = 10; 
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	params.put("pagination_identifier", paginationIdentifier);
+	params.put("addresses", sessionAddressesArray);
+	params.put("limit", limit);
+
+	JsonObject response = sessionsService.getList( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 ### Executing Transactions
 
@@ -269,378 +327,522 @@ For executing transactions, you need to understand the 4 modules described below
 
 #### Rules Module
 
-When executing a token transfer, a user's TokenHolder contract 
-interacts with a token rule contract. A token economy can have 
-multiple token rule contracts. To enable a user to execute a 
-token transfer, you need to start with fetching details of 
-registered rule contracts and understanding their methods and the 
-corresponding parameters passed in those methods.
+* Initialize Rules service object to perform rules specific actions.
 
-To get information about deployed rule contracts, use services provided in the Rules module.
+	```java
+	com.ost.services.Rules rulesService = services.rules;
+	```
 
-```java
-com.ost.services.Rules rulesService = services.rules;
-```
+* List Rules.
 
-List Rules:
-
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = rulesService.getList( params );
-System.out.println("response: " + response.toString() );
-```
+	```java
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	JsonObject response = rulesService.getList( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 #### Price Points Module
 
-To know the value token (such as OST, USDC) price point in pay currency and when it was last updated, 
-use services provided by the Price Points module.
+* Initialize Price Points service object to perform price points specific actions.
 
-```java
-com.ost.services.PricePoints pricePointsService = services.pricePoints;
-```
+	```java
+	com.ost.services.PricePoints pricePointsService = services.pricePoints;
+	```
 
-Get Price Points Detail:
+* Get Price Points Detail.
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("chain_id", "200");
-JsonObject response = pricePointsService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	```java
+	// Mandatory API parameters
+
+	// ChainId of your brand token economy.
+	long chainId = 2000;
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("chain_id", chainId);
+
+	JsonObject response = pricePointsService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 #### Transactions Module
 
-After reviewing the rules information received using services in the Rules 
-module, you will know what data is required to execute transfers 
-with a token rule using the services provided in the Transaction module.
+* Initialize Transactions service object to perform transaction specific actions.
 
-```java
-com.ost.services.Transactions transactionsService = services.transactions;
-```
+	```java
+	com.ost.services.Transactions transactionsService = services.transactions;
+	```
 
-Get a transaction info for existing user:
+* DIRECT-TRANSFERS execute transaction should be used to transfer BTs to your end-users.
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-params.put("transaction_id", "e96450b8-f46a-40ee-adf1-9d65a4b53241");
-JsonObject response = transactionsService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	```java
+	// Mandatory API parameters
 
-Get all transactions info for a user:
+	// Token holder address of receiver.
+	String transferToAddress = "0xa3___";
 
-```java
-//ArrayList<HashMap<String, Object>> metaPropertyArray = new ArrayList<HashMap<String, Object>>();
-//HashMap <String,Object> metaPropertyArrayParams = new HashMap<String,Object>();
-//metaPropertyArrayParams.put("name", "transaction_name"); //like, download IMP : Max length 25 characters (numbers alphabets spaces _ - allowed)
-//metaPropertyArrayParams.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
-//metaPropertyArrayParams.put("details", "test"); // memo field to add additional info about the transaction .  IMP : Max length 120 characters (numbers alphabets spaces _ - allowed)
-//metaPropertyArray.add(metaPropertyArrayParams);
-//Gson gsonObj = new Gson();
-//String metaPropertyArrayJsonStr = gsonObj.toJson(metaPropertyArray);
+	// Amount of tokens to be transferred.
+	String transferAmount = "1";
 
-//ArrayList<Object> statusArray = new ArrayList<Object>();
-//statusArray.add("CREATED");
-//statusArray.add("SUBMITTED");
-//statusArray.add("SUCCESS");
-//statusArray.add("FAILED");
+	// Company userId.
+	String companyUserId = "ee89___";
 
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-//params.put("statuses", statusArray);
-//params.put("meta_properties", metaPropertyArrayJsonStr);
-//params.put("limit", 10);
-JsonObject response = transactionsService.getList( params );
-System.out.println("response: " + response.toString() );
-```
+	// Address of DirectTransfer rule. Use list rules API of Rules module to get the address of rules.
+	// In the rules array which you will get in response, use the address having name "Direct Transfer".
+	String directTransferRuleAddress = "0xe379___";
 
-Execute Transaction DIRECT-TRANSFERS:
+	// Parameters required for rule execution.
+	ArrayList<Object> arrayListForReceiverTokenHolderAddress = new ArrayList<Object>();
+	arrayListForReceiverTokenHolderAddress.add(transferToAddress);
 
-```java
-//HashMap <String,Object> metaProperty = new HashMap<String,Object>();
-//metaProperty.put("name", "transaction_name"); // like, download
-//metaProperty.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
-//metaProperty.put("details", "test"); // memo field to add additional info about the transaction
+	ArrayList<Object> arrayListAmount = new ArrayList<Object>();
+	arrayListAmount.add(transferAmount);
 
-HashMap <String,Object> params = new HashMap<String,Object>();
-HashMap <String,Object> nestedparams = new HashMap<String,Object>();
-String userId = "29f57b59-60af-4579-9d6c-2ebcb36a9142";
-String toAddress = "0xe37906219ad67cc1301b970539c9860f9ce8d991";
-String user2TokenHolderAddress = "0xa31e988eebc89d0bc3e4a9a5463545ea534593e4";
-String amount = "1";
-params.put("user_id", userId);
-params.put("to", toAddress);
-nestedparams.put("method", "directTransfers");
-ArrayList<ArrayList> nestedarraylist = new ArrayList<ArrayList>();
-ArrayList<Object> arrayListForUser2TokenHolderAddress = new ArrayList<Object>();
-arrayListForUser2TokenHolderAddress.add(user2TokenHolderAddress);
-ArrayList<Object> arrayListAmount = new ArrayList<Object>();
-arrayListAmount.add(amount);
-Gson gsonObj = new Gson();
-nestedarraylist.add(arrayListForUser2TokenHolderAddress);
-nestedarraylist.add(arrayListAmount);
-nestedparams.put("parameters", nestedarraylist);
-String jsonStr = gsonObj.toJson(nestedparams);
-params.put("raw_calldata", jsonStr);
-//params.put("meta_property", metaProperty);
-JsonObject response = transactionsService.execute( params );
-System.out.println("response: " + response.toString() );
-```
+	ArrayList<ArrayList> nestedArraylist = new ArrayList<ArrayList>();
+	nestedArraylist.add(arrayListForReceiverTokenHolderAddress);
+	nestedArraylist.add(arrayListAmount);
 
-Execute Transaction PAY:
+	// Parameters required for rule execution.
+	HashMap <String,Object> nestedparams = new HashMap<String,Object>();
+	nestedparams.put("method", "directTransfers");  // Rule name which needs to be passed as-is.
+	nestedparams.put("parameters", nestedArraylist);
 
-```java
-//HashMap <String,Object> metaProperty = new HashMap<String,Object>();
-//metaProperty.put("name", "transaction_name"); // like, download
-//metaProperty.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
-//metaProperty.put("details", "test"); // memo field to add additional info about the transaction
+	Gson gsonObj = new Gson();
+	String jsonStr = gsonObj.toJson(nestedparams);
 
-HashMap <String,Object> params = new HashMap<String,Object>();
-HashMap <String,Object> nestedparams = new HashMap<String,Object>();
-String userId = "29f57b59-60af-4579-9d6c-2ebcb36a9142";
-String toAddress = "0xe37906219ad67cc1301b970539c9860f9ce8d991";
-String user2TokenHolderAddress = "0xa31e988eebc89d0bc3e4a9a5463545ea534593e4";
-String amount = "1";
-params.put("user_id", userId);
-params.put("to", toAddress);
-nestedparams.put("method", "pay");
-ArrayList<Object> nestedarraylist = new ArrayList<Object>();
-ArrayList<Object> arrayListForUser2TokenHolderAddress = new ArrayList<Object>();
-arrayListForUser2TokenHolderAddress.add(user2TokenHolderAddress);
-ArrayList<Object> arrayListAmount = new ArrayList<Object>();
-arrayListAmount.add(amount);
-Gson gsonObj = new Gson();
-String tokenHolderSender = "0xa9632350057c2226c5a10418b1c3bc9acdf7e2ee";
-String payCurrencyCode = "USD";
-String intendedPricePoint = "23757000000000000";
-nestedarraylist.add(tokenHolderSender);
-nestedarraylist.add(arrayListForUser2TokenHolderAddress);
-nestedarraylist.add(arrayListAmount);
-nestedarraylist.add(payCurrencyCode);
-nestedarraylist.add(intendedPricePoint);
-nestedparams.put("parameters", nestedarraylist);
-String jsonStr = gsonObj.toJson(nestedparams);
-params.put("raw_calldata", jsonStr);
-//params.put("meta_property", metaProperty);
-JsonObject response = transactionsService.execute( params );
-System.out.println("response: " + response.toString() );
-```
 
-Get Transaction Detail:
+	HashMap <String,Object> params = new HashMap<String,Object>();
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-params.put("transaction_id", "e96450b8-f46a-40ee-adf1-9d65a4b53241");
-JsonObject response = transactionsService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	params.put("user_id", companyUserId);
+	params.put("to", directTransferRuleAddress);
+	params.put("raw_calldata", jsonStr);
 
-Get User Transactions:
+	// Optional API parameters
 
-```java
-//ArrayList<HashMap<String, Object>> metaPropertyArray = new ArrayList<HashMap<String, Object>>();
-//HashMap <String,Object> metaPropertyArrayParams = new HashMap<String,Object>();
-//metaPropertyArrayParams.put("name", "transaction_name"); //like, download IMP : Max length 25 characters (numbers alphabets spaces _ - allowed)
-//metaPropertyArrayParams.put("type", "user_to_user"); // user_to_user, company_to_user, user_to_company
-//metaPropertyArrayParams.put("details", "test"); // memo field to add additional info about the transaction .  IMP : Max length 120 characters (numbers alphabets spaces _ - allowed)
-//metaPropertyArray.add(metaPropertyArrayParams);
-//Gson gsonObj = new Gson();
-//String metaPropertyArrayJsonStr = gsonObj.toJson(metaPropertyArray);
+	// Name of the transaction. Eg. "like", "download", etc.
+	// NOTE: Max length 25 characters (Allowed characters: [A-Za-z0-9_/s])
+	String transactionName = "like";
 
-//ArrayList<Object> statusArray = new ArrayList<Object>();
-//statusArray.add("CREATED");
-//statusArray.add("SUBMITTED");
-//statusArray.add("SUCCESS");
-//statusArray.add("FAILED");
+	// Transaction type. Possible values: "company_to_user", "user_to_user", "user_to_company".
+	String transactionType = "company_to_user";
 
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-//params.put("status", statusArray);
-//params.put("meta_property", metaPropertyArrayJsonStr);
-//params.put("limit", 10);
-JsonObject response = transactionsService.getList( params );
-System.out.println("response: " + response.toString() );
-```
+	// Some extra information about transaction.
+	// NOTE: Max length 125 characters (Allowed characters: [A-Za-z0-9_/s])
+	String details = "lorem_ipsum";
+
+	// Additional transaction information. There is no dependency between any of the metaProperty keys. 
+	// However, if a key is present, its value cannot be null or undefined.       
+	HashMap <String,Object> metaProperty = new HashMap<String,Object>();
+	metaProperty.put("name", transactionName); 
+	metaProperty.put("type", transactionType); 
+	metaProperty.put("details", details); 
+
+	params.put("meta_property", metaProperty);
+
+	JsonObject response = transactionsService.execute( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+* PAY Execute Transaction should be used when transactions of BTs equivalent to some fiat amount need to be executed.
+
+	```java
+	// Mandatory API parameters
+
+	// Token holder address of receiver.
+	String transferToAddress = "0xa31__";
+
+	// Company token holder address.
+	String companyTokenHolderAddress = "0xa963___";
+
+
+	// Pay currency code. Supported currency codes are "USD", "EUR" and "GBP".
+	String payCurrencyCode = "USD";
+
+	// In pay transaction, the transfer amounts are in pay currency (fiat currency like USD) which then are converted 
+	// into tokens. Use get price point detail API of Price Points module to get this value.
+	double pricePoint = 0.020606673;
+
+	// Price point needs to be passed in atto. Multiply the price point with 10^18. Also, this value should be a string.
+	BigDecimal intendedPricePointBD = new BigDecimal(pricePoint).multiply((new BigDecimal(10)).pow(18));
+	String intendedPricePointInAtto = intendedPricePointBD.toString().split("\\.")[0];
+
+	// Amount of Fiat to be transferred.
+	double transferAmountInFiat = 0.1;
+
+    // Transfer amount in wei needs to be passed in atto. Multiply the fiat transfer amount with 10^18. Also, this value should be a string. 
+    BigDecimal fiatTransferAmountInWeiBD = new BigDecimal(transferAmountInFiat).multiply((new BigDecimal(10)).pow(18));
+	String fiatTransferAmountInAtto = fiatTransferAmountInWeiBD.toString().split("\\.")[0];
+	  
+	// Parameters required for rule execution.
+	ArrayList<Object> arrayListForReceiverTokenHolderAddress = new ArrayList<Object>();
+	arrayListForReceiverTokenHolderAddress.add(transferToAddress);
+
+	ArrayList<Object> arrayListAmount = new ArrayList<Object>();
+	arrayListAmount.add(fiatTransferAmountInAtto);
+	Gson gsonObj = new Gson();
+
+	ArrayList<Object> nestedArraylist = new ArrayList<Object>();
+	nestedArraylist.add(companyTokenHolderAddress);
+	nestedArraylist.add(arrayListForReceiverTokenHolderAddress);
+	nestedArraylist.add(arrayListAmount);
+	nestedArraylist.add(payCurrencyCode);
+	nestedArraylist.add(intendedPricePointInAtto);
+
+	HashMap <String,Object> nestedparams = new HashMap<String,Object>();
+	nestedparams.put("method", "pay");  // Rule name which needs to be passed as-is.
+	nestedparams.put("parameters", nestedArraylist);
+  
+	String jsonRawCallData = gsonObj.toJson(nestedparams);
+
+	// Company userId.
+	String companyUserId = "ee8___";
+
+	// Address of Pay rule. Use list rules API to get the address of rules.
+	// In the rules array which you will get in response, use the address having name "Pricer".
+	String payRuleAddress = "0xe37___";
+	  
+	/* Optional API parameters: */
+	    
+	// Name of the transaction. Eg. "like", "download", etc.
+	// NOTE: Max length 25 characters (Allowed characters: [A-Za-z0-9_/s])
+	String transactionName = "like";
+
+	// Transaction type. Possible values: "company_to_user", "user_to_user", "user_to_company".
+	String transactionType = "company_to_user";
+
+	// Some extra information about transaction.
+	// NOTE: Max length 125 characters (Allowed characters: [A-Za-z0-9_/s])
+	String details = "lorem_ipsum";
+
+	HashMap <String,Object> metaProperty = new HashMap<String,Object>();
+	metaProperty.put("name", transactionName);
+	metaProperty.put("type", transactionType);
+	metaProperty.put("details", details); 
+
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", companyUserId);
+	params.put("to", payRuleAddress);
+
+	params.put("meta_property", metaProperty);
+	params.put("raw_calldata", jsonRawCallData);
+
+	JsonObject response = transactionsService.execute( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+* Get Transaction Detail using userId and transactionId.
+
+	```java
+	// Mandatory API parameters
+
+	// UserId of end-user.
+	String userId = "ee8___";
+
+	// Unique identifier of the transaction to be retrieved.
+	String transactionId = "f1d___";
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	params.put("transaction_id", transactionId);
+
+	JsonObject response = transactionsService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+* Get User Transactions using userId. Pagination is supported by this API.
+
+	```java
+	// Mandatory API parameters
+
+	// UserId of end-user.
+	String userId = "ee89___";
+
+	// Optional API parameters
+
+	// Array of status values.
+	ArrayList<Object> statusesArray = new ArrayList<Object>();
+	statusesArray.add("CREATED");
+	statusesArray.add("SUBMITTED");
+	statusesArray.add("SUCCESS");
+	statusesArray.add("FAILED");
+
+	// Name of the transaction. Eg. "like", "download", etc. 
+	// NOTE: Max length 25 characters (Allowed characters: [A-Za-z0-9_/s])
+	String transactionName = "like";
+
+	// Transaction type. Possible values: "company_to_user", "user_to_user", "user_to_company".
+	String transactionType = "company_to_user";
+
+	// NOTE: Max length 125 characters (Allowed characters: [A-Za-z0-9_/s])
+	String details = "lorem_ipsum";
+
+	// Additional transaction information. There is no dependency between any of the metaProperty keys. 
+	// However, if a key is present, its value cannot be null or undefined. 
+	ArrayList<HashMap<String, Object>> metaPropertyArray = new ArrayList<HashMap<String, Object>>();
+	HashMap <String,Object> metaPropertyArrayParams = new HashMap<String,Object>();
+	metaPropertyArrayParams.put("name", transactionName); 
+	metaPropertyArrayParams.put("type", transactionType); 
+	metaPropertyArrayParams.put("details", details); 
+	metaPropertyArray.add(metaPropertyArrayParams);
+
+	Gson gsonObj = new Gson();
+	String metaPropertyArrayJsonStr = gsonObj.toJson(metaPropertyArray);
+
+	// Limit.
+	long limit = 10;
+
+	// Pagination identifier from the previous API call response.  Not needed for page one.
+	String paginationIdentifier = "eyJsY___";
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	params.put("statuses", statusesArray);
+	params.put("meta_properties", metaPropertyArrayJsonStr);
+	params.put("limit", limit);
+	params.put("pagination_identifier", paginationIdentifier);
+
+	JsonObject response = transactionsService.getList( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 #### Balances Module
 
-Balance services offer the functionality to view a user’s balances.
+* Initialize Balances service object to perform balances specific actions.
 
-```java
-com.ost.services.Balance balancesService = services.balance;
-```
+	```java
+	com.ost.services.Balance balancesService = services.balance;
+	```
 
-Get User Balance:
+* Get User Balance using userId.
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-JsonObject response = balancesService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	```java
+	// Mandatory API parameters
+
+	// UserId for whom balance needs to be fetched.
+	String userId = "c2c6___";
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+
+	JsonObject response = balancesService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 ### Recovery Owners Module
-A user’s Brand Tokens are held by a TokenHolder contract that is controlled ("owned") 
-by a Device Manager; the device manager is controlled ("owned") by device keys created 
-and held by the user in their wallets; and if any of those keys is lost, the Device 
-Manager (which is a multi-signature contract) is programmed to allow replacement of a 
-key by the recovery owner key for the user, via the DelayedRecoveryModule, which is deployed
-at the time of the creation of the user's initial wallet.
 
-To fetch the recovery owner address for a particular user, use services provided 
-in the Users module. To fetch that recovery owner's information, then services 
-provided in the Recovery Owners Module are used.
+* Initialize Recovery Owners service object to perform recovery owners specific actions.
 
-```java
-com.ost.services.RecoveryOwners recoveryOwnersService = services.recoveryOwners;
-```
+	```java
+	com.ost.services.RecoveryOwners recoveryOwnersService = services.recoveryOwners;
+	```
 
-Get Recovery Owner Detail:
+* Get Recovery Owner Detail using userId and recovery owner address.
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("user_id", "29f57b59-60af-4579-9d6c-2ebcb36a9142");
-params.put("recovery_owner_address", "0x1Ea365269A3e6c8fa492eca9A531BFaC8bA1649E");
-JsonObject response = recoveryOwnersService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	```java
+	// Mandatory API parameters
+
+	// UserId for whom recovery details needs to be fetched.
+	String userId = "c2c___";
+
+	// Recovery address of user.
+	String recoveryOwnerAddress = "0xe37___";
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	params.put("recovery_owner_address", recoveryOwnerAddress);
+
+	JsonObject response = recoveryOwnersService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 ### Tokens Module
 
-To get information about the Brand Token created on the OST Platform interface, use services provided 
-by the Tokens module. You can use this service to obtain the chain ID of the auxiliary 
-chain on which the token economy is running, in addition to other information.
+* Initialize Tokens service object to perform tokens specific actions.
 
-```java
-com.ost.services.Tokens tokensService = services.tokens;
-```
+	```java
+	com.ost.services.Tokens tokensService = services.tokens;
+	```
 
-Get Token Detail:
+* Get Token Detail.
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = tokensService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	```java
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	JsonObject response = tokensService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 ### Chains Module
 
-To get information about the auxiliary chain on which the token economy is running, use services 
-provided by the Chains module.
+* Initialize Chains service object to perform chains specific actions.
 
-```java
-com.ost.services.Chains chainsService = services.chains;
-```
+	```java
+	com.ost.services.Chains chainsService = services.chains;
+	```
 
-Get Chain Detail:
+* Get Chain Detail using chainId.
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-params.put("chain_id", "200");
-JsonObject response = chainsService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	```java
+	// Mandatory API parameters
+
+	// ChainId for which details needs to be fetched. Only origin chainId and OST-specific auxiliary chainIds are allowed.
+	String chainId = "2000";
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("chain_id", chainId);
+
+	JsonObject response = chainsService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 ### Base Tokens Module
 
-To get information about the value tokens (such as OST, USDC) available on the OST Platform interface, use services
-provided by the Base Tokens module. You can use this service to obtain the base token details
-on OST Platform interface.
+* Initialize Base Tokens service object to perform base tokens specific actions.
 
-```java
-com.ost.services.BaseTokens baseTokensService = services.baseTokens;
-```
+	```java
+	com.ost.services.BaseTokens baseTokensService = services.baseTokens;
+	```
 
-Get Base Token Detail:
+* Get Base Tokens Detail.
 
-```java
-HashMap <String,Object> params = new HashMap<String,Object>();
-JsonObject response = baseTokensService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	```java
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	JsonObject response = baseTokensService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
 
 ### Webhooks Module
 
-To manage webhooks on the OST Platform Interface, use services provided by the 
-Chains module. You can use this service to create new webhooks and manage existing 
-webhooks.
+* Initialize Webhooks service object to perform webhooks specific actions.
 
-```java
-com.ost.services.Webhooks webhooksService = services.webhooks;
-```
+	```java
+	com.ost.services.Webhooks webhooksService = services.webhooks;
+	```
 
-Create Webhook:
+* Create Webhook using the topics and the subscription url.
 
-```java
-HashMap<String, Object> params = new HashMap<String, Object>();
-ArrayList<String> arrayListofTopics = new ArrayList<String>();
-arrayListofTopics.add("devices/authorization_initiate");
-params.put("url", "https://www.yourdomain12345.com");
-params.put("status", "active");
-params.put("topics", arrayListofTopics);
-JsonObject response = webhooksService.create( params );
-System.out.println("response: " + response.toString() );
-```
+	```java
+	// Mandatory API parameters
 
-Update Webhook:
+	// Array of topics.
+	ArrayList<String> topicParams = new ArrayList<String>();
+	topicParams.add("transactions/initiate");
+	topicParams.add("transactions/success");
+	  
+	// URL where you want to receive the event notifications.
+	String url = "https://www.testingWebhooks.com";
 
-```java
-HashMap<String, Object> params = new HashMap<String, Object>();
-ArrayList<String> arrayListofTopics = new ArrayList<String>();
-arrayListofTopics.add("devices/authorization_initiate");
-params.put("webhook_id", "4107e308-0146-4c6f-b2f3-617e2c0d2354");
-params.put("status", "active");
-params.put("topics", arrayListofTopics);
-JsonObject response = webhooksService.update( params );
-System.out.println("response: " + response.toString() );
-```
+	// Optional API parameters
 
-Get Webhook:
+	// Status of a webhook. Possible values are "active" and "inactive".
+	String status = "active"; 
 
-```java
-HashMap<String, Object> params = new HashMap<String, Object>();
-params.put("webhook_id", "4107e308-0146-4c6f-b2f3-617e2c0d2354");
-JsonObject response = webhooksService.get( params );
-System.out.println("response: " + response.toString() );
-```
+	HashMap<String, Object> params = new HashMap<String, Object>();
+	params.put("url", url);
+	params.put("status", status);
+	params.put("topics", topicParams);
 
-Get Webhook List:
+	JsonObject response = webhooksService.create( params );
+	System.out.println("response: " + response.toString() );
+	```
 
-```java
-HashMap<String, Object> params = new HashMap<String, Object>();
-//params.put("limit", 10);
-//params.put("pagination_identifier", "eyJsYXN0RXZhbHVhdGVkS2V5Ijp7InVpZCI6eyJTIjoiZDE5NGFhNzUtYWNkNS00ZjQwLWIzZmItZTczYTdjZjdjMGQ5In0sIndhIjp7IlMiOiIweDU4YjQxMDY0NzQ4OWI4ODYzNTliNThmZTIyMjYwZWIxOTYwN2IwZjYifX19");
-JsonObject response = webhooksService.getList( params );
-System.out.println("response: " + response.toString() );
-```
+* Update existing Webhook using a webhookId and an array of topics.
 
-Delete Webhook:
+	```java
+	// Mandatory API parameters
 
-```java
-HashMap<String, Object> params = new HashMap<String, Object>();
-params.put("webhook_id", "4107e308-0146-4c6f-b2f3-617e2c0d2354");
-JsonObject response = webhooksService.deleteWebhook( params );
-System.out.println("response: " + response.toString() );
-```
+	// Array of topics.
+	ArrayList<String> topicParams = new ArrayList<String>();
+	topicParams.add("transactions/initiate");
+	topicParams.add("transactions/success");
 
-Verify webhook request signature:
+	// Unique identifier for a webhook.
+	String webhookId = "a743___";
 
-```java
-String webhookEventData = '{"id":"54e3cd1c-afd7-4dcf-9c78-137c56a53582","topic":"transactions/success","created_at":1560838772,"webhook_id":"0823a4ea-5d87-44cf-8ca8-1e5a31bf8e46","version":"v2","data":{"result_type":"transaction","transaction":{"id":"ddebe817-b94f-4b51-9227-f543fae4715a","transaction_hash":"0x7ee737db22b58dc4da3f4ea4830ca709b388d84f31e77106cb79ee09fc6448f9","from":"0x69a581096dbddf6d1e0fff7ebc1254bb7a2647c6","to":"0xc2f0dde92f6f3a3cb13bfff43e2bd136f7dcfe47","nonce":3,"value":"0","gas_price":"1000000000","gas_used":120558,"transaction_fee":"120558000000000","block_confirmation":24,"status":"SUCCESS","updated_timestamp":1560838699,"block_timestamp":1560838698,"block_number":1554246,"rule_name":"Pricer","meta_property":{},"transfers":[{"from":"0xc2f0dde92f6f3a3cb13bfff43e2bd136f7dcfe47","from_user_id":"acfdea7d-278e-4ffc-aacb-4a21398a280c","to":"0x0a754aaab96d634337aac6556312de396a0ca46a","to_user_id":"7bc8e0bd-6761-4604-8f8e-e33f86f81309","amount":"112325386","kind":"transfer"}]}}}' // webhook response should be here
+	// Optional API parameters
 
-// Get webhoook version from webhook events data.
-String version = "v2";
+	// Status of a webhook. Possible values are "active" and "inactive".
+	String status = "active";
 
-// Get ost-timestamp from the response received in event.
-String requestTimestamp = "1559902637";
+	HashMap<String, Object> params = new HashMap<String, Object>();
+	params.put("webhook_id", webhookId);
+	params.put("status", status);
+	params.put("topics", topicParams);
 
-// Get signature from the response received in event.
-String signature = "e9206f9feecccd8f9653a4bdb56ea74531e6528bae8f6de1797aa77dc5235923";
+	JsonObject response = webhooksService.update( params );
+	System.out.println("response: " + response.toString() );
+	```
 
-String webhookSecret = "09121ae7614856777fa36d63aca828e0ef14be77fb48fa149e0c0b50fec847a7";
-String stringifiedData = webhookEventData;
-Boolean response = webhooksService.verifySignature( version, stringifiedData, requestTimestamp, signature, webhookSecret );
-System.out.println("response: " + response );
-```
+* Get Webhook using webhookId.
+
+	```java
+	// Mandatory API parameters
+
+    // Unique identifier for a webhook.
+	String webhookId = "a743___";
+
+
+	HashMap<String, Object> params = new HashMap<String, Object>();
+	params.put("webhook_id", webhookId);
+
+	JsonObject response = webhooksService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+* Get Webhook List. Pagination is supported by this API.
+
+	```java
+	// Mandatory API parameters
+	// No mandatory parameters.
+
+	// Optional API parameters
+
+	// Limit.
+	long limit = 10;
+
+	// Pagination identifier from the previous API call response.  Not needed for page one.
+	String paginationIdentifier = "eyJwY___";
+
+	HashMap<String, Object> params = new HashMap<String, Object>();
+	params.put("limit", limit);
+	params.put("pagination_identifier", paginationIdentifier);
+
+	JsonObject response = webhooksService.getList( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+* Delete Webhook using webhookId.
+
+	```java
+	// Mandatory API parameters
+
+	// Unique identifier for a webhook.
+	String webhookId = "a743___";
+
+	HashMap<String, Object> params = new HashMap<String, Object>();
+	params.put("webhook_id", webhookId);
+
+	JsonObject response = webhooksService.deleteWebhook( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+* Verify webhook request signature. This can be used to validate if the webhook received at your end from OST platform is correctly signed.
+	
+	```java
+	// Webhook data obtained.
+	String webhookEventData = "{\"id\":\"54e3cd1c-afd7-4dcf-9c78-137c56a53582\",\"topic\":\"transactions/success\",\"created_at\":1560838772,\"webhook_id\":\"0823a4ea-5d87-44cf-8ca8-1e5a31bf8e46\",\"version\":\"v2\",\"data\":{\"result_type\":\"transaction\",\"transaction\":{\"id\":\"ddebe817-b94f-4b51-9227-f543fae4715a\",\"transaction_hash\":\"0x7ee737db22b58dc4da3f4ea4830ca709b388d84f31e77106cb79ee09fc6448f9\",\"from\":\"0x69a581096dbddf6d1e0fff7ebc1254bb7a2647c6\",\"to\":\"0xc2f0dde92f6f3a3cb13bfff43e2bd136f7dcfe47\",\"nonce\":3,\"value\":\"0\",\"gas_price\":\"1000000000\",\"gas_used\":120558,\"transaction_fee\":\"120558000000000\",\"block_confirmation\":24,\"status\":\"SUCCESS\",\"updated_timestamp\":1560838699,\"block_timestamp\":1560838698,\"block_number\":1554246,\"rule_name\":\"Pricer\",\"meta_property\":{},\"transfers\":[{\"from\":\"0xc2f0dde92f6f3a3cb13bfff43e2bd136f7dcfe47\",\"from_user_id\":\"acfdea7d-278e-4ffc-aacb-4a21398a280c\",\"to\":\"0x0a754aaab96d634337aac6556312de396a0ca46a\",\"to_user_id\":\"7bc8e0bd-6761-4604-8f8e-e33f86f81309\",\"amount\":\"112325386\",\"kind\":\"transfer\"}]}}}";
+
+	// Get webhoook version from webhook events data.
+	String version = "v2";
+
+	// Get ost-timestamp from the response received in event.
+	String requestTimestamp = "1559902637";
+
+	// Get signature from the response received in event.
+	String signature = "2c56c143550c603a6ff47054803f03ee4755c9c707986ae27f7ca1dd1c92a824";
+
+	String webhookSecret = "mySecret";
+	String stringifiedData = webhookEventData;
+
+	Boolean response = webhooksService.verifySignature( version, stringifiedData, requestTimestamp, signature, webhookSecret );
+	System.out.println("response: " + response );
+	```
