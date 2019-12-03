@@ -566,7 +566,7 @@ For executing transactions, you need to understand the 4 modules described below
 	statusesArray.add("SUCCESS");
 	statusesArray.add("FAILED");
 
-    // To get transactions between some specific time, add start time and end time. 
+    // To get transactions between a specific time interval, add start timestamp and end timestamp. 
     long startTime = 1563260786;
     long endTime = 1563280786;
  
