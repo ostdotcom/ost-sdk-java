@@ -568,7 +568,7 @@ For executing transactions, you need to understand the 4 modules described below
 
     // To get transactions between some specific time, add start time and end time. 
     long startTime = 1563260786;
-    long let endTime = 1563280786;
+    long endTime = 1563280786;
  
 	// Name of the transaction. Eg. "like", "download", etc. 
 	// NOTE: Max length 25 characters (Allowed characters: [A-Za-z0-9_/s])
