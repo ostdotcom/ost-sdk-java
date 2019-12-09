@@ -1,3 +1,9 @@
+[OST JAVA SDK v2.2.2](https://github.com/ostdotcom/ost-sdk-java/tree/v2.2.2)
+---
+
+* Readme changes for documenting new parameters in transactions module. These parameters can help to 
+get data between specific time interval.
+
 [OST JAVA SDK v2.2.0](https://github.com/ostdotcom/ost-sdk-java/tree/v2.2.0)
 ---
 
