@@ -566,6 +566,10 @@ For executing transactions, you need to understand the 4 modules described below
 	statusesArray.add("SUCCESS");
 	statusesArray.add("FAILED");
 
+    // To get transactions between a specific time interval, add start timestamp and end timestamp. 
+    long startTime = 1563260786;
+    long endTime = 1563280786;
+ 
 	// Name of the transaction. Eg. "like", "download", etc. 
 	// NOTE: Max length 25 characters (Allowed characters: [A-Za-z0-9_/s])
 	String transactionName = "like";
@@ -596,6 +600,8 @@ For executing transactions, you need to understand the 4 modules described below
 
 	HashMap <String,Object> params = new HashMap<String,Object>();
 	params.put("user_id", userId);
+    params.put("start_time", startTime);
+    params.put("end_time", endTime);
 	params.put("statuses", statusesArray);
 	params.put("meta_properties", metaPropertyArrayJsonStr);
 	params.put("limit", limit);
