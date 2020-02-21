@@ -893,7 +893,7 @@ For executing transactions, you need to understand the 4 modules described below
 	// Pagination identifier from the previous API call response. Not needed for page one.
 	String paginationIdentifier = "eyJ___";
 
-	// Array of of user redemption uuids.
+	// Array of user redemption uuids.
 	ArrayList<Object> userRedemptionUuidsArray = new ArrayList<Object>();
 	userRedemptionUuidsArray.add("eyJ___");
 	userRedemptionUuidsArray.add("eyJ___");
@@ -908,5 +908,56 @@ For executing transactions, you need to understand the 4 modules described below
 	params.put("limit", limit);
 
 	JsonObject response = redemptionsService.getList( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+### Redeemable SKUs Module
+
+* Initialize Redeemable Skus service object to perform user redemption specific actions.
+
+	```java
+	com.ost.services.RedeemableSkus redeemableSkusService = services.redeemableSkus;
+	```
+
+* Get Redeemable SKU detail using the redeemable SKU id.
+
+	```java
+	// Mandatory API parameters
+
+	// RedeemableSkuId of product for whom details needs to be fetched.
+    String redeemableSkuId = 'c2c__';
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("redeemable_sku_id", redeemableSkuId);
+
+	JsonObject response = redeemableSkusService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+* Get Redeemable SKUs List. Pagination is supported by this API.
+
+	```java
+	// Mandatory API parameters
+    // No mandatory parameters.
+
+	// Optional API parameters
+
+	// Pagination identifier from the previous API call response. Not needed for page one.
+	String paginationIdentifier = "eyJ___";
+
+	// Array of redeemable SKU ids.
+	ArrayList<Object> idsArray = new ArrayList<Object>();
+	idsArray.add("1");
+	idsArray.add("2");
+
+	// Limit.
+	long limit = 10; 
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("ids", idsArray);
+	params.put("pagination_identifier", paginationIdentifier);
+	params.put("limit", limit);
+
+	JsonObject response = redeemableSkusService.getList( params );
 	System.out.println("response: " + response.toString() );
 	```
