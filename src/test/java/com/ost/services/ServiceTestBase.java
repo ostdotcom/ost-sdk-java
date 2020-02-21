@@ -133,6 +133,16 @@ public abstract class ServiceTestBase {
             throw new Exception("companyUserId can not be null.");
         }
 
+        String redemptionId = System.getenv("OST_KIT_REDEMPTION_ID");
+        if ( null == redemptionId ) {
+            throw new Exception("redemptionId can not be null.");
+        }
+
+        String redeemableSkuId = System.getenv("OST_KIT_REDEEMABLE_SKU_ID");
+        if ( null == redeemableSkuId ) {
+            throw new Exception("redeemableSkuId can not be null.");
+        }
+
 
         environmentVariables = new HashMap<String, Object>();
         environmentVariables.put("userId", userId);
@@ -144,6 +154,8 @@ public abstract class ServiceTestBase {
         environmentVariables.put("user2TokenHolderAddress", user2TokenHolderAddress);
         environmentVariables.put("transactionId", transactionId);
         environmentVariables.put("companyUserId", companyUserId);
+        environmentVariables.put("redemptionId", redemptionId);
+        environmentVariables.put("redeemableSkuId", redeemableSkuId);
     }
 
     public OSTAPIService getService() {
