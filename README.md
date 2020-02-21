@@ -852,3 +852,61 @@ For executing transactions, you need to understand the 4 modules described below
 	Boolean response = webhooksService.verifySignature( version, stringifiedData, requestTimestamp, signature, webhookSecret );
 	System.out.println("response: " + response );
 	```
+
+### Redemptions Module
+
+* Initialize Redemptions service object to perform user redemption specific actions.
+
+	```java
+	com.ost.services.Redemptions redemptionsService = services.redemptions;
+	```
+
+* Get User redemption detail using the userId and redemptionId.
+
+	```java
+	// Mandatory API parameters
+
+	// UserId of user for whom redemption details needs to be fetched.
+	String userId = "c2c___";
+
+	// RedemptionId of user.
+	String redemptionId = "c2c___";
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	params.put("redemption_id", redemptionId);
+
+	JsonObject response = redemptionsService.get( params );
+	System.out.println("response: " + response.toString() );
+	```
+
+* Get User Redemptions List. Pagination is supported by this API.
+
+	```java
+	// Mandatory API parameters
+
+	// UserId of user for whom redemption details needs to be fetched.
+	String userId = "c2c6___";
+
+	// Optional API parameters
+
+	// Pagination identifier from the previous API call response. Not needed for page one.
+	String paginationIdentifier = "eyJ___";
+
+	// Array of of user redemption uuids.
+	ArrayList<Object> userRedemptionUuidsArray = new ArrayList<Object>();
+	userRedemptionUuidsArray.add("eyJ___");
+	userRedemptionUuidsArray.add("eyJ___");
+
+	// Limit.
+	long limit = 10; 
+
+	HashMap <String,Object> params = new HashMap<String,Object>();
+	params.put("user_id", userId);
+	params.put("user_redemption_uuids", userRedemptionUuidsArray);
+	params.put("pagination_identifier", paginationIdentifier);
+	params.put("limit", limit);
+
+	JsonObject response = redemptionsService.getList( params );
+	System.out.println("response: " + response.toString() );
+	```
