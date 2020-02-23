@@ -1,5 +1,5 @@
-name: ost_wallet_sdk_ios
-title: Ost Wallet SDK iOS
+name: server-sdk-java
+title: Ost Server SDK Java
 version: '1.0'
 nav:
 - modules/ROOT/nav.adoc
