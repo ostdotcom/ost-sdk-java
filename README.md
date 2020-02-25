@@ -894,16 +894,16 @@ For executing transactions, you need to understand the 4 modules described below
 	String paginationIdentifier = "eyJ___";
 
 	// Array of user redemption uuids.
-	ArrayList<Object> userRedemptionUuidsArray = new ArrayList<Object>();
-	userRedemptionUuidsArray.add("eyJ___");
-	userRedemptionUuidsArray.add("eyJ___");
+	ArrayList<Object> redemptionIdsArray = new ArrayList<Object>();
+	redemptionIdsArray.add("eyJ___");
+	redemptionIdsArray.add("eyJ___");
 
 	// Limit.
 	long limit = 10; 
 
 	HashMap <String,Object> params = new HashMap<String,Object>();
 	params.put("user_id", userId);
-	params.put("user_redemption_uuids", userRedemptionUuidsArray);
+	params.put("redemption_ids", redemptionIdsArray);
 	params.put("pagination_identifier", paginationIdentifier);
 	params.put("limit", limit);
 
