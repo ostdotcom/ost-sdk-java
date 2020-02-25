@@ -913,7 +913,7 @@ For executing transactions, you need to understand the 4 modules described below
 
 ### Redeemable SKUs Module
 
-* Initialize Redeemable Skus service object to perform user redemption specific actions.
+* Initialize RedeemableSkus service object to perform redeemable skus specific actions.
 
 	```java
 	com.ost.services.RedeemableSkus redeemableSkusService = services.redeemableSkus;
@@ -946,15 +946,15 @@ For executing transactions, you need to understand the 4 modules described below
 	String paginationIdentifier = "eyJ___";
 
 	// Array of redeemable SKU ids.
-	ArrayList<Object> idsArray = new ArrayList<Object>();
-	idsArray.add("1");
-	idsArray.add("2");
+	ArrayList<Object> redemptionSkuIdsArray = new ArrayList<Object>();
+	redemptionSkuIdsArray.add("1");
+	redemptionSkuIdsArray.add("2");
 
 	// Limit.
 	long limit = 10; 
 
 	HashMap <String,Object> params = new HashMap<String,Object>();
-	params.put("ids", idsArray);
+	params.put("redemption_ids", redemptionSkuIdsArray);
 	params.put("pagination_identifier", paginationIdentifier);
 	params.put("limit", limit);
 
