@@ -853,111 +853,113 @@ For executing transactions, you need to understand the 4 modules described below
 	System.out.println("response: " + response );
 	```
 
-### Redemptions Module
 
-* Initialize Redemptions service object to perform user redemption specific actions.
+### Redemption Modules
 
-	```java
-	com.ost.services.Redemptions redemptionsService = services.redemptions;
-	```
+Two modules of redemption, "Redeemable SKUs" and "User Redemptions", are described below.
 
-* Get User redemption detail using the userId and redemptionId.
+#### Redeemable SKUs Module
 
-	```java
-	// Mandatory API parameters
+* Initialize Redeemable SKUs service object to perform redeemable skus specific actions.
 
-	// UserId of user for whom redemption details needs to be fetched.
-	String userId = "c2c___";
+    ```java
+    com.ost.services.RedeemableSkus redeemableSkusService = services.redeemableSkus;
+    ```
+  
+* Get Redeemable SKU detail using the redeemable sku id.
 
-	// RedemptionId of user.
-	String redemptionId = "c2c___";
+    ```java
+    // Mandatory API parameters
 
-	HashMap <String,Object> params = new HashMap<String,Object>();
-	params.put("user_id", userId);
-	params.put("redemption_id", redemptionId);
-
-	JsonObject response = redemptionsService.get( params );
-	System.out.println("response: " + response.toString() );
-	```
-
-* Get User Redemptions List. Pagination is supported by this API.
-
-	```java
-	// Mandatory API parameters
-
-	// UserId of user for whom redemption details needs to be fetched.
-	String userId = "c2c6___";
-
-	// Optional API parameters
-
-	// Pagination identifier from the previous API call response. Not needed for page one.
-	String paginationIdentifier = "eyJ___";
-
-	// Array of user redemption uuids.
-	ArrayList<Object> redemptionIdsArray = new ArrayList<Object>();
-	redemptionIdsArray.add("eyJ___");
-	redemptionIdsArray.add("eyJ___");
-
-	// Limit.
-	long limit = 10; 
-
-	HashMap <String,Object> params = new HashMap<String,Object>();
-	params.put("user_id", userId);
-	params.put("redemption_ids", redemptionIdsArray);
-	params.put("pagination_identifier", paginationIdentifier);
-	params.put("limit", limit);
-
-	JsonObject response = redemptionsService.getList( params );
-	System.out.println("response: " + response.toString() );
-	```
-
-### Redeemable SKUs Module
-
-* Initialize RedeemableSkus service object to perform redeemable skus specific actions.
-
-	```java
-	com.ost.services.RedeemableSkus redeemableSkusService = services.redeemableSkus;
-	```
-
-* Get Redeemable SKU detail using the redeemable SKU id.
-
-	```java
-	// Mandatory API parameters
-
-	// RedeemableSkuId of product for whom details needs to be fetched.
+    // Fetch details of following redeemable sku.
     String redeemableSkuId = 'c2c__';
-
-	HashMap <String,Object> params = new HashMap<String,Object>();
-	params.put("redeemable_sku_id", redeemableSkuId);
-
-	JsonObject response = redeemableSkusService.get( params );
-	System.out.println("response: " + response.toString() );
-	```
+    
+    HashMap <String,Object> params = new HashMap<String,Object>();
+    params.put("redeemable_sku_id", redeemableSkuId);
+    
+    JsonObject response = redeemableSkusService.get( params );
+    System.out.println("response: " + response.toString() );
+    ```
 
 * Get Redeemable SKUs List. Pagination is supported by this API.
 
-	```java
-	// Mandatory API parameters
-    // No mandatory parameters.
+    ```java
+    // Mandatory API parameters
+    // NOTE: No mandatory parameters.
+  
+    // Optional API parameters
+  
+    // Limit.
+    long limit = 10; 
 
-	// Optional API parameters
+    // Array of redeemable SKU ids.
+    ArrayList<Object> redemptionSkuIdsArray = new ArrayList<Object>();
+    redemptionSkuIdsArray.add("1001");
+    redemptionSkuIdsArray.add("1002");
 
-	// Pagination identifier from the previous API call response. Not needed for page one.
-	String paginationIdentifier = "eyJ___";
+    // Pagination identifier from the previous API call response.  Not needed for page one.
+    String paginationIdentifier = "eyJ___";
+ 
+    HashMap <String,Object> params = new HashMap<String,Object>();
+    params.put("redemption_ids", redemptionSkuIdsArray);
+    params.put("pagination_identifier", paginationIdentifier);
+    params.put("limit", limit);
+    
+    JsonObject response = redeemableSkusService.getList( params );
+    System.out.println("response: " + response.toString() );
+    ```
+#### User Redemptions Module
 
-	// Array of redeemable SKU ids.
-	ArrayList<Object> redemptionSkuIdsArray = new ArrayList<Object>();
-	redemptionSkuIdsArray.add("1");
-	redemptionSkuIdsArray.add("2");
+* Initialize Redemptions service object to perform user redemption specific actions.
 
-	// Limit.
-	long limit = 10; 
+    ```java
+    com.ost.services.Redemptions redemptionsService = services.redemptions;
+    ```
 
-	HashMap <String,Object> params = new HashMap<String,Object>();
-	params.put("redemption_ids", redemptionSkuIdsArray);
-	params.put("pagination_identifier", paginationIdentifier);
-	params.put("limit", limit);
+* Get User redemption details using the userId and redemptionId.
 
-	JsonObject response = redeemableSkusService.getList( params );
-	System.out.println("response: " + response.toString() );
-	```
+    ```java
+    // Mandatory API parameters
+
+    // UserId of user for whom redemption details needs to be fetched.
+    String userId = "c2c6___";
+  
+    // Unique identifier of the redemption of user.
+    String redemptionId = "c2c___";
+    
+    HashMap <String,Object> params = new HashMap<String,Object>();
+    params.put("user_id", userId);
+    params.put("redemption_id", redemptionId);
+    
+    JsonObject response = redemptionsService.get( params );
+    System.out.println("response: " + response.toString() );
+    ```
+
+* Get User Redemptions List. Pagination is supported by this API.
+
+    ```java
+    // Mandatory API parameters
+    String userId = "c2c6___";
+
+    // Optional API parameters
+
+    // Limit.
+    long limit = 10;
+
+    // Array of user redemption uuids.
+    ArrayList<Object> redemptionIdsArray = new ArrayList<Object>();
+    redemptionIdsArray.add("eyJ___");
+    redemptionIdsArray.add("eyJ___");
+
+    // Pagination identifier from the previous API call response.  Not needed for page one.
+    String paginationIdentifier = "eyJ___";
+
+    HashMap <String,Object> params = new HashMap<String,Object>();
+    params.put("user_id", userId);
+    params.put("redemption_ids", redemptionIdsArray);
+    params.put("pagination_identifier", paginationIdentifier);
+    params.put("limit", limit);
+
+    JsonObject response = redemptionsService.getList( params );
+    System.out.println("response: " + response.toString() );
+    ```
