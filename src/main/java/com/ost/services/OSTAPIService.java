@@ -77,6 +77,32 @@ public abstract class OSTAPIService {
         return specialCharacterEscape(transactionId);
     }
 
+    public String getRedemptionId(Map<String, Object> params) throws MissingParameter, InvalidParameter {
+            String redemptionId = "";
+            if (null == params || !params.containsKey("redemption_id") || null == params.get("redemption_id")) {
+                throw new MissingParameter("redemption_id");
+            }
+            if (!isValidParameter(params.get("redemption_id"))) {
+                throw new InvalidParameter("redemption_id");
+            }
+            redemptionId = params.get("redemption_id").toString();
+            params.remove("redemption_id");
+            return specialCharacterEscape(redemptionId);
+    }
+
+    public String getRedeemableSkuId(Map<String, Object> params) throws MissingParameter, InvalidParameter {
+                String redeemableSkuId = "";
+                if (null == params || !params.containsKey("redeemable_sku_id") || null == params.get("redeemable_sku_id")) {
+                    throw new MissingParameter("redeemable_sku_id");
+                }
+                if (!isValidParameter(params.get("redeemable_sku_id"))) {
+                    throw new InvalidParameter("redeemable_sku_id");
+                }
+                redeemableSkuId = params.get("redeemable_sku_id").toString();
+                params.remove("redeemable_sku_id");
+                return specialCharacterEscape(redeemableSkuId);
+        }
+
     public String getRecoveryOwnerAddress(Map<String, Object> params) throws MissingParameter, InvalidParameter {
         String recoveryOwnerAddress = "";
         if (null == params || !params.containsKey("recovery_owner_address") || null == params.get("recovery_owner_address")) {
