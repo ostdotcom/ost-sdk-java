@@ -1,0 +1,37 @@
+== https://github.com/ostdotcom/ost-sdk-java/tree/v2.2.3[OST JAVA SDK v2.2.3]
+
+* Added redemptions module to call user redemptions management OST APIs.
+* Added redeemable SKUs module to call redeemable SKUs OST APIs.
+
+== https://github.com/ostdotcom/ost-sdk-java/tree/v2.2.2[OST JAVA SDK v2.2.2]
+
+* Readme changes for documenting new parameters in transactions module.
+These parameters can help to  get data between specific time interval.
+
+== https://github.com/ostdotcom/ost-sdk-java/tree/v2.2.0[OST JAVA SDK v2.2.0]
+
+* Added webhooks module to call webhook management OST APIs.
+* Support for verify webhook signature.
+
+== https://github.com/ostdotcom/ost-sdk-java/tree/v2.1.0[OST JAVA SDK v2.1.0]
+
+* Added base tokens module to V2 API's
+
+== https://github.com/ostdotcom/ost-sdk-java/tree/v2.0.0[OST JAVA SDK v2.0.0]
+
+* OST API V2 interaction layer implementation.
+* Removed API V0 and V1 support.
+* xref:README.adoc[README.adoc] has API V2 usage instructions
+
+== https://github.com/ostdotcom/ost-sdk-java/tree/v1.1.0[OST JAVA SDK v1.1.0]
+
+* Added user balances module to V1 API's
+* Added transaction ledger module to V1 API's
+
+== https://github.com/ostdotcom/ost-sdk-java/tree/v1.0.0[OST JAVA SDK v1.0.0]
+
+Initial release of the official OST JAVA SDK +
+
+* This release has support for interacting with V1 API along with V0
+* xref:README.adoc[README.adoc] has API V1 usage instructions
+* xref:README.adoc[README_V0.adoc] has API V0 usage instructions
